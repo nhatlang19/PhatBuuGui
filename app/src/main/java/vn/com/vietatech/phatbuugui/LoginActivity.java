@@ -1,5 +1,6 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -8,12 +9,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import vn.com.vietatech.async.MapCitiesAsync;
+
 public class LoginActivity extends AppCompatActivity {
 
     protected Button btnLogin;
     protected Button  btnExit;
     protected TextView txtUsername;
     protected TextView txtPassword;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +62,13 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
-        if (username.length() == 0 || password.length() == 0) {
-            Toast.makeText(getApplicationContext(),
-                    "Username / password can not empty", Toast.LENGTH_SHORT)
-                    .show();
-            return;
-        }
+        new MapCitiesAsync(getApplicationContext()).execute();
+//        if (username.length() == 0 || password.length() == 0) {
+//            Toast.makeText(getApplicationContext(),
+//                    "Username / password can not empty", Toast.LENGTH_SHORT)
+//                    .show();
+//            return;
+//        }
 
         //new UpdateTimeAsync(context).execute();
         //new LoginAsync(context, getApplication()).execute(username, password);
