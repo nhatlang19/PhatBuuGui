@@ -16,7 +16,7 @@ public class UsersDataSource {
     private MySQLiteHelper helper;
 
     private String[] allColumns = { MySQLiteHelper.KEY_USER_ID,
-            MySQLiteHelper.KEY_USER_USERNAME };
+            MySQLiteHelper.KEY_USER_USERNAME,  MySQLiteHelper.KEY_USER_PASSWORD,  MySQLiteHelper.KEY_USER_ROLE };
 
     private static UsersDataSource sInstance;
 
@@ -32,6 +32,7 @@ public class UsersDataSource {
 
     private UsersDataSource(Context context) {
         helper = MySQLiteHelper.getInstance(context);
+        open();
     }
 
     public void open() {
@@ -94,15 +95,33 @@ public class UsersDataSource {
         return user;
     }
 
+    public User login(User _user) {
+        // get data after insert
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_USERS, allColumns,
+                MySQLiteHelper.KEY_USER_USERNAME + "='" + _user.getUsername() + "'&" +
+                        MySQLiteHelper.KEY_USER_PASSWORD + "='" + _user.getPassword() + "'", null, null, null,
+                null);
+        User user = new User();
+        if(cursor.getCount() != 0) {
+            cursor.moveToFirst();
+            user = cursorToUser(cursor);
+        }
+        cursor.close();
+
+        return user;
+    }
+
     private User cursorToUser(Cursor cursor) {
         int indexId = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_ID);
         int indexUsername = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_USERNAME);
         int indexPassword = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_PASSWORD);
+        int indexRole = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_ROLE);
 
         User user = new User();
         user.setId(cursor.getInt(indexId));
         user.setUsername(cursor.getString(indexUsername));
-        user.setPasword(cursor.getString(indexPassword));
+        user.setPassword(cursor.getString(indexPassword));
+        user.setRole(cursor.getString(indexRole));
 
         return user;
     }

@@ -1,6 +1,7 @@
 package vn.com.vietatech.phatbuugui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -9,7 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import vn.com.vietatech.async.MapCitiesAsync;
+import vn.com.vietatech.async.LoginAsync;
+import vn.com.vietatech.phatbuugui.dialog.TransparentProgressDialog;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -19,10 +21,14 @@ public class LoginActivity extends AppCompatActivity {
     protected TextView txtPassword;
     private Context context = this;
 
+    MyApplication globalVariable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        globalVariable = (MyApplication) getApplicationContext();
 
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnExit = (Button) findViewById(R.id.btnExit);
@@ -62,15 +68,17 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
-        new MapCitiesAsync(getApplicationContext()).execute();
+        username = "Asds";
+        password = "dsfadF";
+
 //        if (username.length() == 0 || password.length() == 0) {
 //            Toast.makeText(getApplicationContext(),
 //                    "Username / password can not empty", Toast.LENGTH_SHORT)
 //                    .show();
 //            return;
 //        }
-
-        //new UpdateTimeAsync(context).execute();
-        //new LoginAsync(context, getApplication()).execute(username, password);
+//
+//        //new UpdateTimeAsync(context).execute();
+        new LoginAsync(this, getApplication()).execute(username, password);
     }
 }

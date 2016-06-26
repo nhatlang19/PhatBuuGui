@@ -9,7 +9,7 @@ import vn.com.vietatech.async.MapCitiesAsync;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 10;
 
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
@@ -19,6 +19,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_USER_ID = "id";
     public static final String KEY_USER_USERNAME = "username";
     public static final String KEY_USER_PASSWORD = "password";
+    public static final String KEY_USER_ROLE = "role";
 
     // City Table Columns
     public static final String KEY_CITY_ID = "id";
@@ -66,6 +67,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 KEY_USER_USERNAME + " TEXT," +
                 KEY_USER_PASSWORD + " TEXT" +
+                KEY_USER_ROLE + " TEXT" +
                 ")";
 
         String CREATE_CITIES_TABLE = "CREATE TABLE " + TABLE_CITIES +
@@ -75,7 +77,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_CITY_DESC + " TEXT" +
                 ")";
 
+        String INIT_ADMIN_USER = "INSERT INTO " + TABLE_USERS + "(" + KEY_USER_ID + ", " + KEY_USER_USERNAME + ", " + KEY_USER_PASSWORD + ", " + KEY_USER_ROLE + ")" +
+                "VALUES (1, 'admin', '123', 'Admin');";
+
         db.execSQL(CREATE_USERS_TABLE);
+        //db.execSQL(INIT_ADMIN_USER);
         db.execSQL(CREATE_CITIES_TABLE);
 
         new MapCitiesAsync(mContext).execute();
@@ -93,4 +99,5 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             onCreate(db);
         }
     }
+
 }

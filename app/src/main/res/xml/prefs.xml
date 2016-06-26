@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:summary="Cấu hình"
+        android:title="Cấu hình" >
+        <EditTextPreference
+            android:key="server"
+            android:summary="End point"
+            android:title="Server" />
+        <EditTextPreference
+            android:key="port"
+            android:summary="Vui lòng liên hệ Ban CNTT để biết port đang sử dụng"
+            android:title="Port" />
+        <EditTextPreference
+            android:key="code"
+            android:summary="Nhập đúng mã bưu cục (6 số) của đơn vị đang sử dụng"
+            android:title="Mã bưu cục" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -12,7 +12,6 @@ import java.util.Properties;
 import vn.com.vietatech.dto.City;
 
 public class CitiesGetPropertyValues {
-    String result = "";
     InputStream inputStream;
 
     Context context;

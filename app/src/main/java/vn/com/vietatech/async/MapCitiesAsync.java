@@ -23,7 +23,6 @@ public class MapCitiesAsync extends AsyncTask<Void, Void, Void> {
             List<City> cities = propertyValues.getPropValues();
 
             CitiesDataSource dataSource = CitiesDataSource.getInstance(mContext);
-            dataSource.open();
             for(City city : cities) {
                 dataSource.createCity(city);
             }
@@ -34,6 +33,11 @@ public class MapCitiesAsync extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
     }
 
     @Override
