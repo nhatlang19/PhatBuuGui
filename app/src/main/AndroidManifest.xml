@@ -24,6 +24,10 @@
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen" />
+        <activity
+            android:name=".UserActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_userscreen" />
         <activity android:name=".PrefsActivity"></activity>
     </application>
 

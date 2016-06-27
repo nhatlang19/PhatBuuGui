@@ -4,13 +4,16 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.List;
+
 import vn.com.vietatech.async.MapCitiesAsync;
+import vn.com.vietatech.dto.City;
+import vn.com.vietatech.dto.User;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 10;
-
+    private static final int DATABASE_VERSION = 22;
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
     public static final String TABLE_CITIES = "tbl_cities";
@@ -66,7 +69,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 KEY_USER_USERNAME + " TEXT," +
-                KEY_USER_PASSWORD + " TEXT" +
+                KEY_USER_PASSWORD + " TEXT," +
                 KEY_USER_ROLE + " TEXT" +
                 ")";
 
@@ -77,14 +80,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_CITY_DESC + " TEXT" +
                 ")";
 
-        String INIT_ADMIN_USER = "INSERT INTO " + TABLE_USERS + "(" + KEY_USER_ID + ", " + KEY_USER_USERNAME + ", " + KEY_USER_PASSWORD + ", " + KEY_USER_ROLE + ")" +
-                "VALUES (1, 'admin', '123', 'Admin');";
-
         db.execSQL(CREATE_USERS_TABLE);
-        //db.execSQL(INIT_ADMIN_USER);
         db.execSQL(CREATE_CITIES_TABLE);
-
-        new MapCitiesAsync(mContext).execute();
     }
 
     // Called when the database needs to be upgraded.
@@ -99,5 +96,4 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             onCreate(db);
         }
     }
-
 }

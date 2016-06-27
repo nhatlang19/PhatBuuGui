@@ -81,6 +81,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void loadUsers() {
-
+        Intent intent = new Intent(FullscreenActivity.this, UserActivity.class);
+        startActivity(intent);
     }
 }

@@ -32,7 +32,6 @@ public class UsersDataSource {
 
     private UsersDataSource(Context context) {
         helper = MySQLiteHelper.getInstance(context);
-        open();
     }
 
     public void open() {
@@ -43,9 +42,12 @@ public class UsersDataSource {
         helper.close();
     }
 
-    public User createUser(String _User) {
+    public User createUser(User _User) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.KEY_USER_USERNAME, _User);
+        values.put(MySQLiteHelper.KEY_USER_USERNAME, _User.getUsername());
+        values.put(MySQLiteHelper.KEY_USER_PASSWORD, _User.getPassword());
+        values.put(MySQLiteHelper.KEY_USER_ROLE, _User.getRole());
+
         int insertId = (int) db.insert(MySQLiteHelper.TABLE_USERS, null,
                 values);
 
@@ -79,6 +81,7 @@ public class UsersDataSource {
             list.add(User);
         }
         cursor.close();
+        helper.close();
         return list;
     }
 
@@ -97,9 +100,9 @@ public class UsersDataSource {
 
     public User login(User _user) {
         // get data after insert
-        Cursor cursor = db.query(MySQLiteHelper.TABLE_USERS, allColumns,
-                MySQLiteHelper.KEY_USER_USERNAME + "='" + _user.getUsername() + "'&" +
-                        MySQLiteHelper.KEY_USER_PASSWORD + "='" + _user.getPassword() + "'", null, null, null,
+        String where = MySQLiteHelper.KEY_USER_USERNAME + "=? and " +
+                MySQLiteHelper.KEY_USER_PASSWORD + "=?";
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_USERS, allColumns, where, new String[] {_user.getUsername(), _user.getPassword()}, null, null,
                 null);
         User user = new User();
         if(cursor.getCount() != 0) {

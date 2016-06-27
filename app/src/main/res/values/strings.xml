@@ -10,6 +10,7 @@
     <string name="app_folder">VNPostDelivery</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_userscreen">Danh sách người dùng</string>
 
     <!-- Main Menu -->
     <string name="phat_buu_gui">Phát bưu gửi</string>

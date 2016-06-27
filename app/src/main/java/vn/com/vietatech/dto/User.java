@@ -11,6 +11,12 @@ public class User {
         password = _password;
     }
 
+    public User(String _username, String _password, String _role) {
+        username = _username;
+        password = _password;
+        role = _role;
+    }
+
     public User() {
         id = 0;
         username = "";

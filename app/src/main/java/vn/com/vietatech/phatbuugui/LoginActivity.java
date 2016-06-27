@@ -10,8 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import vn.com.vietatech.async.InitData;
 import vn.com.vietatech.async.LoginAsync;
-import vn.com.vietatech.phatbuugui.dialog.TransparentProgressDialog;
+import vn.com.vietatech.async.MapCitiesAsync;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -27,6 +28,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        String isSynced = System.getProperty("isSynced");
+        if(isSynced == null || isSynced.isEmpty() || !isSynced.equals("1")) {
+            new InitData(this).execute();
+            new MapCitiesAsync(this).execute();
+            System.setProperty("isSynced", "1");
+        }
 
         globalVariable = (MyApplication) getApplicationContext();
 
@@ -68,15 +76,15 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
-        username = "Asds";
-        password = "dsfadF";
+        username = "admin";
+        password = "123";
 
-//        if (username.length() == 0 || password.length() == 0) {
-//            Toast.makeText(getApplicationContext(),
-//                    "Username / password can not empty", Toast.LENGTH_SHORT)
-//                    .show();
-//            return;
-//        }
+        if (username.length() == 0) {
+            Toast.makeText(getApplicationContext(),
+                    "Tên đăng nhập không thể trống", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
 //
 //        //new UpdateTimeAsync(context).execute();
         new LoginAsync(this, getApplication()).execute(username, password);

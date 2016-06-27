@@ -23,11 +23,12 @@ public class MapCitiesAsync extends AsyncTask<Void, Void, Void> {
             List<City> cities = propertyValues.getPropValues();
 
             CitiesDataSource dataSource = CitiesDataSource.getInstance(mContext);
+            dataSource.open();
             for(City city : cities) {
                 dataSource.createCity(city);
             }
-            dataSource.close();
             System.out.println("Batch cities successful");
+            dataSource.close();
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

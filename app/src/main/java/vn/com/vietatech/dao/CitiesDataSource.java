@@ -68,7 +68,7 @@ public class CitiesDataSource {
         db.delete(MySQLiteHelper.TABLE_CITIES, whereClause, null);
     }
 
-    public List<City> getAllUsers() {
+    public List<City> getAllCities() {
         List<City> list = new ArrayList<City>();
 
         Cursor cursor = db.query(MySQLiteHelper.TABLE_CITIES, allColumns,
