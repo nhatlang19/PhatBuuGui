@@ -27,6 +27,8 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        mListView = (ListView) findViewById(R.id.listUser);
+
         mAdapter = new ListViewUserAdapter(this);
         mListView.setAdapter(mAdapter);
         mAdapter.setMode(Attributes.Mode.Single);
