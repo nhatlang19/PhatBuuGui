@@ -33,6 +33,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="FullscreenActivity" />
         </activity>
+        <activity
+            android:name=".AddUserActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_add_userscreen"
+            android:parentActivityName="UserActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="UserActivity" />
+        </activity>
         <activity android:name=".PrefsActivity"></activity>
     </application>
 

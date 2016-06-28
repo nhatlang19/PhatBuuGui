@@ -11,6 +11,7 @@
 
     <string name="title_activity_fullscreen">Chúc năng chính</string>
     <string name="title_activity_userscreen">Danh sách người dùng</string>
+    <string name="title_activity_add_userscreen">Thêm người dùng</string>
 
     <!-- Main Menu -->
     <string name="phat_buu_gui">Phát bưu gửi</string>
