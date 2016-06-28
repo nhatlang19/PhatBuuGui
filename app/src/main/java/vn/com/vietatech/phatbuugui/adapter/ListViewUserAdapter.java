@@ -54,13 +54,22 @@ public class ListViewUserAdapter extends BaseSwipeAdapter {
                 Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
             }
         });
+        v.findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "click edit", Toast.LENGTH_SHORT).show();
+            }
+        });
         return v;
     }
 
     @Override
     public void fillValues(int position, View convertView) {
-        TextView t = (TextView)convertView.findViewById(R.id.position);
-        t.setText(users.get(position).getUsername());
+        TextView txtNameView = (TextView)convertView.findViewById(R.id.txtNameView);
+        txtNameView.setText(users.get(position).getUsername());
+
+        TextView txtRoleView = (TextView)convertView.findViewById(R.id.txtRoleView);
+        txtRoleView.setText(users.get(position).getRole());
     }
 
     @Override

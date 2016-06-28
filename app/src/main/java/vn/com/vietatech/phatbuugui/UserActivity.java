@@ -27,6 +27,9 @@ public class UserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         mListView = (ListView) findViewById(R.id.listUser);
 
         mAdapter = new ListViewUserAdapter(this);

@@ -9,32 +9,95 @@
     swipe:rightEdgeSwipeOffset="0dp">
 
     <LinearLayout
-        android:layout_width="50dp"
+        android:layout_width="160dp"
         android:layout_height="80dp"
-        android:background="#FF5534"
+        android:background="#ff0008"
         android:gravity="center"
         android:tag="Bottom3"
         android:weightSum="10">
 
-        <ImageView
-            android:id="@+id/trash"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1"
-            android:src="@drawable/trash" />
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="#fdf169"
+            android:gravity="center"
+            android:tag="Bottom3"
+            android:weightSum="10">
 
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_edit" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="#ff0008"
+            android:gravity="center"
+            android:tag="Bottom3"
+            android:weightSum="10">
+            <ImageView
+                android:id="@+id/trash"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/trash" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/item_selector"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_user"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txtNameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textSize="21dp"
+                    android:textStyle="bold"
+                    android:text="Username" />
+                <TextView
+                    android:id="@+id/txtRoleView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic|normal"
+                    android:text="Role" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/txtPhoneView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:gravity="top|right"
+                android:layout_gravity="right|end"
+                android:text="1234567890" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-for one repulse, forgo the purpose that you resolved to effort. " />
+
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>
