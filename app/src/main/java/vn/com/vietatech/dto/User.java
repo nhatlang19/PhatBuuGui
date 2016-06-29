@@ -5,16 +5,18 @@ public class User {
     private String username;
     private String password;
     private String role;
+    private String phone;
 
     public User(String _username, String _password) {
         username = _username;
         password = _password;
     }
 
-    public User(String _username, String _password, String _role) {
+    public User(String _username, String _password, String _role, String _phone) {
         username = _username;
         password = _password;
         role = _role;
+        setPhone(_phone);
     }
 
     public User() {
@@ -22,6 +24,7 @@ public class User {
         username = "";
         password = "";
         setRole("User");
+        phone = "";
     }
 
     public int getId() {
@@ -54,5 +57,13 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

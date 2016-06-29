@@ -9,15 +9,52 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="vn.com.vietatech.phatbuugui.AddUserActivity">
 
+
     <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:padding="10dp" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/user_txtUsername"
+            android:singleLine="true"
+            android:hint="Tên đăng nhập" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:singleLine="true"
+            android:hint="Tên"
+            android:id="@+id/user_txtName" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="phone"
+            android:id="@+id/user_txtPhone"
+            android:hint="Phone" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:id="@+id/user_txtPassword"
+            android:hint="Mật khẩu" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:inputType="textPassword"
+            android:id="@+id/user_txtConfirmPassword"
+            android:hint="Xác nhận mật khẩu" />
     </LinearLayout>
 </RelativeLayout>

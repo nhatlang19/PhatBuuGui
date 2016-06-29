@@ -64,15 +64,13 @@
             android:src="@drawable/ic_user"
             android:layout_gravity="center"
             android:layout_marginRight="5dp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                android:id="@+id/name"
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/txtNameView"
@@ -90,24 +88,15 @@
                     android:textSize="18dp"
                     android:text="Role" />
             </LinearLayout>
-            <LinearLayout
-                android:layout_weight="2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/txtPhoneView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="normal"
-                    android:gravity="top|right"
-                    android:textSize="18dp"
-                    android:layout_gravity="right|end"
-                    android:text="1234567890" />
-            </LinearLayout>
-        </LinearLayout>
-
-
+            <TextView
+                android:id="@+id/txtPhoneView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="normal"
+                android:gravity="top|right"
+                android:textSize="18dp"
+                android:layout_gravity="right|end"
+                android:layout_toRightOf="@id/name"
+                android:text="1234567890" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

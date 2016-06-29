@@ -9,6 +9,11 @@
     <string name="copyright">Copyright® 2015</string>
     <string name="app_folder">VNPostDelivery</string>
 
+    <!-- Dialog confirm -->
+    <string name="confirm_delete">Bạn có muốn xoá không?</string>
+    <string name="yes">Đồng ý</string>
+    <string name="no">Huỷ</string>
+
     <string name="title_activity_fullscreen">Chúc năng chính</string>
     <string name="title_activity_userscreen">Danh sách người dùng</string>
     <string name="title_activity_add_userscreen">Thêm người dùng</string>
@@ -18,4 +23,10 @@
     <string name="nguoi_dung">Người dùng</string>
     <string name="xoa_buu_gui">Xoá bưu gửi</string>
     <string name="cau_hinh">Cấu hình</string>
+
+    <!-- Add User -->
+    <string name="username_is_empty">Tên đăng nhập không thể rỗng</string>
+    <string name="name_is_empty">Tên không thể rỗng</string>
+    <string name="password_is_empty">Mật khẩu không thể rỗng</string>
+    <string name="password_does_not_match">Mật khẩu không trùng khớp</string>
 </resources>

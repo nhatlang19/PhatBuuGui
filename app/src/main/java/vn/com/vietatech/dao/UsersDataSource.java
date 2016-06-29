@@ -16,7 +16,8 @@ public class UsersDataSource {
     private MySQLiteHelper helper;
 
     private String[] allColumns = { MySQLiteHelper.KEY_USER_ID,
-            MySQLiteHelper.KEY_USER_USERNAME,  MySQLiteHelper.KEY_USER_PASSWORD,  MySQLiteHelper.KEY_USER_ROLE };
+            MySQLiteHelper.KEY_USER_USERNAME,  MySQLiteHelper.KEY_USER_PASSWORD,
+            MySQLiteHelper.KEY_USER_ROLE,  MySQLiteHelper.KEY_USER_PHONE };
 
     private static UsersDataSource sInstance;
 
@@ -47,6 +48,7 @@ public class UsersDataSource {
         values.put(MySQLiteHelper.KEY_USER_USERNAME, _User.getUsername());
         values.put(MySQLiteHelper.KEY_USER_PASSWORD, _User.getPassword());
         values.put(MySQLiteHelper.KEY_USER_ROLE, _User.getRole());
+        values.put(MySQLiteHelper.KEY_USER_PHONE, _User.getPhone());
 
         int insertId = (int) db.insert(MySQLiteHelper.TABLE_USERS, null,
                 values);
@@ -63,8 +65,11 @@ public class UsersDataSource {
         return user;
     }
 
-    public void deleteUser(User User) {
-        int id = User.getId();
+    public void deleteUser(User user) throws Exception {
+        if(user.getRole().equals("Admin")) {
+            throw new Exception("Không thể xoá user này");
+        }
+        int id = user.getId();
         System.out.println("User deleted with id: " + id);
         String whereClause = MySQLiteHelper.KEY_USER_ID + "=" + id;
         db.delete(MySQLiteHelper.TABLE_USERS, whereClause, null);
@@ -119,12 +124,14 @@ public class UsersDataSource {
         int indexUsername = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_USERNAME);
         int indexPassword = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_PASSWORD);
         int indexRole = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_ROLE);
+        int indexPhone = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_PHONE);
 
         User user = new User();
         user.setId(cursor.getInt(indexId));
         user.setUsername(cursor.getString(indexUsername));
         user.setPassword(cursor.getString(indexPassword));
         user.setRole(cursor.getString(indexRole));
+        user.setPhone(cursor.getString(indexPhone));
 
         return user;
     }

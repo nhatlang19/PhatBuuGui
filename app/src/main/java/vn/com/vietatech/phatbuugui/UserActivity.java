@@ -73,7 +73,7 @@ public class UserActivity extends AppCompatActivity {
         mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("ListView", "onItemSelected:" + position);
+                Log.i("ListView", "onItemSelected:" + position);
             }
 
             @Override
