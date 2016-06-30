@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.util.Attributes;
 
+import vn.com.vietatech.dto.User;
 import vn.com.vietatech.phatbuugui.adapter.ListViewUserAdapter;
 
 public class UserActivity extends AppCompatActivity {
@@ -100,10 +101,29 @@ public class UserActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.btnAddUser) {
             Intent intent = new Intent(this, AddUserActivity.class);
-            startActivity(intent);
+            intent.setAction(AddUserActivity.ACTION_ADD);
+            startActivityForResult(intent, AddUserActivity.RESQUEST_CODE_ADD);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == AddUserActivity.RESQUEST_CODE_ADD) {
+            User user = (User) data.getSerializableExtra(AddUserActivity.EXTRA_PARAM_USER);
+            mAdapter.getUsers().add(user);
+            mAdapter.notifyDataSetChanged();
+        } else if(requestCode == AddUserActivity.RESQUEST_CODE_EDIT) {
+            User user = (User) data.getSerializableExtra(AddUserActivity.EXTRA_PARAM_USER);
+            int position = mAdapter.getSelectedUserIndex();
+            mAdapter.getUsers().set(position, user);
+            mAdapter.notifyDataSetChanged();
+            mAdapter.closeItem(position);
+        }
     }
 }

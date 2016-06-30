@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="160dp"
-        android:layout_height="80dp"
+        android:layout_height="90dp"
         android:background="#ff0008"
         android:gravity="center"
         android:tag="Bottom3"
@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_height="match_parent"
             android:background="#fdf169"
             android:gravity="center"
             android:tag="Bottom3"
@@ -36,7 +36,7 @@
 
         <LinearLayout
             android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_height="match_parent"
             android:background="#ff0008"
             android:gravity="center"
             android:tag="Bottom3"
@@ -58,8 +58,8 @@
         android:padding="10dp"
         android:orientation="horizontal">
         <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:id="@+id/imageView"
             android:src="@drawable/ic_user"
             android:layout_gravity="center"
@@ -77,16 +77,26 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
-                    android:textSize="21dp"
+                    android:textSize="20dp"
                     android:textStyle="bold"
-                    android:text="Username" />
+                    android:text="name"
+                    android:textColor="#0084ff" />
+                <TextView
+                    android:id="@+id/txtUserNameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:text="Username"
+                    android:textIsSelectable="false"
+                    android:textSize="16dp" />
                 <TextView
                     android:id="@+id/txtRoleView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="italic|normal"
-                    android:textSize="18dp"
-                    android:text="Role" />
+                    android:textSize="16dp"
+                    android:text="Role"
+                    android:textColor="#a40000" />
             </LinearLayout>
             <TextView
                 android:id="@+id/txtPhoneView"

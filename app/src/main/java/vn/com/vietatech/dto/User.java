@@ -1,18 +1,40 @@
 package vn.com.vietatech.dto;
 
-public class User {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class User implements Serializable {
     private int id;
+    private String name;
     private String username;
     private String password;
     private String role;
     private String phone;
 
-    public User(String _username, String _password) {
+    public User(String _username) {
+        id = 0;
         username = _username;
-        password = _password;
     }
 
-    public User(String _username, String _password, String _role, String _phone) {
+    public User(String _username, String _password) {
+        id = 0;
+        username = _username;
+        password = _password;
+        setRole("User");
+    }
+
+    public User(int _id, String _name, String _username, String _password, String _role, String _phone) {
+        id = _id;
+        name = _name;
+        username = _username;
+        password = _password;
+        role = _role;
+        setPhone(_phone);
+    }
+
+    public User(String _name, String _username, String _password, String _role, String _phone) {
+        id = 0;
+        name = _name;
         username = _username;
         password = _password;
         role = _role;
@@ -25,6 +47,15 @@ public class User {
         password = "";
         setRole("User");
         phone = "";
+        name = "";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {

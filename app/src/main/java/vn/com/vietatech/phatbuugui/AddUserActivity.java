@@ -1,5 +1,6 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,16 +11,27 @@ import android.widget.TextView;
 import vn.com.vietatech.dao.UsersDataSource;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.Utils;
+import vn.com.vietatech.phatbuugui.dialog.TransparentProgressDialog;
 
 
 public class AddUserActivity  extends AppCompatActivity {
+    private Context mContext = this;
+
     protected TextView txtUsername;
     protected TextView txtName;
     protected TextView txtPhone;
     protected TextView txtPassword;
     protected TextView txtConfirmPassword;
 
-    protected User user;
+    public static int RESQUEST_CODE_ADD = 1;
+    public static int RESQUEST_CODE_EDIT = 2;
+
+    public static String ACTION_ADD = "add";
+    public static String ACTION_EDIT = "edit";
+
+    public static String EXTRA_PARAM_USER = "User";
+
+    protected User selectedUser = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +42,17 @@ public class AddUserActivity  extends AppCompatActivity {
         txtPhone = (TextView) findViewById(R.id.user_txtPhone);
         txtPassword = (TextView) findViewById(R.id.user_txtPassword);
         txtConfirmPassword = (TextView) findViewById(R.id.user_txtConfirmPassword);
+
+        Intent intent = getIntent();
+        if(intent.getAction().equals(ACTION_EDIT)) {
+            // update title
+            this.setTitle(R.string.title_activity_edit_userscreen);
+
+            selectedUser = (User) intent.getSerializableExtra(EXTRA_PARAM_USER);
+            txtUsername.setText(selectedUser.getUsername());
+            txtName.setText(selectedUser.getName());
+            txtPhone.setText(selectedUser.getPhone());
+        }
     }
 
     @Override
@@ -51,8 +74,25 @@ public class AddUserActivity  extends AppCompatActivity {
             try {
                 User user = initUser();
                 UsersDataSource dataSource = UsersDataSource.getInstance(this);
-                dataSource.createUser(user);
-            } catch(Exception ex) {
+                dataSource.open();
+                if(dataSource.existsUser(user)) {
+                    throw new Exception(this.getString(R.string.user_exists));
+                }
+
+                if(selectedUser == null) {
+                    user = dataSource.createUser(user);
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_PARAM_USER, user);
+                    setResult(RESQUEST_CODE_ADD, intent);
+                } else {
+                    user = dataSource.updateUser(user);
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_PARAM_USER, user);
+                    setResult(RESQUEST_CODE_EDIT, intent);
+                }
+                dataSource.close();
+                finish();//finishing activity
+            } catch (Exception ex) {
                 Utils.showAlert(this, ex.getMessage());
             }
             return true;
@@ -77,15 +117,20 @@ public class AddUserActivity  extends AppCompatActivity {
             throw new Exception(this.getString(R.string.name_is_empty));
         }
 
-        if(password.length() == 0) {
-            throw new Exception(this.getString(R.string.password_is_empty));
+        if(selectedUser == null) {
+            if (password.length() == 0) {
+                throw new Exception(this.getString(R.string.password_is_empty));
+            }
         }
-
-        if(!password.equals(confirmPassword)) {
-            throw new Exception(this.getString(R.string.password_does_not_match));
+        if(selectedUser == null || password.length() > 0) {
+            if (!password.equals(confirmPassword)) {
+                throw new Exception(this.getString(R.string.password_does_not_match));
+            }
         }
-
-        return new User(userName, password, role, phone);
+        if(selectedUser != null) {
+            return new User(selectedUser.getId(), name, userName, password, role, phone);
+        }
+        return new User(name, userName, password, role, phone);
     }
 
 }

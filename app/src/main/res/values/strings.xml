@@ -17,6 +17,7 @@
     <string name="title_activity_fullscreen">Chúc năng chính</string>
     <string name="title_activity_userscreen">Danh sách người dùng</string>
     <string name="title_activity_add_userscreen">Thêm người dùng</string>
+    <string name="title_activity_edit_userscreen">Chỉnh sửa người dùng</string>
 
     <!-- Main Menu -->
     <string name="phat_buu_gui">Phát bưu gửi</string>
@@ -25,6 +26,7 @@
     <string name="cau_hinh">Cấu hình</string>
 
     <!-- Add User -->
+    <string name="user_exists">Tên đăng nhập này đã tồn tại</string>
     <string name="username_is_empty">Tên đăng nhập không thể rỗng</string>
     <string name="name_is_empty">Tên không thể rỗng</string>
     <string name="password_is_empty">Mật khẩu không thể rỗng</string>

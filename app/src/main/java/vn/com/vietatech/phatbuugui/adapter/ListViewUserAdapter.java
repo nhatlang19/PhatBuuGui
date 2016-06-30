@@ -1,15 +1,13 @@
 package vn.com.vietatech.phatbuugui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
-import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
@@ -18,23 +16,27 @@ import java.util.List;
 import vn.com.vietatech.dao.UsersDataSource;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.Utils;
+import vn.com.vietatech.phatbuugui.AddUserActivity;
 import vn.com.vietatech.phatbuugui.R;
+import vn.com.vietatech.phatbuugui.UserActivity;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
 
 public class ListViewUserAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
-    List<User> users;
-    UsersDataSource dataSource;
+    private List<User> users;
+    private UsersDataSource dataSource;
 
     final ListViewUserAdapter adapter = this;
+    private User selectedUser = null;
+    private int selectedUserIndex = -1;
 
     public ListViewUserAdapter(Context mContext) {
         this.mContext = mContext;
 
         dataSource = UsersDataSource.getInstance(mContext);
         dataSource.open();
-        users = dataSource.getAllUsers();
+        setUsers(dataSource.getAllUsers());
         dataSource.close();
     }
 
@@ -47,12 +49,7 @@ public class ListViewUserAdapter extends BaseSwipeAdapter {
     public View generateView(int position, ViewGroup parent) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
         final SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
-//        swipeLayout.addSwipeListener(new SimpleSwipeListener() {
-//            @Override
-//            public void onOpen(SwipeLayout layout) {
-//                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
-//            }
-//        });
+
         swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
             @Override
             public void onDoubleClick(SwipeLayout layout, boolean surface) {
@@ -68,18 +65,18 @@ public class ListViewUserAdapter extends BaseSwipeAdapter {
                 new DialogConfirm(mContext, mContext.getString(R.string.confirm_delete)) {
                     public void run() {
                         try {
-                            User user = users.get(_position);
+                            User user = getUsers().get(_position);
                             dataSource.open();
                             dataSource.deleteUser(user);
                             dataSource.close();
 
-                            users.remove(_position);
+                            getUsers().remove(_position);
                             adapter.removeShownLayouts(swipeLayout);
                             adapter.notifyDataSetInvalidated();
-                        } catch(Exception ex) {
+                            adapter.closeItem(_position);
+                        } catch (Exception ex) {
                             Utils.showAlert(mContext, ex.getMessage());
                         }
-                        Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
                     }
                 };
             }
@@ -87,7 +84,13 @@ public class ListViewUserAdapter extends BaseSwipeAdapter {
         v.findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click edit", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(mContext, AddUserActivity.class);
+                intent.setAction(AddUserActivity.ACTION_EDIT);
+                setSelectedUser(getUsers().get(_position));
+                setSelectedUserIndex(_position);
+                intent.putExtra(AddUserActivity.EXTRA_PARAM_USER, getSelectedUser());
+                UserActivity userActivity = (UserActivity)mContext;
+                userActivity.startActivityForResult(intent, AddUserActivity.RESQUEST_CODE_EDIT);
             }
         });
         return v;
@@ -96,24 +99,54 @@ public class ListViewUserAdapter extends BaseSwipeAdapter {
     @Override
     public void fillValues(int position, View convertView) {
         TextView txtNameView = (TextView)convertView.findViewById(R.id.txtNameView);
-        txtNameView.setText(users.get(position).getId() + ". " + users.get(position).getUsername());
+        txtNameView.setText(getUsers().get(position).getName());
+
+        TextView txtUserNameView = (TextView)convertView.findViewById(R.id.txtUserNameView);
+        txtUserNameView.setText("@" + getUsers().get(position).getUsername());
 
         TextView txtRoleView = (TextView)convertView.findViewById(R.id.txtRoleView);
-        txtRoleView.setText(users.get(position).getRole());
+        txtRoleView.setText("Role: " + getUsers().get(position).getRole());
+
+        TextView txtPhoneView = (TextView)convertView.findViewById(R.id.txtPhoneView);
+        txtPhoneView.setText(getUsers().get(position).getPhone());
     }
 
     @Override
     public int getCount() {
-        return users.size();
+        return getUsers().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return users.get(position);
+        return getUsers().get(position);
     }
 
     @Override
     public long getItemId(int position) {
         return position;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public User getSelectedUser() {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
+    }
+
+    public int getSelectedUserIndex() {
+        return selectedUserIndex;
+    }
+
+    public void setSelectedUserIndex(int selectedUserIndex) {
+        this.selectedUserIndex = selectedUserIndex;
     }
 }

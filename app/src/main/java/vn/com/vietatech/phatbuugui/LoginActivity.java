@@ -13,6 +13,8 @@ import android.widget.Toast;
 import vn.com.vietatech.async.InitData;
 import vn.com.vietatech.async.LoginAsync;
 import vn.com.vietatech.async.MapCitiesAsync;
+import vn.com.vietatech.dao.UsersDataSource;
+import vn.com.vietatech.dto.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,11 +31,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        String isSynced = System.getProperty("isSynced");
-        if(isSynced == null || isSynced.isEmpty() || !isSynced.equals("1")) {
+        UsersDataSource dataSource = UsersDataSource.getInstance(context);
+        dataSource.open();
+        User user = new User("admin");
+        boolean isSynced = dataSource.existsUser(user);
+        dataSource.close();
+        if(!isSynced) {
             new InitData(this).execute();
             new MapCitiesAsync(this).execute();
-            System.setProperty("isSynced", "1");
         }
 
         globalVariable = (MyApplication) getApplicationContext();

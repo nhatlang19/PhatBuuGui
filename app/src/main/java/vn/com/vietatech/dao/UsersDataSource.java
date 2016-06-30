@@ -16,6 +16,7 @@ public class UsersDataSource {
     private MySQLiteHelper helper;
 
     private String[] allColumns = { MySQLiteHelper.KEY_USER_ID,
+            MySQLiteHelper.KEY_USER_NAME,
             MySQLiteHelper.KEY_USER_USERNAME,  MySQLiteHelper.KEY_USER_PASSWORD,
             MySQLiteHelper.KEY_USER_ROLE,  MySQLiteHelper.KEY_USER_PHONE };
 
@@ -45,6 +46,7 @@ public class UsersDataSource {
 
     public User createUser(User _User) {
         ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.KEY_USER_NAME, _User.getName());
         values.put(MySQLiteHelper.KEY_USER_USERNAME, _User.getUsername());
         values.put(MySQLiteHelper.KEY_USER_PASSWORD, _User.getPassword());
         values.put(MySQLiteHelper.KEY_USER_ROLE, _User.getRole());
@@ -63,6 +65,18 @@ public class UsersDataSource {
 
         cursor.close();
         return user;
+    }
+
+    public User updateUser(User _User) {
+        ContentValues values = new ContentValues();
+        values.put(MySQLiteHelper.KEY_USER_NAME, _User.getName());
+        values.put(MySQLiteHelper.KEY_USER_USERNAME, _User.getUsername());
+        values.put(MySQLiteHelper.KEY_USER_PASSWORD, _User.getPassword());
+        values.put(MySQLiteHelper.KEY_USER_ROLE, _User.getRole());
+        values.put(MySQLiteHelper.KEY_USER_PHONE, _User.getPhone());
+
+        db.update(MySQLiteHelper.TABLE_USERS, values, MySQLiteHelper.KEY_USER_ID + "=" + _User.getId(), null);
+        return _User;
     }
 
     public void deleteUser(User user) throws Exception {
@@ -95,12 +109,27 @@ public class UsersDataSource {
         Cursor cursor = db.query(MySQLiteHelper.TABLE_USERS, allColumns,
                 MySQLiteHelper.KEY_USER_ID + "=" + _user.getId(), null, null, null,
                 null);
-
-        cursor.moveToFirst();
-        User user = cursorToUser(cursor);
-
+        User user = null;
+        if(cursor.getCount() != 0) {
+            cursor.moveToFirst();
+            user = cursorToUser(cursor);
+        }
         cursor.close();
         return user;
+    }
+
+    public boolean existsUser(User _user) {
+        // get data after insert
+        String where = MySQLiteHelper.KEY_USER_USERNAME + " = ? and " +
+                MySQLiteHelper.KEY_USER_ID + " != ?";
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_USERS, allColumns,
+                where, new String[] {_user.getUsername(), String.valueOf(_user.getId())}, null, null,
+                null);
+
+        int count = cursor.getCount();
+        cursor.close();
+
+        return count != 0;
     }
 
     public User login(User _user) {
@@ -121,6 +150,7 @@ public class UsersDataSource {
 
     private User cursorToUser(Cursor cursor) {
         int indexId = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_ID);
+        int indexName = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_NAME);
         int indexUsername = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_USERNAME);
         int indexPassword = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_PASSWORD);
         int indexRole = cursor.getColumnIndex(MySQLiteHelper.KEY_USER_ROLE);
@@ -128,6 +158,7 @@ public class UsersDataSource {
 
         User user = new User();
         user.setId(cursor.getInt(indexId));
+        user.setName(cursor.getString(indexName));
         user.setUsername(cursor.getString(indexUsername));
         user.setPassword(cursor.getString(indexPassword));
         user.setRole(cursor.getString(indexRole));

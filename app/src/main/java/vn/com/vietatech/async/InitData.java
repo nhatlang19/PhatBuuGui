@@ -25,7 +25,7 @@ public class InitData extends AsyncTask<Void, Void, Void> {
     }
 
     private void initAdminUser() {
-        User user = new User("admin", "123", "Admin", "12345678");
+        User user = new User("Administrator", "admin", "123", "Admin", "12345678");
         UsersDataSource dataSource = UsersDataSource.getInstance(mContext);
         dataSource.open();
         dataSource.createUser(user);

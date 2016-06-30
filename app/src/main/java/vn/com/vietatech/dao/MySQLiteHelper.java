@@ -13,13 +13,14 @@ import vn.com.vietatech.dto.User;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui1";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 8;
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
     public static final String TABLE_CITIES = "tbl_cities";
 
     // User Table Columns
     public static final String KEY_USER_ID = "id";
+    public static final String KEY_USER_NAME = "name";
     public static final String KEY_USER_USERNAME = "username";
     public static final String KEY_USER_PASSWORD = "password";
     public static final String KEY_USER_ROLE = "role";
@@ -69,6 +70,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS +
                 "(" +
                 KEY_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_USER_NAME + " TEXT," +
                 KEY_USER_USERNAME + " TEXT," +
                 KEY_USER_PASSWORD + " TEXT," +
                 KEY_USER_ROLE + " TEXT," +
