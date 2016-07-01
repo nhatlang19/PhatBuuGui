@@ -1,0 +1,35 @@
+2	Giao hàng đến khu vực khác theo yêu cầu người gửi
+3	Giao hàng với các sản phẩm đã bị hư hỏng
+4	Địa chỉ thiếu/không rõ ràng
+5	Vắng mặt trong một thời gian
+6	Thiếu số lượng hàng hóa
+7	Từ chối nhận hàng
+11	Không thể liên lạc được
+14	Phát theo thời gian đề nghị của người gửi
+15	Đình công
+16	Phát nhầm địa chỉ
+17	Bưu phẩm lạc hướng
+19	Hàng cấm
+20	Hàng thuộc mặt hàng hạn chế nhập khẩu
+21	Chờ thu thêm tiền của người nhận
+23	Người nhận đã chết
+24	Trường hợp bất khả kháng
+25	Người nhận yêu cầu đến nhận tại bưu cục
+26	Ngày nghỉ
+27	Mất bưu gửi
+29	Người nhận có P.O box
+45	Địa chỉ nằm ngoài khu vực phát của dịch vụ CPN
+46	Không đáp ứng được yêu cầu của hải quan
+60	Người nhận không có nhà
+61	Người nhận yêu cầu thay đổi địa chỉ phát
+62	Không có địa chỉ nhận
+63	Địa chỉ nhận không đầy đủ hoặc không đúng
+64	Người nhận đã thay đổi địa chỉ nhưng không để lại địa chỉ mới
+65	Không tìm được người nhận tại địa chỉ ghi trên bưu gửi
+66	Người nhận từ chối nhận
+67	Hết thời gian lưu giữ theo quy định mà người nhận không đến nhận
+68	Hết thời gian lưu giữ theo yêu cầu người gửi
+69	Bưu gửi lưu ký
+89	Rút bưu gửi
+90	Thay đổi địa chỉ
+99	Lý do khác

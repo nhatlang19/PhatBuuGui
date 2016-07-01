@@ -13,6 +13,7 @@ import android.widget.Toast;
 import vn.com.vietatech.async.InitData;
 import vn.com.vietatech.async.LoginAsync;
 import vn.com.vietatech.async.MapCitiesAsync;
+import vn.com.vietatech.async.SolutionsAsync;
 import vn.com.vietatech.dao.UsersDataSource;
 import vn.com.vietatech.dto.User;
 
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         if(!isSynced) {
             new InitData(this).execute();
             new MapCitiesAsync(this).execute();
+            new SolutionsAsync(this).execute();
         }
 
         globalVariable = (MyApplication) getApplicationContext();

@@ -12,11 +12,15 @@ import vn.com.vietatech.dto.User;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
-    private static final String DATABASE_NAME = "phatbuugui1";
-    private static final int DATABASE_VERSION = 8;
+    private static final String DATABASE_NAME = "phatbuugui";
+    private static final int DATABASE_VERSION = 1;
+
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
     public static final String TABLE_CITIES = "tbl_cities";
+    public static final String TABLE_REASONS = "tbl_reasons";
+    public static final String TABLE_SOLUTIONS = "tbl_solutions";
+    public static final String TABLE_REASON_SOLUTION_MAPS = "tbl_reason_solution_maps";
 
     // User Table Columns
     public static final String KEY_USER_ID = "id";
@@ -30,6 +34,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_CITY_ID = "id";
     public static final String KEY_CITY_CODE = "code";
     public static final String KEY_CITY_DESC = "desc";
+
+    // Reason Table Columns
+    public static final String KEY_REASON_ID = "id";
+    public static final String KEY_REASON_NAME = "name";
+
+    // Solution Table Columns
+    public static final String KEY_SOLUTION_ID = "id";
+    public static final String KEY_SOLUTION_NAME = "code";
+
+    // Map Table Columns
+    public static final String KEY_MAP_ID = "id";
+    public static final String KEY_MAP_SOLUTION_ID = "solution_id";
+    public static final String KEY_MAP_REASON_ID = "reason_id";
 
     private static MySQLiteHelper sInstance;
 
@@ -60,6 +77,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
         //db.setForeignKeyConstraintsEnabled(true);
+        db.execSQL("PRAGMA encoding = \"UTF-8\"");
     }
 
     // Called when the database is created for the FIRST time.
@@ -79,13 +97,36 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         String CREATE_CITIES_TABLE = "CREATE TABLE " + TABLE_CITIES +
                 "(" +
-                KEY_CITY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_CITY_ID + " INTEGER PRIMARY KEY," +
                 KEY_CITY_CODE + " TEXT," +
                 KEY_CITY_DESC + " TEXT" +
                 ")";
 
+        String CREATE_REASONS_TABLE = "CREATE TABLE " + TABLE_REASONS +
+                "(" +
+                KEY_REASON_ID + " INTEGER PRIMARY KEY," +
+                KEY_REASON_NAME + " TEXT" +
+                ")";
+
+        String CREATE_SOLUTIONS_TABLE = "CREATE TABLE " + TABLE_SOLUTIONS +
+                "(" +
+                KEY_SOLUTION_ID + " INTEGER PRIMARY KEY," +
+                KEY_SOLUTION_NAME + " TEXT" +
+                ")";
+
+        String CREATE_MAPS_TABLE = "CREATE TABLE " + TABLE_REASON_SOLUTION_MAPS +
+                "(" +
+                KEY_MAP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                KEY_MAP_REASON_ID + " INTEGER," +
+                KEY_MAP_SOLUTION_ID + " INTEGER" +
+                ")";
+
+
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_CITIES_TABLE);
+        db.execSQL(CREATE_REASONS_TABLE);
+        db.execSQL(CREATE_SOLUTIONS_TABLE);
+        db.execSQL(CREATE_MAPS_TABLE);
     }
 
     // Called when the database needs to be upgraded.
@@ -97,6 +138,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             // Simplest implementation is to drop all old tables and recreate them
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITIES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_REASONS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOLUTIONS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_REASON_SOLUTION_MAPS);
+
             onCreate(db);
         }
     }

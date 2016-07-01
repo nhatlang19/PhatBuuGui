@@ -1,0 +1,18 @@
+A	Phát lại trong chuyến phát tiếp theo
+B	Gửi lại giấy mời, chuyển phát tại bưu cục
+C	Chuyển tiếp sang địa chỉ mới
+D	Chuyển hoàn cho người gửi
+E	Hủy (chuyển vô thừa nhận)
+F	Liên hệ với người gửi, chờ trả lời
+G	Lưu bưu gửi theo yêu cầu của người nhận
+H	Đã phát thành công giấy mời, chờ người nhận đến nhận
+I	Sẽ phát trong ngày
+J	Phát tiếp theo yêu cầu
+K	Chờ xử lý của bưu cục gốc
+L	Chờ xử lý của người gửi
+M	Lưu xử lý vô thừa nhận theo lựa chọn của người gửi
+N	Chờ xác minh địa chỉ người nhận
+Q	Xử lý thực tế xử lý của đơn vị
+V	Người nhận đến lấy
+X	Bưu phẩm bị tích thu/hủy bỏ do nội dung không phù hợp
+Y	Chờ đợi sự kiểm tra
