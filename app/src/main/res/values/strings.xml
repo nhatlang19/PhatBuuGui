@@ -18,6 +18,7 @@
     <string name="title_activity_userscreen">Danh sách người dùng</string>
     <string name="title_activity_add_userscreen">Thêm người dùng</string>
     <string name="title_activity_edit_userscreen">Chỉnh sửa người dùng</string>
+    <string name="title_activity_delivery">Phát bưu gửi</string>
 
     <!-- Main Menu -->
     <string name="phat_buu_gui">Phát bưu gửi</string>
@@ -31,4 +32,8 @@
     <string name="name_is_empty">Tên không thể rỗng</string>
     <string name="password_is_empty">Mật khẩu không thể rỗng</string>
     <string name="password_does_not_match">Mật khẩu không trùng khớp</string>
+
+    <!-- Delivery -->
+    <string name="delivery">Phát được</string>
+    <string name="no_delivery">Không phát được</string>
 </resources>

@@ -73,22 +73,22 @@
                 android:id="@+id/name"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/txtNameView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:text="name"
-                    android:textColor="#0084ff" />
-                <TextView
                     android:id="@+id/txtUserNameView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
                     android:text="Username"
-                    android:textIsSelectable="false"
-                    android:textSize="16dp" />
+                    android:textSize="20dp"
+                    android:textColor="#0084ff"
+                    android:textStyle="bold"
+                    android:textIsSelectable="false" />
+                <TextView
+                    android:id="@+id/txtNameView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textSize="16dp"
+                    android:text="name" />
                 <TextView
                     android:id="@+id/txtRoleView"
                     android:layout_width="wrap_content"

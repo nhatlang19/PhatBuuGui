@@ -77,7 +77,8 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void phatBuuGui() {
-
+        Intent intent = new Intent(FullscreenActivity.this, DeliveryActivity.class);
+        startActivity(intent);
     }
 
     private void loadUsers() {
