@@ -36,4 +36,5 @@
     <!-- Delivery -->
     <string name="delivery"><![CDATA[ Phát được (<) ]]></string>
     <string name="no_delivery"><![CDATA[ Không phát được (>) ]]></string>
+    <string name="title_activity_maps">Map</string>
 </resources>

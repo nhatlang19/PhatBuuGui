@@ -1,5 +1,6 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.TabLayout;
@@ -62,6 +63,10 @@ public class DeliveryActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
+            case R.id.btnShowMap:
+                Intent intent = new Intent(this, MapsActivity.class);
+                startActivity(intent);
+                return true;
             case R.id.btnSaveDelivery:
                 return true;
             case R.id.btnQuetSoLuongLon:
