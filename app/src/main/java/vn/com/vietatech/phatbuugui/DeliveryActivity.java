@@ -41,7 +41,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DeliveryFragment(), this.getString(R.string.delivery));
+        adapter.addFragment(new DeliveryFragment(),  this.getString(R.string.delivery));
         adapter.addFragment(new NoDeliveryFragment(), this.getString(R.string.no_delivery));
         viewPager.setAdapter(adapter);
     }

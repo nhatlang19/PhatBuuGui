@@ -34,6 +34,6 @@
     <string name="password_does_not_match">Mật khẩu không trùng khớp</string>
 
     <!-- Delivery -->
-    <string name="delivery">Phát được</string>
-    <string name="no_delivery">Không phát được</string>
+    <string name="delivery"><![CDATA[ Phát được (<) ]]></string>
+    <string name="no_delivery"><![CDATA[ Không phát được (>) ]]></string>
 </resources>

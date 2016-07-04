@@ -5,6 +5,7 @@ import android.content.Context;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -27,12 +28,11 @@ public class ReasonsGetPropertyValues {
             Properties prop = new Properties();
             String propFileName = "reasons";
 
-            inputStream = context.getResources().openRawResource(
-                    context.getResources().getIdentifier(propFileName,
-                            "raw", context.getPackageName()));
+            inputStream = context.getResources().openRawResource(context.getResources().getIdentifier(propFileName,"raw", context.getPackageName()));
 
             if (inputStream != null) {
-                prop.load(inputStream);
+                InputStreamReader isr = new InputStreamReader(inputStream, "UTF-8");
+                prop.load(isr);
             } else {
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
