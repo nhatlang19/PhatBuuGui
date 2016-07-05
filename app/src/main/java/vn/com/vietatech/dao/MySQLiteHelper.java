@@ -13,7 +13,7 @@ import vn.com.vietatech.dto.User;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
@@ -21,6 +21,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_REASONS = "tbl_reasons";
     public static final String TABLE_SOLUTIONS = "tbl_solutions";
     public static final String TABLE_REASON_SOLUTION_MAPS = "tbl_reason_solution_maps";
+    public static final String TABLE_DELIVERIES = "tbl_deliveries";
 
     // User Table Columns
     public static final String KEY_USER_ID = "id";
@@ -47,6 +48,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_MAP_ID = "id";
     public static final String KEY_MAP_SOLUTION_ID = "solution_id";
     public static final String KEY_MAP_REASON_ID = "reason_id";
+
+    // Delivery Table Columns
+    public static final String KEY_ITEM_CODE = "itemCode";
+    public static final String KEY_POS_CODE = "toPOSCode";
+    public static final String KEY_IS_DELIVERABLE = "isDeliverable";
+    public static final String KEY_CAUSE_CODE = "causeCode";
+    public static final String KEY_SOLUTION_CODE = "solutionCode";
+    public static final String KEY_DELIVERY_DATE = "deliveryDate";
+    public static final String KEY_DELIVERY_CERT_NAME = "deliveryCertificateName";
+    public static final String KEY_DELIVERY_CERT_NUMBER = "deliveryCertificateNumber";
+    public static final String KEY_DELIVERY_CERT_DATEOFISSUE = "deliveryCertificateDateOfIssue";
+    public static final String KEY_DELIVERY_CERT_PLACEOFISSUE = "deliveryCertificatePlaceOfIssue";
+    public static final String KEY_RELATE_WITH_RECEIVE = "relateWithReceive";
+    public static final String KEY_REAL_RECEIVER_NAME = "realReciverName";
+    public static final String KEY_REAL_RECEIVER_IDENTIFICATION = "realReceiverIdentification";
+    public static final String KEY_DELIVERY_USER = "deliveryUser";
+    public static final String KEY_BATCH_DELIVERY = "batchDelivery";
+    public static final String KEY_UPLOAD = "upload";
+
 
     private static MySQLiteHelper sInstance;
 
@@ -121,12 +141,32 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_MAP_SOLUTION_ID + " INTEGER" +
                 ")";
 
+        String CREATE_DILIVERIES_TABLE = "CREATE TABLE " + TABLE_DELIVERIES +
+                "(" +
+                KEY_ITEM_CODE + " TEXT PRIMARY KEY ," +
+                KEY_POS_CODE + " TEXT," +
+                KEY_IS_DELIVERABLE + " TEXT," +
+                KEY_CAUSE_CODE + " TEXT," +
+                KEY_SOLUTION_CODE + " TEXT," +
+                KEY_DELIVERY_DATE + " TEXT," +
+                KEY_DELIVERY_CERT_NAME + " TEXT," +
+                KEY_DELIVERY_CERT_NUMBER + " TEXT," +
+                KEY_DELIVERY_CERT_DATEOFISSUE + " TEXT," +
+                KEY_DELIVERY_CERT_PLACEOFISSUE + " TEXT," +
+                KEY_RELATE_WITH_RECEIVE + " TEXT," +
+                KEY_REAL_RECEIVER_NAME + " TEXT," +
+                KEY_REAL_RECEIVER_IDENTIFICATION + " TEXT," +
+                KEY_DELIVERY_USER + " TEXT," +
+                KEY_BATCH_DELIVERY + " TEXT," +
+                KEY_UPLOAD + " TEXT" +
+                ")";
 
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_CITIES_TABLE);
         db.execSQL(CREATE_REASONS_TABLE);
         db.execSQL(CREATE_SOLUTIONS_TABLE);
         db.execSQL(CREATE_MAPS_TABLE);
+        db.execSQL(CREATE_DILIVERIES_TABLE);
     }
 
     // Called when the database needs to be upgraded.
@@ -141,6 +181,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_REASONS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOLUTIONS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_REASON_SOLUTION_MAPS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_DELIVERIES);
 
             onCreate(db);
         }

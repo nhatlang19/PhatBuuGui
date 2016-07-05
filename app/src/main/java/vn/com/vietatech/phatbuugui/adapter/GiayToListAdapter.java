@@ -24,11 +24,11 @@ public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
 		this.context = context;
 
 		this.values = new ArrayList<>();
-		this.values.add(new GiayTo(1, "AAAAA"));
-		this.values.add(new GiayTo(2, "BBBBB"));
-		this.values.add(new GiayTo(3, "CCCCC"));
-		this.values.add(new GiayTo(4, "DDDDD"));
-
+		this.values.add(new GiayTo(1, "CMND"));
+		this.values.add(new GiayTo(2, "CMND quân đội"));
+		this.values.add(new GiayTo(3, "Bằng lái xe"));
+		this.values.add(new GiayTo(4, "Thẻ học sinh"));
+		this.values.add(new GiayTo(4, "Thẻ sinh viên"));
 	}
 
 	public int getCount() {
