@@ -37,4 +37,7 @@
     <string name="delivery"><![CDATA[ Phát được (<) ]]></string>
     <string name="no_delivery"><![CDATA[ Không phát được (>) ]]></string>
     <string name="title_activity_maps">Map</string>
+
+    <!-- Delivery Error -->
+    <string name="error_no_code">Chưa quét bưu gửi</string>
 </resources>

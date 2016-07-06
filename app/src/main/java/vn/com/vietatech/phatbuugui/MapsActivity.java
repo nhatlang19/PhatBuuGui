@@ -41,14 +41,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        double latitude = 10.7904181;
+        double longtitude = 106.68051650000007;
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+        LatLng sydney = new LatLng(latitude, longtitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Vị trí của bạn"));
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(new LatLng(-34, 151)).zoom(18).build();
+                .target(new LatLng(latitude, longtitude)).zoom(18).build();
         mMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(cameraPosition));
 

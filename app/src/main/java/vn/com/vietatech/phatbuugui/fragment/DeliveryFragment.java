@@ -18,11 +18,12 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.adapter.GiayToListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.NoiCapListAdapter;
 
-public class DeliveryFragment extends Fragment {
+public class DeliveryFragment extends Fragment implements IFragment  {
 
     private EditText txtHoten;
     private RadioButton rbDuongSu;
@@ -114,5 +115,39 @@ public class DeliveryFragment extends Fragment {
                 });
         AlertDialog alertD = alertDialogBuilder.create();
         alertD.show();
+    }
+
+    @Override
+    public Delivery getData() {
+//        return null;
+
+//
+//
+//        rbDuongSu = (RadioButton) view.findViewById(R.id.rbDuongSu);
+//        rbKhac = (RadioButton) view.findViewById(R.id.rbKhac);
+//        spinnerGiayTo = (Spinner) view.findViewById(R.id.spinnerGiayTo);
+//        txtSoGiayTo = (EditText) view.findViewById(R.id.txtSoGiayTo);
+//        txtNgayCap = (EditText) view.findViewById(R.id.txtNgayCap);
+//        spinnerNoiCap = (Spinner) view.findViewById(R.id.spinnerNoiCap);
+//        rbPhatHoan = (CheckBox) view.findViewById(R.id.rbPhatHoan1);
+
+        Delivery _delivery = new Delivery();
+        _delivery.setDeliveryCertificateName(spinnerGiayTo.getSelectedItem().toString());
+        _delivery.setDeliveryCertificateNumber(txtSoGiayTo.getText().toString());
+        _delivery.setDeliveryCertificateDateOfIssue(txtNgayCap.getText().toString());
+        _delivery.setDeliveryCertificatePlaceOfIssue(spinnerNoiCap.getSelectedItem().toString());
+        _delivery.setIsDeliverable("1");
+
+        return _delivery;
+
+//        _delivery.setItemCode(cursor.getString(indexItemCode));
+//        _delivery.setToPOSCode(cursor.getString(indexPosCode));
+//        _delivery.setDeliveryDate(cursor.getString(indexDeliveryDate));
+//        _delivery.setRelateWithReceive(cursor.getString(indexRelateWithReceive));
+//        _delivery.setRealReciverName(cursor.getString(indexRealReceverName));
+//        _delivery.setRealReceiverIdentification(cursor.getString(indexRealReceivertIdent));
+//        _delivery.setDeliveryUser(cursor.getString(indexDeliveryUser));
+//        _delivery.setBatchDelivery(cursor.getString(indexBatchDelivery));
+//        _delivery.setUpload(cursor.getString(indexUpload));
     }
 }

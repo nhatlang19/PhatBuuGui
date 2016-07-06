@@ -3,20 +3,39 @@ package vn.com.vietatech.dto;
 public class Delivery {
     private String itemCode;
     private String toPOSCode;
-    private String isDeliverable;
-    private String causeCode;
-    private String solutionCode;
-    private String deliveryDate;
-    private String deliveryCertificateName;
-    private String deliveryCertificateNumber;
-    private String deliveryCertificateDateOfIssue;
-    private String deliveryCertificatePlaceOfIssue;
+    private String isDeliverable; // Phat duoc / khong phat duoc
+    private String causeCode; // ly do
+    private String solutionCode; // giai phap
+    private String deliveryDate; // ngay phat
+    private String deliveryCertificateName; // giay to
+    private String deliveryCertificateNumber; // so giay to
+    private String deliveryCertificateDateOfIssue; // ngay cap
+    private String deliveryCertificatePlaceOfIssue; // noi cap
     private String relateWithReceive;
     private String realReciverName;
     private String realReceiverIdentification;
     private String deliveryUser;
     private String batchDelivery;
     private String upload;
+
+    public Delivery() {
+        itemCode = "";
+        toPOSCode = "";
+        isDeliverable = "0";
+        causeCode = "";
+        solutionCode = "";
+        deliveryDate = "";
+        deliveryCertificateName = "";
+        deliveryCertificateNumber = "";
+        deliveryCertificateDateOfIssue = "";
+        deliveryCertificatePlaceOfIssue = "";
+        relateWithReceive = "";
+        realReciverName = "";
+        realReceiverIdentification = "";
+        deliveryUser = "";
+        batchDelivery = "0";
+        upload = "0";
+    }
 
     public String getItemCode() {
         return itemCode;

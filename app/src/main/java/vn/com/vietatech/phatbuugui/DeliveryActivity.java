@@ -1,5 +1,6 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,15 +8,25 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
+
+import vn.com.vietatech.dto.Delivery;
+import vn.com.vietatech.lib.ConfigUtils;
+import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.adapter.ViewPagerAdapter;
 import vn.com.vietatech.phatbuugui.fragment.DeliveryFragment;
 import vn.com.vietatech.phatbuugui.fragment.NoDeliveryFragment;
 
 public class DeliveryActivity extends AppCompatActivity {
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private EditText txtCode;
+    private CheckBox cbBatch;
+
+    private Context context = this;
 
     private static String temlateTitle = "Mới %d/Tổng %d";
 
@@ -34,6 +45,9 @@ public class DeliveryActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        txtCode = (EditText) findViewById(R.id.txtCode);
+        cbBatch = (CheckBox) findViewById(R.id.cbBatch);
     }
 
     private void updateTitle() {
@@ -66,18 +80,57 @@ public class DeliveryActivity extends AppCompatActivity {
             case R.id.btnShowMap:
                 Intent intent = new Intent(this, MapsActivity.class);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.btnSaveDelivery:
-                return true;
+                this.save();
+                break;
             case R.id.btnQuetSoLuongLon:
-                return true;
+                break;
             case R.id.btnXemDanhSach:
-                return true;
+                break;
             case R.id.btnXoaBuuGui:
-                return true;
+                break;
             case R.id.btnUpload:
-                return true;
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void save() {
+        int position = viewPager.getCurrentItem();
+        ViewPagerAdapter adapter = (ViewPagerAdapter)viewPager.getAdapter();
+
+        if(txtCode.getText().toString().trim().length() == 0) {
+            Utils.showAlert(context, this.getString(R.string.error_no_code));
+            return ;
+        }
+
+        Delivery delivery;
+        if (position == 1) {
+            delivery = ((DeliveryFragment)adapter.getItem(position)).getData ();
+        } else {
+            delivery = new Delivery();
+        }
+
+        delivery.setItemCode(txtCode.getText().toString());
+        if(cbBatch.isChecked()) {
+            delivery.setBatchDelivery("1");
+        }
+
+        // get code
+        ConfigUtils utils = ConfigUtils.getInstance(this);
+        String code = utils.displaySharedPreferences().getCode();
+        delivery.setToPOSCode(code);
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+        String dateString = sdf.format(date);
+        delivery.setDeliveryDate(dateString);
+
+//
+//        _delivery.setRelateWithReceive(cursor.getString(indexRelateWithReceive));
+//        _delivery.setRealReciverName(cursor.getString(indexRealReceverName));
+//        _delivery.setRealReceiverIdentification(cursor.getString(indexRealReceivertIdent));
+//        _delivery.setDeliveryUser(cursor.getString(indexDeliveryUser));
     }
 }

@@ -10,12 +10,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.adapter.GiayToListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.ReasonListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.SolutionListAdapter;
 
-public class NoDeliveryFragment extends Fragment{
+public class NoDeliveryFragment extends Fragment implements IFragment{
     private Spinner spinReason;
     private Spinner spinSolution;
     private CheckBox cbPhatHoan;
@@ -51,4 +52,8 @@ public class NoDeliveryFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public Delivery getData() {
+        return null;
+    }
 }
