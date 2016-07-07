@@ -12,31 +12,30 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.util.Attributes;
 
 import vn.com.vietatech.dto.User;
-import vn.com.vietatech.phatbuugui.adapter.ListViewUserAdapter;
+import vn.com.vietatech.phatbuugui.adapter.ListViewDeliveryAdapter;
 
-public class UserActivity extends AppCompatActivity {
+public class DeliveryListActivity extends AppCompatActivity {
 
     private ListView mListView;
-    private ListViewUserAdapter mAdapter;
+    private ListViewDeliveryAdapter mAdapter;
     private Context mContext = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_delivery_list);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mListView = (ListView) findViewById(R.id.listUser);
+        mListView = (ListView) findViewById(R.id.listDelivery);
 
-        mAdapter = new ListViewUserAdapter(this);
+        mAdapter = new ListViewDeliveryAdapter(this);
         mListView.setAdapter(mAdapter);
         mAdapter.setMode(Attributes.Mode.Single);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,7 +54,6 @@ public class UserActivity extends AppCompatActivity {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(mContext, "OnItemLongClickListener", Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -100,9 +98,7 @@ public class UserActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.btnAddUser) {
-            Intent intent = new Intent(this, AddUserActivity.class);
-            intent.setAction(AddUserActivity.ACTION_ADD);
-            startActivityForResult(intent, AddUserActivity.RESQUEST_CODE_ADD);
+
             return true;
         }
 

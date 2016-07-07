@@ -7,9 +7,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import vn.com.vietatech.dto.Reason;
+import vn.com.vietatech.dto.Solution;
 
 public class ReasonsDataSource {
     private SQLiteDatabase db;
@@ -19,6 +22,13 @@ public class ReasonsDataSource {
             MySQLiteHelper.KEY_REASON_NAME};
 
     private static ReasonsDataSource sInstance;
+
+    private static String PREFIX_REASON_ID = MySQLiteHelper.TABLE_REASONS + "." + MySQLiteHelper.KEY_REASON_ID;
+    private static String PREFIX_REASON_NAME = MySQLiteHelper.TABLE_REASONS + "." + MySQLiteHelper.KEY_REASON_NAME;
+    private static String PREFIX_SOLUTION_ID = MySQLiteHelper.TABLE_SOLUTIONS + "." + MySQLiteHelper.KEY_SOLUTION_ID;
+    private static String PREFIX_SOLUTION_NAME = MySQLiteHelper.TABLE_SOLUTIONS + "." + MySQLiteHelper.KEY_SOLUTION_NAME;
+    private static String PREFIX_MAP_REASON_ID = MySQLiteHelper.TABLE_REASON_SOLUTION_MAPS + "." + MySQLiteHelper.KEY_MAP_REASON_ID;
+    private static String PREFIX_MAP_SOLUTION_ID = MySQLiteHelper.TABLE_REASON_SOLUTION_MAPS + "." + MySQLiteHelper.KEY_MAP_SOLUTION_ID;
 
     public static synchronized ReasonsDataSource getInstance(Context context) {
         // Use the application context, which will ensure that you
@@ -71,13 +81,21 @@ public class ReasonsDataSource {
     public List<Reason> getAllReasons() {
         List<Reason> list = new ArrayList<Reason>();
 
-        Cursor cursor = db.query(MySQLiteHelper.TABLE_REASONS, allColumns,
-                null, null, null, null, null);
 
-        while (cursor.moveToNext()) {
-            Reason reason = cursorToReason(cursor);
-            list.add(reason);
-        }
+        String query = "SELECT "
+                + PREFIX_REASON_ID + ", " + PREFIX_REASON_NAME + ", "
+                + PREFIX_SOLUTION_ID + ", " + PREFIX_SOLUTION_NAME
+                + " FROM "
+                + MySQLiteHelper.TABLE_REASONS + ", "
+                + MySQLiteHelper.TABLE_REASON_SOLUTION_MAPS + ", "
+                + MySQLiteHelper.TABLE_SOLUTIONS + " WHERE "
+                + PREFIX_MAP_REASON_ID + " = " + PREFIX_REASON_ID + " AND "
+                + PREFIX_MAP_SOLUTION_ID + " = " + PREFIX_SOLUTION_ID;
+
+        System.out.println(query);
+        Cursor cursor = db.rawQuery(query, null);
+
+        list = cursorToReasonList(cursor);
         cursor.close();
         return list;
     }
@@ -96,13 +114,43 @@ public class ReasonsDataSource {
     }
 
     private Reason cursorToReason(Cursor cursor) {
-        int indexId = cursor.getColumnIndex(MySQLiteHelper.KEY_REASON_ID);
-        int indexName = cursor.getColumnIndex(MySQLiteHelper.KEY_REASON_NAME);
+        int indexReasonId = cursor.getColumnIndex(PREFIX_REASON_ID);
+        int indexReasonName = cursor.getColumnIndex(PREFIX_REASON_NAME);
 
         Reason reason = new Reason();
-        reason.setId(cursor.getInt(indexId));
-        reason.setName(cursor.getString(indexName));
+        reason.setId(cursor.getInt(indexReasonId));
+        reason.setName(cursor.getString(indexReasonName));
 
         return reason;
+    }
+
+    private List<Reason> cursorToReasonList(Cursor cursor) {
+        Map<Integer, Reason> map = new HashMap<Integer, Reason>();
+
+        int indexReasonId = 0;
+        int indexReasonName = 1;
+        int indexSolutionId = 2;
+        int indexSolutionName = 3;
+
+        while (cursor.moveToNext()) {
+            Solution solution = new Solution();
+            solution.setId(cursor.getInt(indexSolutionId));
+            solution.setName(cursor.getString(indexSolutionName));
+
+            int id = cursor.getInt(indexReasonId);
+            Reason reason = new Reason();
+            if (!map.containsKey(id)) {
+                reason.setId(id);
+                reason.setName(cursor.getString(indexReasonName));
+                reason.setSolutions(new ArrayList<Solution>());
+            } else {
+                reason = map.get(id);
+            }
+            reason.getSolutions().add(solution);
+            map.put(id, reason);
+        }
+
+        List<Reason> list = new ArrayList<Reason>(map.values());
+        return list;
     }
 }

@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import vn.com.vietatech.dao.SolutionsDataSource;
 import vn.com.vietatech.dto.Solution;
 
 public class SolutionListAdapter extends ArrayAdapter<Solution>{
@@ -18,27 +17,21 @@ public class SolutionListAdapter extends ArrayAdapter<Solution>{
     // Your sent context
     private Context context;
     // Your custom values for the spinner (Session)
-    private ArrayList<Solution> values;
+    private List<Solution> values;
 
-    public SolutionListAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
+    public SolutionListAdapter(Context context, int textViewResourceId, List<Solution> solutions) {
+        super(context, textViewResourceId, solutions);
+		setValues(solutions);
 		this.context = context;
 
-
-		if(null == values) {
-			SolutionsDataSource ds = SolutionsDataSource.getInstance(context);
-			ds.open();
-			this.values = (ArrayList<Solution>) ds.getAllSolutions();
-			ds.close();
-		}
 	}
 
 	public int getCount() {
-		return values.size();
+		return getValues().size();
 	}
 
 	public Solution getItem(int position) {
-		return values.get(position);
+		return getValues().get(position);
 	}
 
 	public long getItemId(int position) {
@@ -58,7 +51,7 @@ public class SolutionListAdapter extends ArrayAdapter<Solution>{
             );
         }
         label.setTextSize(20);
-		label.setText(values.get(position).getName().trim());
+		label.setText(getValues().get(position).getName().trim());
 		return label;
 	}
 
@@ -74,7 +67,15 @@ public class SolutionListAdapter extends ArrayAdapter<Solution>{
             );
         }
         label.setTextSize(20);
-		label.setText(values.get(position).getName().trim());
+		label.setText(getValues().get(position).getName().trim());
 		return label;
 	}
+
+    public List<Solution> getValues() {
+        return values;
+    }
+
+    public void setValues(List<Solution> values) {
+        this.values = values;
+    }
 }

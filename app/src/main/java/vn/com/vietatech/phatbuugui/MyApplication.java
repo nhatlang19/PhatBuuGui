@@ -4,7 +4,7 @@ import android.app.Application;
 
 import vn.com.vietatech.dto.User;
 
-public class MyApplication extends Application {
+public class MyApplication extends android.support.multidex.MultiDexApplication {
 	private User _user = null;
 
 

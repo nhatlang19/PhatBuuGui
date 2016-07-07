@@ -18,7 +18,7 @@ public class ReasonListAdapter extends ArrayAdapter<Reason>{
     // Your sent context
     private Context context;
     // Your custom values for the spinner (Session)
-    private ArrayList<Reason> values;
+    private static ArrayList<Reason> values;
 
     public ReasonListAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);

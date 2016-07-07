@@ -13,7 +13,7 @@ import vn.com.vietatech.dto.User;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
@@ -138,7 +138,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "(" +
                 KEY_MAP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 KEY_MAP_REASON_ID + " INTEGER," +
-                KEY_MAP_SOLUTION_ID + " INTEGER" +
+                KEY_MAP_SOLUTION_ID + " INTEGER," +
+                "FOREIGN KEY(" + KEY_MAP_REASON_ID + ") REFERENCES " +
+                TABLE_REASONS + "(id) " +
+                "FOREIGN KEY(" + KEY_MAP_SOLUTION_ID + ") REFERENCES " +
+                TABLE_SOLUTIONS + "(id) " +
                 ")";
 
         String CREATE_DILIVERIES_TABLE = "CREATE TABLE " + TABLE_DELIVERIES +

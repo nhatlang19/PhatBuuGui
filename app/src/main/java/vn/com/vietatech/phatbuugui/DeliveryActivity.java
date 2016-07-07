@@ -87,14 +87,27 @@ public class DeliveryActivity extends AppCompatActivity {
             case R.id.btnQuetSoLuongLon:
                 break;
             case R.id.btnXemDanhSach:
+                Intent intentList = new Intent(this, DeliveryListActivity.class);
+                startActivity(intentList);
                 break;
             case R.id.btnXoaBuuGui:
+                delete();
                 break;
             case R.id.btnUpload:
+                upload();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    protected void delete() {
+
+    }
+
+    protected void upload() {
+
+    }
+
 
     protected void save() {
         int position = viewPager.getCurrentItem();

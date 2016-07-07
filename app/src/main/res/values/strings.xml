@@ -19,6 +19,8 @@
     <string name="title_activity_add_userscreen">Thêm người dùng</string>
     <string name="title_activity_edit_userscreen">Chỉnh sửa người dùng</string>
     <string name="title_activity_delivery">Phát bưu gửi</string>
+    <string name="title_activity_delivery_list">Danh sách bưu gửi</string>
+    <string name="title_activity_maps">Map</string>
 
     <!-- Main Menu -->
     <string name="phat_buu_gui">Phát bưu gửi</string>
@@ -36,7 +38,7 @@
     <!-- Delivery -->
     <string name="delivery"><![CDATA[ Phát được (<) ]]></string>
     <string name="no_delivery"><![CDATA[ Không phát được (>) ]]></string>
-    <string name="title_activity_maps">Map</string>
+
 
     <!-- Delivery Error -->
     <string name="error_no_code">Chưa quét bưu gửi</string>

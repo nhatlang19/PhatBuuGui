@@ -72,6 +72,16 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".DeliveryListActivity"
+            android:label="@string/title_activity_delivery_list"
+            android:parentActivityName=".DeliveryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="DeliveryActivity" />
+
+        </activity>
+
+        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:parentActivityName=".DeliveryActivity">

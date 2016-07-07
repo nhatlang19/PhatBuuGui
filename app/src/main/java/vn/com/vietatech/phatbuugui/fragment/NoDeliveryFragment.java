@@ -1,16 +1,23 @@
 package vn.com.vietatech.phatbuugui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import vn.com.vietatech.dto.Delivery;
+import vn.com.vietatech.dto.Reason;
+import vn.com.vietatech.dto.Solution;
 import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.adapter.GiayToListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.ReasonListAdapter;
@@ -20,6 +27,7 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
     private Spinner spinReason;
     private Spinner spinSolution;
     private CheckBox cbPhatHoan;
+
 
 
     public NoDeliveryFragment() {
@@ -45,9 +53,22 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
         spinReason.setAdapter(reasonListAdapter);
         spinReason.setSelection(0);
 
-        SolutionListAdapter solutionListAdapter = new SolutionListAdapter(this.getContext(),  android.R.layout.simple_spinner_item);
-        spinSolution.setAdapter(solutionListAdapter);
-        spinSolution.setSelection(0);
+        final Context context = this.getContext();
+        spinReason.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                List<Solution> solutions = ((Reason) spinReason.getSelectedItem()).getSolutions();
+                SolutionListAdapter solutionListAdapter = new SolutionListAdapter(context,  android.R.layout.simple_spinner_item, solutions);
+                spinSolution.setAdapter(solutionListAdapter);
+                spinSolution.setSelection(0);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         return view;
     }

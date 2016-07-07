@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
@@ -21,17 +20,17 @@ import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.UserActivity;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
 
-public class ListViewUserAdapter extends BaseSwipeAdapter {
+public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
     private List<User> users;
     private UsersDataSource dataSource;
 
-    final ListViewUserAdapter adapter = this;
+    final ListViewDeliveryAdapter adapter = this;
     private User selectedUser = null;
     private int selectedUserIndex = -1;
 
-    public ListViewUserAdapter(Context mContext) {
+    public ListViewDeliveryAdapter(Context mContext) {
         this.mContext = mContext;
 
         dataSource = UsersDataSource.getInstance(mContext);
