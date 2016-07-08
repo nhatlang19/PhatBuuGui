@@ -85,13 +85,14 @@ public class DeliveryActivity extends AppCompatActivity {
                 this.save();
                 break;
             case R.id.btnQuetSoLuongLon:
+                this.scanMany();
                 break;
             case R.id.btnXemDanhSach:
                 Intent intentList = new Intent(this, DeliveryListActivity.class);
                 startActivity(intentList);
                 break;
             case R.id.btnXoaBuuGui:
-                delete();
+                this.delete();
                 break;
             case R.id.btnUpload:
                 upload();
@@ -105,6 +106,10 @@ public class DeliveryActivity extends AppCompatActivity {
     }
 
     protected void upload() {
+
+    }
+
+    protected void scanMany() {
 
     }
 

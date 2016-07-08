@@ -123,7 +123,7 @@ public class DeliveryDataSource {
         db.delete(MySQLiteHelper.TABLE_DELIVERIES, whereClause, new String[]{id});
     }
 
-    public List<Delivery> getAllDeliverys() {
+    public List<Delivery> getAllDeliveries() {
         List<Delivery> list = new ArrayList<Delivery>();
 
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,

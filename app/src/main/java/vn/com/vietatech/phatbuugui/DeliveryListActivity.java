@@ -81,45 +81,4 @@ public class DeliveryListActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.btnAddUser) {
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // check if the request code is same as what is passed  here it is 2
-        if (requestCode == AddUserActivity.RESQUEST_CODE_ADD) {
-            User user = (User) data.getSerializableExtra(AddUserActivity.EXTRA_PARAM_USER);
-            mAdapter.getUsers().add(user);
-            mAdapter.notifyDataSetChanged();
-        } else if(requestCode == AddUserActivity.RESQUEST_CODE_EDIT) {
-            User user = (User) data.getSerializableExtra(AddUserActivity.EXTRA_PARAM_USER);
-            int position = mAdapter.getSelectedUserIndex();
-            mAdapter.getUsers().set(position, user);
-            mAdapter.notifyDataSetChanged();
-            mAdapter.closeItem(position);
-        }
-    }
 }

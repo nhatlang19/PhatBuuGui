@@ -9,30 +9,13 @@
     swipe:rightEdgeSwipeOffset="0dp">
 
     <LinearLayout
-        android:layout_width="160dp"
-        android:layout_height="90dp"
+        android:layout_width="80dp"
+        android:layout_height="70dp"
         android:background="#ff0008"
         android:gravity="center"
         android:tag="Bottom3"
         android:weightSum="10">
 
-        <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:background="#fdf169"
-            android:gravity="center"
-            android:tag="Bottom3"
-            android:weightSum="10">
-
-
-            <ImageView
-                android:id="@+id/edit"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:src="@drawable/ic_edit" />
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="80dp"
@@ -53,16 +36,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:background="@drawable/item_selector"
-        android:padding="10dp"
+        android:padding="0dp"
         android:orientation="horizontal">
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:id="@+id/imageView"
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:id="@+id/uploadColor"
             android:src="@drawable/ic_user"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
+            android:background="#ff0008"
             android:layout_marginRight="5dp" />
 
             <LinearLayout
@@ -71,42 +55,26 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:id="@+id/name"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_vertical">
                 <TextView
-                    android:id="@+id/txtUserNameView"
+                    android:id="@+id/txtBuuGui"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
-                    android:text="Username"
+                    android:text="Bưu gửi"
                     android:textSize="20dp"
                     android:textColor="#0084ff"
                     android:textStyle="bold"
                     android:textIsSelectable="false" />
                 <TextView
-                    android:id="@+id/txtNameView"
+                    android:id="@+id/txtNguoiNhan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
                     android:textSize="16dp"
                     android:text="name" />
-                <TextView
-                    android:id="@+id/txtRoleView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="italic|normal"
-                    android:textSize="16dp"
-                    android:text="Role"
-                    android:textColor="#a40000" />
+
             </LinearLayout>
-            <TextView
-                android:id="@+id/txtPhoneView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="normal"
-                android:gravity="top|right"
-                android:textSize="18dp"
-                android:layout_gravity="right|end"
-                android:layout_toRightOf="@id/name"
-                android:text="1234567890" />
     </LinearLayout>
 </com.daimajia.swipe.SwipeLayout>

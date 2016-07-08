@@ -2,6 +2,7 @@ package vn.com.vietatech.phatbuugui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,30 +13,28 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
 import java.util.List;
 
-import vn.com.vietatech.dao.UsersDataSource;
-import vn.com.vietatech.dto.User;
+import vn.com.vietatech.dao.DeliveryDataSource;
+import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.lib.Utils;
-import vn.com.vietatech.phatbuugui.AddUserActivity;
 import vn.com.vietatech.phatbuugui.R;
-import vn.com.vietatech.phatbuugui.UserActivity;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
 
 public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
-    private List<User> users;
-    private UsersDataSource dataSource;
+    private List<Delivery> deliveries;
+    private DeliveryDataSource dataSource;
 
     final ListViewDeliveryAdapter adapter = this;
-    private User selectedUser = null;
-    private int selectedUserIndex = -1;
+    private Delivery selectedDelivery = null;
+    private int selectedDeliveryIndex = -1;
 
     public ListViewDeliveryAdapter(Context mContext) {
         this.mContext = mContext;
 
-        dataSource = UsersDataSource.getInstance(mContext);
+        dataSource = DeliveryDataSource.getInstance(mContext);
         dataSource.open();
-        setUsers(dataSource.getAllUsers());
+        setDeliveries(dataSource.getAllDeliveries());
         dataSource.close();
     }
 
@@ -64,12 +63,12 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
                 new DialogConfirm(mContext, mContext.getString(R.string.confirm_delete)) {
                     public void run() {
                         try {
-                            User user = getUsers().get(_position);
+                            Delivery Delivery = getDeliveries().get(_position);
                             dataSource.open();
-                            dataSource.deleteUser(user);
+                            dataSource.deleteDelivery(Delivery);
                             dataSource.close();
 
-                            getUsers().remove(_position);
+                            getDeliveries().remove(_position);
                             adapter.removeShownLayouts(swipeLayout);
                             adapter.notifyDataSetInvalidated();
                             adapter.closeItem(_position);
@@ -80,44 +79,31 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
                 };
             }
         });
-        v.findViewById(R.id.edit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, AddUserActivity.class);
-                intent.setAction(AddUserActivity.ACTION_EDIT);
-                setSelectedUser(getUsers().get(_position));
-                setSelectedUserIndex(_position);
-                intent.putExtra(AddUserActivity.EXTRA_PARAM_USER, getSelectedUser());
-                UserActivity userActivity = (UserActivity)mContext;
-                userActivity.startActivityForResult(intent, AddUserActivity.RESQUEST_CODE_EDIT);
-            }
-        });
         return v;
     }
 
     @Override
     public void fillValues(int position, View convertView) {
-        TextView txtNameView = (TextView)convertView.findViewById(R.id.txtNameView);
-        txtNameView.setText(getUsers().get(position).getName());
+        TextView txtBuuGui = (TextView)convertView.findViewById(R.id.txtBuuGui);
+        txtBuuGui.setText(getDeliveries().get(position).getItemCode());
 
-        TextView txtUserNameView = (TextView)convertView.findViewById(R.id.txtUserNameView);
-        txtUserNameView.setText("@" + getUsers().get(position).getUsername());
+        TextView txtNguoiNhan = (TextView)convertView.findViewById(R.id.txtNguoiNhan);
+        txtNguoiNhan.setText("Người nhận: " + getDeliveries().get(position).getDeliveryUser());
 
-        TextView txtRoleView = (TextView)convertView.findViewById(R.id.txtRoleView);
-        txtRoleView.setText("Role: " + getUsers().get(position).getRole());
-
-        TextView txtPhoneView = (TextView)convertView.findViewById(R.id.txtPhoneView);
-        txtPhoneView.setText(getUsers().get(position).getPhone());
+        View uploadColor = (View) convertView.findViewById(R.id.uploadColor);
+        if(getDeliveries().get(position).getItemCode().equals("1")) {
+            uploadColor.setBackgroundColor(Color.parseColor("#1dc100"));
+        }
     }
 
     @Override
     public int getCount() {
-        return getUsers().size();
+        return getDeliveries().size();
     }
 
     @Override
     public Object getItem(int position) {
-        return getUsers().get(position);
+        return getDeliveries().get(position);
     }
 
     @Override
@@ -125,27 +111,27 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
         return position;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<Delivery> getDeliveries() {
+        return this.deliveries;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setDeliveries(List<Delivery> deliveries) {
+        this.deliveries = deliveries;
     }
 
-    public User getSelectedUser() {
-        return selectedUser;
+    public Delivery getSelectedDelivery() {
+        return selectedDelivery;
     }
 
-    public void setSelectedUser(User selectedUser) {
-        this.selectedUser = selectedUser;
+    public void setSelectedDelivery(Delivery selectedDelivery) {
+        this.selectedDelivery = selectedDelivery;
     }
 
-    public int getSelectedUserIndex() {
-        return selectedUserIndex;
+    public int getSelectedDeliveryIndex() {
+        return selectedDeliveryIndex;
     }
 
-    public void setSelectedUserIndex(int selectedUserIndex) {
-        this.selectedUserIndex = selectedUserIndex;
+    public void setSelectedDeliveryIndex(int selectedDeliveryIndex) {
+        this.selectedDeliveryIndex = selectedDeliveryIndex;
     }
 }
