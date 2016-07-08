@@ -18,7 +18,9 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import vn.com.vietatech.dto.City;
 import vn.com.vietatech.dto.Delivery;
+import vn.com.vietatech.dto.GiayTo;
 import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.adapter.GiayToListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.NoiCapListAdapter;
@@ -36,6 +38,7 @@ public class DeliveryFragment extends Fragment implements IFragment  {
 
     public DeliveryFragment() {
         // Required empty public constructor
+        super();
     }
 
     @Override
@@ -121,10 +124,10 @@ public class DeliveryFragment extends Fragment implements IFragment  {
     @Override
     public Delivery getData() {
         Delivery _delivery = new Delivery();
-        _delivery.setDeliveryCertificateName(spinnerGiayTo.getSelectedItem().toString());
+        _delivery.setDeliveryCertificateName(((GiayTo)spinnerGiayTo.getSelectedItem()).getName());
         _delivery.setDeliveryCertificateNumber(txtSoGiayTo.getText().toString());
         _delivery.setDeliveryCertificateDateOfIssue(txtNgayCap.getText().toString());
-        _delivery.setDeliveryCertificatePlaceOfIssue(spinnerNoiCap.getSelectedItem().toString());
+        _delivery.setDeliveryCertificatePlaceOfIssue(((City)spinnerNoiCap.getSelectedItem()).getCode());
         _delivery.setIsDeliverable(Delivery.PHAT_DUOC);
 
         if(rbPhatHoan.isChecked()) {

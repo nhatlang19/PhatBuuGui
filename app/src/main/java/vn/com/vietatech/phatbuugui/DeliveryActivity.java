@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import vn.com.vietatech.dao.DeliveryDataSource;
 import vn.com.vietatech.dto.Delivery;
@@ -32,6 +33,8 @@ public class DeliveryActivity extends AppCompatActivity {
     private Context context = this;
 
     private static String temlateTitle = "Mới %d/Tổng %d";
+
+    public static final int REQUEST_CODE_VIEW_LIST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,20 @@ public class DeliveryActivity extends AppCompatActivity {
     }
 
     private void updateTitle() {
-        setTitle(String.format(temlateTitle, 0, 0));
+        DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
+        ds.open();
+        List<Delivery> deliveries = ds.getAllDeliveries();
+        ds.close();
+
+        int count = 0;
+        for(Delivery delivery : deliveries)
+        {
+            if(delivery.getUpload().equals(Delivery.UNUPLOADED)) {
+                count++;
+            }
+        }
+
+        setTitle(String.format(temlateTitle, count, deliveries.size()));
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -92,7 +108,7 @@ public class DeliveryActivity extends AppCompatActivity {
                 break;
             case R.id.btnXemDanhSach:
                 Intent intentList = new Intent(this, DeliveryListActivity.class);
-                startActivity(intentList);
+                startActivityForResult(intentList, REQUEST_CODE_VIEW_LIST);
                 break;
             case R.id.btnXoaBuuGui:
                 this.delete();
@@ -127,7 +143,7 @@ public class DeliveryActivity extends AppCompatActivity {
         }
 
         Delivery delivery;
-        if (position == 1) {
+        if (position == 0) {
             delivery = ((DeliveryFragment)adapter.getItem(position)).getData ();
         } else {
             delivery = ((NoDeliveryFragment)adapter.getItem(position)).getData ();
@@ -144,7 +160,7 @@ public class DeliveryActivity extends AppCompatActivity {
         delivery.setToPOSCode(code);
 
         long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM MM dd, yyyy h:mm a");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String dateString = sdf.format(date);
         delivery.setDeliveryDate(dateString);
 
@@ -152,10 +168,27 @@ public class DeliveryActivity extends AppCompatActivity {
         User user = globalVariable.getUser();
         delivery.setDeliveryUser(user.getUsername());
 
-
         DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
-        delivery = ds.createDelivery(delivery);
+        ds.open();
+        if(!ds.existsDelivery(delivery)) {
+            delivery = ds.createDelivery(delivery);
+        } else {
+            delivery = ds.updateDelivery(delivery);
+        }
+        ds.close();
 
-        Utils.showAlert(context, context.getString(R.string.save_delivery_success) + delivery.getItemCode());
+        Utils.showAlert(context, context.getString(R.string.save_delivery_success) + " " + delivery.getItemCode());
+
+        updateTitle();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == REQUEST_CODE_VIEW_LIST) {
+            updateTitle();
+        }
     }
 }

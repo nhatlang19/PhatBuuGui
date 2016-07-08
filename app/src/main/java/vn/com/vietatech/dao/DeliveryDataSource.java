@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.com.vietatech.dto.Delivery;
+import vn.com.vietatech.dto.User;
+import vn.com.vietatech.phatbuugui.MyApplication;
 
 public class DeliveryDataSource {
     private SQLiteDatabase db;
@@ -36,13 +38,15 @@ public class DeliveryDataSource {
     };
 
     private static DeliveryDataSource sInstance;
+    private static Context context;
 
-    public static synchronized DeliveryDataSource getInstance(Context context) {
+    public static synchronized DeliveryDataSource getInstance(Context _context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
 
         if (sInstance == null) {
-            sInstance = new DeliveryDataSource(context.getApplicationContext());
+            context = _context;
+            sInstance = new DeliveryDataSource(_context.getApplicationContext());
         }
         return sInstance;
     }
@@ -79,12 +83,12 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_BATCH_DELIVERY, _delivery.getBatchDelivery());
         values.put(MySQLiteHelper.KEY_UPLOAD, _delivery.getUpload());
 
-        int insertId = (int) db.insert(MySQLiteHelper.TABLE_DELIVERIES, null,
+        db.insert(MySQLiteHelper.TABLE_DELIVERIES, null,
                 values);
 
         // get data after insert
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
-                MySQLiteHelper.KEY_ITEM_CODE + "=" + insertId, null, null, null,
+                MySQLiteHelper.KEY_ITEM_CODE + "= ?", new String[]{_delivery.getItemCode()}, null, null,
                 null);
 
         cursor.moveToFirst();
@@ -96,7 +100,6 @@ public class DeliveryDataSource {
 
     public Delivery updateDelivery(Delivery _delivery) {
         ContentValues values = new ContentValues();
-        values.put(MySQLiteHelper.KEY_ITEM_CODE, _delivery.getItemCode());
         values.put(MySQLiteHelper.KEY_POS_CODE, _delivery.getToPOSCode());
         values.put(MySQLiteHelper.KEY_IS_DELIVERABLE, _delivery.getIsDeliverable());
         values.put(MySQLiteHelper.KEY_CAUSE_CODE, _delivery.getCauseCode());
@@ -129,8 +132,10 @@ public class DeliveryDataSource {
     public List<Delivery> getAllDeliveries() {
         List<Delivery> list = new ArrayList<Delivery>();
 
+        MyApplication globalVariable = (MyApplication) context.getApplicationContext();
+        User user = globalVariable.getUser();
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
-                null, null, null, null, null);
+                MySQLiteHelper.KEY_DELIVERY_USER + "= ?", new String[]{user.getUsername()}, null, null, null);
 
         while (cursor.moveToNext()) {
             Delivery Delivery = cursorToDelivery(cursor);

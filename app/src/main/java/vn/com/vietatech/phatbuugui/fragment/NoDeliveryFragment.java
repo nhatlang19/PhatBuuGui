@@ -32,6 +32,7 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
     private SolutionListAdapter solutionListAdapter;
 
     public NoDeliveryFragment() {
+        super();
         // Required empty public constructor
     }
 
