@@ -26,6 +26,7 @@ public class DeliveryDataSource {
             MySQLiteHelper.KEY_DELIVERY_CERT_NUMBER,
             MySQLiteHelper.KEY_DELIVERY_CERT_DATEOFISSUE,
             MySQLiteHelper.KEY_DELIVERY_CERT_PLACEOFISSUE,
+            MySQLiteHelper.KEY_DELIVERY_RETURN,
             MySQLiteHelper.KEY_RELATE_WITH_RECEIVE,
             MySQLiteHelper.KEY_REAL_RECEIVER_NAME,
             MySQLiteHelper.KEY_REAL_RECEIVER_IDENTIFICATION,
@@ -65,6 +66,7 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_IS_DELIVERABLE, _delivery.getIsDeliverable());
         values.put(MySQLiteHelper.KEY_CAUSE_CODE, _delivery.getCauseCode());
         values.put(MySQLiteHelper.KEY_SOLUTION_CODE, _delivery.getSolutionCode());
+        values.put(MySQLiteHelper.KEY_DELIVERY_RETURN, _delivery.getDeliveryReturn());
         values.put(MySQLiteHelper.KEY_DELIVERY_DATE, _delivery.getDeliveryDate());
         values.put(MySQLiteHelper.KEY_DELIVERY_CERT_NAME, _delivery.getDeliveryCertificateName());
         values.put(MySQLiteHelper.KEY_DELIVERY_CERT_NUMBER, _delivery.getDeliveryCertificateNumber());
@@ -104,6 +106,7 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_DELIVERY_CERT_NUMBER, _delivery.getDeliveryCertificateNumber());
         values.put(MySQLiteHelper.KEY_DELIVERY_CERT_DATEOFISSUE, _delivery.getDeliveryCertificateDateOfIssue());
         values.put(MySQLiteHelper.KEY_DELIVERY_CERT_PLACEOFISSUE, _delivery.getDeliveryCertificatePlaceOfIssue());
+        values.put(MySQLiteHelper.KEY_DELIVERY_RETURN, _delivery.getDeliveryReturn());
         values.put(MySQLiteHelper.KEY_RELATE_WITH_RECEIVE, _delivery.getRelateWithReceive());
         values.put(MySQLiteHelper.KEY_REAL_RECEIVER_NAME, _delivery.getRealReciverName());
         values.put(MySQLiteHelper.KEY_REAL_RECEIVER_IDENTIFICATION, _delivery.getRealReceiverIdentification());
@@ -177,12 +180,14 @@ public class DeliveryDataSource {
         int indexDelivertCertNumber = cursor.getColumnIndex(MySQLiteHelper.KEY_DELIVERY_CERT_NUMBER);
         int indexDelivertCertDate = cursor.getColumnIndex(MySQLiteHelper.KEY_DELIVERY_CERT_DATEOFISSUE);
         int indexDelivertCertPlace = cursor.getColumnIndex(MySQLiteHelper.KEY_DELIVERY_CERT_PLACEOFISSUE);
+        int indexDeliveryReturn = cursor.getColumnIndex(MySQLiteHelper.KEY_DELIVERY_RETURN);
         int indexRelateWithReceive = cursor.getColumnIndex(MySQLiteHelper.KEY_RELATE_WITH_RECEIVE);
         int indexRealReceverName = cursor.getColumnIndex(MySQLiteHelper.KEY_REAL_RECEIVER_NAME);
         int indexRealReceivertIdent = cursor.getColumnIndex(MySQLiteHelper.KEY_REAL_RECEIVER_IDENTIFICATION);
         int indexDeliveryUser = cursor.getColumnIndex(MySQLiteHelper.KEY_DELIVERY_USER);
         int indexBatchDelivery = cursor.getColumnIndex(MySQLiteHelper.KEY_BATCH_DELIVERY);
         int indexUpload = cursor.getColumnIndex(MySQLiteHelper.KEY_UPLOAD);
+
 
         Delivery _delivery = new Delivery();
         _delivery.setItemCode(cursor.getString(indexItemCode));
@@ -195,6 +200,7 @@ public class DeliveryDataSource {
         _delivery.setDeliveryCertificateNumber(cursor.getString(indexDelivertCertNumber));
         _delivery.setDeliveryCertificateDateOfIssue(cursor.getString(indexDelivertCertDate));
         _delivery.setDeliveryCertificatePlaceOfIssue(cursor.getString(indexDelivertCertPlace));
+        _delivery.setDeliveryReturn(cursor.getString(indexDeliveryReturn));
         _delivery.setRelateWithReceive(cursor.getString(indexRelateWithReceive));
         _delivery.setRealReciverName(cursor.getString(indexRealReceverName));
         _delivery.setRealReceiverIdentification(cursor.getString(indexRealReceivertIdent));

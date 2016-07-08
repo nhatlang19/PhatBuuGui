@@ -1,5 +1,6 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.widget.EditText;
 
 import java.text.SimpleDateFormat;
 
+import vn.com.vietatech.dao.DeliveryDataSource;
 import vn.com.vietatech.dto.Delivery;
+import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.ConfigUtils;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.adapter.ViewPagerAdapter;
@@ -127,12 +130,12 @@ public class DeliveryActivity extends AppCompatActivity {
         if (position == 1) {
             delivery = ((DeliveryFragment)adapter.getItem(position)).getData ();
         } else {
-            delivery = new Delivery();
+            delivery = ((NoDeliveryFragment)adapter.getItem(position)).getData ();
         }
 
         delivery.setItemCode(txtCode.getText().toString());
         if(cbBatch.isChecked()) {
-            delivery.setBatchDelivery("1");
+            delivery.setBatchDelivery(Delivery.BATCH);
         }
 
         // get code
@@ -145,10 +148,14 @@ public class DeliveryActivity extends AppCompatActivity {
         String dateString = sdf.format(date);
         delivery.setDeliveryDate(dateString);
 
-//
-//        _delivery.setRelateWithReceive(cursor.getString(indexRelateWithReceive));
-//        _delivery.setRealReciverName(cursor.getString(indexRealReceverName));
-//        _delivery.setRealReceiverIdentification(cursor.getString(indexRealReceivertIdent));
-//        _delivery.setDeliveryUser(cursor.getString(indexDeliveryUser));
+        MyApplication globalVariable = (MyApplication) this.getApplication();
+        User user = globalVariable.getUser();
+        delivery.setDeliveryUser(user.getUsername());
+
+
+        DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
+        delivery = ds.createDelivery(delivery);
+
+        Utils.showAlert(context, context.getString(R.string.save_delivery_success) + delivery.getItemCode());
     }
 }

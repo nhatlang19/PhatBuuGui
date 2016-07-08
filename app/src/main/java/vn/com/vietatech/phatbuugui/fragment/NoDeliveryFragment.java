@@ -28,7 +28,8 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
     private Spinner spinSolution;
     private CheckBox cbPhatHoan;
 
-
+    private ReasonListAdapter reasonListAdapter;
+    private SolutionListAdapter solutionListAdapter;
 
     public NoDeliveryFragment() {
         // Required empty public constructor
@@ -49,7 +50,7 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
         spinSolution = (Spinner) view.findViewById(R.id.spinSolution);
         cbPhatHoan = (CheckBox) view.findViewById(R.id.cbPhatHoan);
 
-        ReasonListAdapter reasonListAdapter = new ReasonListAdapter(this.getContext(),  android.R.layout.simple_spinner_item);
+        reasonListAdapter = new ReasonListAdapter(this.getContext(),  android.R.layout.simple_spinner_item);
         spinReason.setAdapter(reasonListAdapter);
         spinReason.setSelection(0);
 
@@ -58,7 +59,7 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 List<Solution> solutions = ((Reason) spinReason.getSelectedItem()).getSolutions();
-                SolutionListAdapter solutionListAdapter = new SolutionListAdapter(context,  android.R.layout.simple_spinner_item, solutions);
+                solutionListAdapter = new SolutionListAdapter(context,  android.R.layout.simple_spinner_item, solutions);
                 spinSolution.setAdapter(solutionListAdapter);
                 spinSolution.setSelection(0);
             }
@@ -75,6 +76,17 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
 
     @Override
     public Delivery getData() {
-        return null;
+        Delivery _delivery = new Delivery();
+
+        Reason reason = reasonListAdapter.getItem(spinReason.getSelectedItemPosition());
+        _delivery.setCauseCode(String.valueOf(reason.getId()));
+
+        Solution solution = solutionListAdapter.getItem(spinSolution.getSelectedItemPosition());
+        _delivery.setSolutionCode(String.valueOf(solution.getId()));
+
+        if(cbPhatHoan.isChecked()) {
+            _delivery.setDeliveryReturn(Delivery.PHAT_HOAN);
+        }
+        return _delivery;
     }
 }

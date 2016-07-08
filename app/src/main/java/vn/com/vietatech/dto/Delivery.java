@@ -11,6 +11,7 @@ public class Delivery {
     private String deliveryCertificateNumber; // so giay to
     private String deliveryCertificateDateOfIssue; // ngay cap
     private String deliveryCertificatePlaceOfIssue; // noi cap
+    private String deliveryReturn;
     private String relateWithReceive;
     private String realReciverName;
     private String realReceiverIdentification;
@@ -18,10 +19,25 @@ public class Delivery {
     private String batchDelivery;
     private String upload;
 
+    public static final String STATUS_DUONGSU = "0";
+    public static final String STATUS_KHAC = "1";
+
+    public static final String PHAT_HOAN = "1";
+    public static final String KHONG_PHAT_HOAN = "0";
+
+    public static final String PHAT_DUOC = "1";
+    public static final String KHONG_PHAT_DUOC = "0";
+
+    public static final String UPLOADED = "1";
+    public static final String UNUPLOADED = "0";
+
+    public static final String BATCH = "1";
+    public static final String NOBATCH = "0";
+
     public Delivery() {
         itemCode = "";
         toPOSCode = "";
-        isDeliverable = "0";
+        isDeliverable = PHAT_DUOC;
         causeCode = "";
         solutionCode = "";
         deliveryDate = "";
@@ -29,12 +45,13 @@ public class Delivery {
         deliveryCertificateNumber = "";
         deliveryCertificateDateOfIssue = "";
         deliveryCertificatePlaceOfIssue = "";
-        relateWithReceive = "";
+        relateWithReceive = STATUS_DUONGSU;
+        deliveryReturn = PHAT_HOAN;
         realReciverName = "";
         realReceiverIdentification = "";
         deliveryUser = "";
-        batchDelivery = "0";
-        upload = "0";
+        batchDelivery = NOBATCH;
+        upload = UNUPLOADED;
     }
 
     public String getItemCode() {
@@ -163,5 +180,13 @@ public class Delivery {
 
     public void setUpload(String upload) {
         this.upload = upload;
+    }
+
+    public String getDeliveryReturn() {
+        return deliveryReturn;
+    }
+
+    public void setDeliveryReturn(String deliveryReturn) {
+        this.deliveryReturn = deliveryReturn;
     }
 }

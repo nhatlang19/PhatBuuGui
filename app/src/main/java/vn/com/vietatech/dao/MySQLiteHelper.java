@@ -13,7 +13,7 @@ import vn.com.vietatech.dto.User;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
@@ -60,6 +60,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_DELIVERY_CERT_NUMBER = "deliveryCertificateNumber";
     public static final String KEY_DELIVERY_CERT_DATEOFISSUE = "deliveryCertificateDateOfIssue";
     public static final String KEY_DELIVERY_CERT_PLACEOFISSUE = "deliveryCertificatePlaceOfIssue";
+    public static final String KEY_DELIVERY_RETURN = "deliveryReturn";
     public static final String KEY_RELATE_WITH_RECEIVE = "relateWithReceive";
     public static final String KEY_REAL_RECEIVER_NAME = "realReciverName";
     public static final String KEY_REAL_RECEIVER_IDENTIFICATION = "realReceiverIdentification";
@@ -157,6 +158,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_DELIVERY_CERT_NUMBER + " TEXT," +
                 KEY_DELIVERY_CERT_DATEOFISSUE + " TEXT," +
                 KEY_DELIVERY_CERT_PLACEOFISSUE + " TEXT," +
+                KEY_DELIVERY_RETURN + " TEXT," +
                 KEY_RELATE_WITH_RECEIVE + " TEXT," +
                 KEY_REAL_RECEIVER_NAME + " TEXT," +
                 KEY_REAL_RECEIVER_IDENTIFICATION + " TEXT," +
