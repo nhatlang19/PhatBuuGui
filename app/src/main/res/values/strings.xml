@@ -43,6 +43,7 @@
     <string name="update_delivery_success">Cập nhật thành công bưu gửi</string>
     <string name="receiver">Người nhận: </string>
     <string name="duong_su">Đương sự</string>
+    <string name="no_delivery_message">Không phát được></string>
 
 
     <!-- Delivery Error -->
