@@ -92,6 +92,16 @@
                 android:value="DeliveryActivity" />
 
         </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ScanBigDeliveryActivity"
+            android:label="@string/title_activity_delivery_scan"
+            android:parentActivityName=".DeliveryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="DeliveryActivity" />
+
+        </activity>
 
         <activity
             android:screenOrientation="portrait"

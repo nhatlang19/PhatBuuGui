@@ -1,7 +1,5 @@
 package vn.com.vietatech.phatbuugui;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,7 +27,6 @@ import com.honeywell.aidc.TriggerStateChangeEvent;
 import com.honeywell.aidc.UnsupportedPropertyException;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +52,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     private static String temlateTitle = "Mới %d/Tổng %d";
 
     public static final int REQUEST_CODE_VIEW_LIST = 1;
+    public static final int REQUEST_CODE_SCAN_BIG = 2;
 
     private BarcodeReader barcodeReader;
 
@@ -80,6 +77,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
 
         txtCode.setFocusable(false);
         txtCode.setEnabled(false);
+        txtCode.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -220,7 +218,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
                 this.save();
                 break;
             case R.id.btnQuetSoLuongLon:
-                this.scanMany();
+                Intent intentScan = new Intent(this, ScanBigDeliveryActivity.class);
+                startActivityForResult(intentScan, REQUEST_CODE_SCAN_BIG);
                 break;
             case R.id.btnXemDanhSach:
                 Intent intentList = new Intent(this, DeliveryListActivity.class);
@@ -230,7 +229,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
                 this.delete();
                 break;
             case R.id.btnUpload:
-                upload();
+                this.upload();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -242,17 +241,25 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
             return ;
         }
 
+        DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
+        ds.open();
+        Delivery delivery = new Delivery();
+        delivery.setItemCode(txtCode.getText().toString().trim());
+        ds.deleteDelivery(delivery);
+        ds.close();
+        Utils.showAlert(context, this.getString(R.string.delete_delivery_success) + " " + delivery.getItemCode());
+
+        clearAllView();
+        updateTitle();
     }
 
     protected void upload() {
-
+        Utils.showAlert(context, "Test Uploaded");
     }
 
-    protected void scanMany() {
-
-    }
-
-
+    /**
+     * save delivery
+     */
     protected void save() {
         int position = viewPager.getCurrentItem();
         ViewPagerAdapter adapter = (ViewPagerAdapter)viewPager.getAdapter();
@@ -265,6 +272,12 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         Delivery delivery;
         if (position == 0) {
             delivery = ((DeliveryFragment)adapter.getItem(position)).getData ();
+            if(delivery.getRelateWithReceive().equals(Delivery.STATUS_KHAC)) {
+                if(delivery.getRealReciverName().trim().length() == 0) {
+                    Utils.showAlert(context, this.getString(R.string.error_no_name));
+                    return ;
+                }
+            }
         } else {
             delivery = ((NoDeliveryFragment)adapter.getItem(position)).getData ();
         }
@@ -358,6 +371,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == REQUEST_CODE_VIEW_LIST) {
             updateTitle();
+        } else if(requestCode == REQUEST_CODE_SCAN_BIG) {
+            clearAllView();
         }
     }
 
@@ -368,8 +383,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                txtCode.setText(_event.getBarcodeData());
                 clearAllView();
+                txtCode.setText(_event.getBarcodeData());
                 loadDelivery();
             }
         });

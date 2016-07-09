@@ -121,8 +121,7 @@ public class DeliveryDataSource {
         return _delivery;
     }
 
-    public void deleteDelivery(Delivery _delivery) throws Exception {
-
+    public void deleteDelivery(Delivery _delivery) {
         String id = _delivery.getItemCode();
         System.out.println("Delivery deleted with id: " + id);
         String whereClause = MySQLiteHelper.KEY_ITEM_CODE + "= ?";

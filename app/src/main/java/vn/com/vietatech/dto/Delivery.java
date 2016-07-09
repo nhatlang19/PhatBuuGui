@@ -1,6 +1,9 @@
 package vn.com.vietatech.dto;
 
-public class Delivery {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Delivery implements Serializable {
     private String itemCode;
     private String toPOSCode;
     private String isDeliverable; // Phat duoc / khong phat duoc

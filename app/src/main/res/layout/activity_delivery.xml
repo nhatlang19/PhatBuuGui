@@ -25,6 +25,7 @@
             android:id="@+id/txtCode"
             android:layout_weight="1"
             android:text=""
+            android:paddingLeft="10dp"
             android:textSize="26dp"
             android:singleLine="true"
             android:clickable="false"

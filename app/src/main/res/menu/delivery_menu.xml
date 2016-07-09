@@ -14,21 +14,17 @@
     <item
         android:id="@+id/btnQuetSoLuongLon"
         android:title="Quét số lượng lớn"
-        app:showAsAction="never"
         android:orderInCategory="2"/>
     <item
         android:id="@+id/btnXemDanhSach"
         android:title="Xem danh sách"
-        app:showAsAction="never"
         android:orderInCategory="3"/>
     <item
         android:id="@+id/btnXoaBuuGui"
         android:title="Xoá bưu gửi"
-        app:showAsAction="never"
         android:orderInCategory="4"/>
     <item
         android:id="@+id/btnUpload"
         android:title="Upload"
-        app:showAsAction="never"
         android:orderInCategory="5"/>
 </menu>

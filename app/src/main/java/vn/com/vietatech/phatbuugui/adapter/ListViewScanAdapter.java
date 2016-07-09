@@ -1,7 +1,6 @@
 package vn.com.vietatech.phatbuugui.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.TextView;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vn.com.vietatech.dao.DeliveryDataSource;
@@ -19,23 +19,27 @@ import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
 
-public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
+public class ListViewScanAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
-    private List<Delivery> deliveries;
+    private static ArrayList<Delivery> deliveries;
     private DeliveryDataSource dataSource;
-
-    final ListViewDeliveryAdapter adapter = this;
     private Delivery selectedDelivery = null;
     private int selectedDeliveryIndex = -1;
+    private List<String> listCodes;
 
-    public ListViewDeliveryAdapter(Context mContext) {
+    public ListViewScanAdapter(Context mContext, List<String> listCodes) {
         this.mContext = mContext;
+        this.listCodes = listCodes;
+        deliveries = new ArrayList<>();
+    }
 
-        dataSource = DeliveryDataSource.getInstance(mContext);
-        dataSource.open();
-        setDeliveries(dataSource.getAllDeliveries());
-        dataSource.close();
+    public void setContext(Context mContext) {
+        this.mContext = mContext;
+    }
+
+    public void setListCodes(List<String> listCodes) {
+        this.listCodes = listCodes;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
 
     @Override
     public View generateView(int position, ViewGroup parent) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.listview_delivery_item, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.listview_scan_item, null);
         final SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
 
         swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
@@ -56,22 +60,20 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
         });
 
         final int _position = position;
-
+        final ListViewScanAdapter adapter = this;
         v.findViewById(R.id.trash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 new DialogConfirm(mContext, mContext.getString(R.string.confirm_delete)) {
                     public void run() {
                         try {
-                            Delivery Delivery = getDeliveries().get(_position);
-                            dataSource.open();
-                            dataSource.deleteDelivery(Delivery);
-                            dataSource.close();
-
                             getDeliveries().remove(_position);
                             adapter.removeShownLayouts(swipeLayout);
                             adapter.notifyDataSetInvalidated();
                             adapter.closeItem(_position);
+
+                            listCodes.remove(_position);
                         } catch (Exception ex) {
                             Utils.showAlert(mContext, ex.getMessage());
                         }
@@ -86,22 +88,6 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
     public void fillValues(int position, View convertView) {
         TextView txtBuuGui = (TextView)convertView.findViewById(R.id.txtBuuGui);
         txtBuuGui.setText(getDeliveries().get(position).getItemCode());
-
-        TextView txtNguoiNhan = (TextView) convertView.findViewById(R.id.txtNguoiNhan);
-        if(getDeliveries().get(position).getIsDeliverable().equals(Delivery.PHAT_DUOC)) {
-            String receiver = getDeliveries().get(position).getRealReciverName();
-            if (getDeliveries().get(position).getRelateWithReceive().equals(Delivery.STATUS_DUONGSU)) {
-                receiver = mContext.getString(R.string.duong_su);
-            }
-            txtNguoiNhan.setText(mContext.getString(R.string.receiver) + receiver);
-        } else {
-            txtNguoiNhan.setText(mContext.getString(R.string.no_delivery_message));
-        }
-
-        View uploadColor = (View) convertView.findViewById(R.id.uploadColor);
-        if(getDeliveries().get(position).getUpload().equals("1")) {
-            uploadColor.setBackgroundColor(Color.parseColor("#1dc100"));
-        }
     }
 
     @Override
@@ -123,7 +109,7 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
         return this.deliveries;
     }
 
-    public void setDeliveries(List<Delivery> deliveries) {
+    public void setDeliveries(ArrayList<Delivery> deliveries) {
         this.deliveries = deliveries;
     }
 
