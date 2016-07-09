@@ -87,8 +87,14 @@ public class ListViewDeliveryAdapter extends BaseSwipeAdapter {
         TextView txtBuuGui = (TextView)convertView.findViewById(R.id.txtBuuGui);
         txtBuuGui.setText(getDeliveries().get(position).getItemCode());
 
-        TextView txtNguoiNhan = (TextView)convertView.findViewById(R.id.txtNguoiNhan);
-        txtNguoiNhan.setText("Người nhận: " + getDeliveries().get(position).getDeliveryUser());
+        if(getDeliveries().get(position).getIsDeliverable().equals(Delivery.PHAT_DUOC)) {
+            TextView txtNguoiNhan = (TextView) convertView.findViewById(R.id.txtNguoiNhan);
+            String receiver = getDeliveries().get(position).getRealReciverName();
+            if (getDeliveries().get(position).getRelateWithReceive().equals(Delivery.STATUS_DUONGSU)) {
+                receiver = mContext.getString(R.string.duong_su);
+            }
+            txtNguoiNhan.setText(mContext.getString(R.string.receiver) + receiver);
+        }
 
         View uploadColor = (View) convertView.findViewById(R.id.uploadColor);
         if(getDeliveries().get(position).getItemCode().equals("1")) {

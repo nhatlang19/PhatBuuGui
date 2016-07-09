@@ -8,6 +8,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.honeywell.aidc.AidcManager;
+import com.honeywell.aidc.BarcodeReader;
+
 public class FullscreenActivity extends AppCompatActivity {
     protected Button btnNguoiDung;
     protected Button btnPhatBuuGui;
@@ -15,12 +18,12 @@ public class FullscreenActivity extends AppCompatActivity {
     protected Button btnXoaBuuGui;
     protected Button btnThoat;
 
+    private static BarcodeReader barcodeReader;
+    private AidcManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_fullscreen);
 
@@ -65,6 +68,21 @@ public class FullscreenActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        // create the AidcManager providing a Context and a
+        // CreatedCallback implementation.
+        AidcManager.create(this, new AidcManager.CreatedCallback() {
+
+            @Override
+            public void onCreated(AidcManager aidcManager) {
+                manager = aidcManager;
+                barcodeReader = manager.createBarcodeReader();
+            }
+        });
+    }
+
+    public static BarcodeReader getBarcodeObject() {
+        return barcodeReader;
     }
 
     private void loadConfig() {
@@ -84,5 +102,22 @@ public class FullscreenActivity extends AppCompatActivity {
     private void loadUsers() {
         Intent intent = new Intent(FullscreenActivity.this, UserActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (barcodeReader != null) {
+            // close BarcodeReader to clean up resources.
+            barcodeReader.close();
+            barcodeReader = null;
+        }
+
+        if (manager != null) {
+            // close AidcManager to disconnect from the scanner service.
+            // once closed, the object can no longer be used.
+            manager.close();
+        }
     }
 }

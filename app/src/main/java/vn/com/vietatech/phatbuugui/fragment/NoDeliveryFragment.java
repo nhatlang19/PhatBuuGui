@@ -85,9 +85,31 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
         Solution solution = solutionListAdapter.getItem(spinSolution.getSelectedItemPosition());
         _delivery.setSolutionCode(String.valueOf(solution.getId()));
 
+        _delivery.setIsDeliverable(Delivery.KHONG_PHAT_DUOC);
+
         if(cbPhatHoan.isChecked()) {
             _delivery.setDeliveryReturn(Delivery.PHAT_HOAN);
         }
         return _delivery;
+    }
+
+    @Override
+    public void clearView() {
+        spinReason.setSelection(0);
+        spinSolution.setSelection(0);
+        cbPhatHoan.setSelected(false);
+    }
+
+    @Override
+    public void setFields(Delivery delivery) {
+        spinReason.setSelection(0);
+        spinSolution.setSelection(0);
+
+        if(delivery.getDeliveryReturn().equals(Delivery.PHAT_HOAN)) {
+            cbPhatHoan.setChecked(true);
+        }
+
+//        Reason reason = reasonListAdapter.getItem(spinReason.getSelectedItemPosition());
+//        Solution solution = solutionListAdapter.getItem(spinSolution.getSelectedItemPosition());
     }
 }

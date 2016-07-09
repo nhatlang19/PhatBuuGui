@@ -9,6 +9,7 @@ import vn.com.vietatech.phatbuugui.R;
 public class DialogConfirm implements DialogInterface.OnClickListener, Runnable {
 	public DialogConfirm(Context c, String q) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(c);
+		builder.setTitle(c.getString(R.string.title_warning));
 		builder.setMessage(q).setPositiveButton(c.getString(R.string.yes), this)
 				.setNegativeButton(c.getString(R.string.no), this);
 		builder.create().show();

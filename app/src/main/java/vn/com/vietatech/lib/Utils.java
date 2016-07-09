@@ -8,12 +8,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
+import vn.com.vietatech.phatbuugui.R;
 
 public class Utils {
 	public static boolean isNetworkAvailable(Context context) {
@@ -25,6 +30,7 @@ public class Utils {
 	public static void showAlert(Context context, String message) {
 		// Use the Builder class for convenient dialog construction
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(context.getString(R.string.title_warning));
 		builder.setMessage(message);
 		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
@@ -118,4 +124,5 @@ public class Utils {
 		String POSBizDate = sdf.format(new Date());
 		return POSBizDate;
 	}
+
 }

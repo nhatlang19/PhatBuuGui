@@ -30,4 +30,5 @@ dependencies {
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.android.support:design:24.0.0'
     compile 'com.google.android.gms:play-services:9.0.2'
+    compile files('src/main/java/vn/com/vietatech/lib/DataCollection.jar')
 }

@@ -11,6 +11,7 @@
 
     <!-- Dialog confirm -->
     <string name="confirm_delete">Bạn có muốn xoá không?</string>
+    <string name="title_warning">Thông báo</string>
     <string name="yes">Đồng ý</string>
     <string name="no">Huỷ</string>
 
@@ -39,8 +40,14 @@
     <string name="delivery"><![CDATA[ Phát được (<) ]]></string>
     <string name="no_delivery"><![CDATA[ Không phát được (>) ]]></string>
     <string name="save_delivery_success">Lưu thành công bưu gửi</string>
+    <string name="update_delivery_success">Cập nhật thành công bưu gửi</string>
+    <string name="receiver">Người nhận: </string>
+    <string name="duong_su">Đương sự</string>
 
 
     <!-- Delivery Error -->
     <string name="error_no_code">Chưa quét bưu gửi: </string>
+    <string name="delete_error_no_code">Chưa quét mã bưu gửi để xoá khỏi danh sách </string>
+
+    <string name="txtBarcodeTitle">Press the device\'s scan button to scan a barcode.</string>
 </resources>

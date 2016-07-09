@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.honeywell.decode.permission.DECODE" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -20,7 +21,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,10 +29,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_fullscreen" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".UserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_userscreen"
@@ -41,6 +44,7 @@
                 android:value="FullscreenActivity" />
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".DeliveryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_delivery"
@@ -50,15 +54,22 @@
                 android:value="FullscreenActivity" />
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".AddUserActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_add_userscreen"
-            android:parentActivityName=".UserActivity">
+            android:parentActivityName=".FullscreenActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="UserActivity" />
+                android:value="FullscreenActivity" />
         </activity>
-        <activity android:name=".PrefsActivity" />
+        <activity
+            android:name=".PrefsActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="UserActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -72,6 +83,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".DeliveryListActivity"
             android:label="@string/title_activity_delivery_list"
             android:parentActivityName=".DeliveryActivity">
@@ -82,6 +94,7 @@
         </activity>
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:parentActivityName=".DeliveryActivity">

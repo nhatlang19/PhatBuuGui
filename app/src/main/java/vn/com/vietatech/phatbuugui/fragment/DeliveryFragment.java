@@ -139,7 +139,37 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         }
 
         _delivery.setRealReciverName(txtHoten.getText().toString());
-
         return _delivery;
+    }
+
+    @Override
+    public void clearView() {
+        txtHoten.getText().clear();
+        rbDuongSu.setSelected(true);
+        spinnerGiayTo.setSelection(0);
+        txtSoGiayTo.getText().clear();
+        txtNgayCap.getText().clear();
+        spinnerNoiCap.setSelection(0);
+        rbPhatHoan.setSelected(false);
+    }
+
+    @Override
+    public void setFields(Delivery delivery) {
+        txtHoten.setText(delivery.getRealReciverName());
+
+        if(delivery.getRelateWithReceive().equals(Delivery.STATUS_DUONGSU)) {
+            rbDuongSu.setSelected(true);
+        } else {
+            rbKhac.setSelected(true);
+        }
+
+        txtSoGiayTo.setText(delivery.getDeliveryCertificateNumber());
+        txtNgayCap.setText(delivery.getDeliveryCertificateDateOfIssue());
+        spinnerGiayTo.setSelection(0);
+        spinnerNoiCap.setSelection(0);
+
+        if(delivery.getDeliveryReturn().equals(Delivery.PHAT_HOAN)) {
+            rbPhatHoan.setChecked(true);
+        }
     }
 }
