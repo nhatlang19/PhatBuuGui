@@ -1,6 +1,7 @@
 package vn.com.vietatech.phatbuugui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import vn.com.vietatech.dao.DeliveryDataSource;
 import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.adapter.ListViewScanAdapter;
@@ -40,9 +42,9 @@ public class ScanBigDeliveryActivity extends AppCompatActivity implements Barcod
 
     private static List<String> listCodes;
 
-    private Context mContext;
+    private  Context mContext = this;;
 
-    private static BarcodeReader barcodeReader;
+    private  BarcodeReader barcodeReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,8 @@ public class ScanBigDeliveryActivity extends AppCompatActivity implements Barcod
         txtCode.setFocusable(false);
         txtCode.setEnabled(false);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        txtCode.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         if(null == mAdapter) {
             mAdapter = new ListViewScanAdapter(this, listCodes);
@@ -115,11 +119,16 @@ public class ScanBigDeliveryActivity extends AppCompatActivity implements Barcod
         });
 
         barcodeInstance();
+
+        updateTitle();
+    }
+
+    public void updateTitle() {
+        setTitle(String.format(getString(R.string.loc_buu_gui), listCodes.size()));
     }
 
     public void barcodeInstance() {
         // get bar code instance from MainActivity
-        if (barcodeReader == null) {
             barcodeReader = FullscreenActivity.getBarcodeObject();
             if (barcodeReader != null) {
 
@@ -158,7 +167,6 @@ public class ScanBigDeliveryActivity extends AppCompatActivity implements Barcod
                 // Apply the settings
                 barcodeReader.setProperties(properties);
             }
-        }
     }
 
     @Override
@@ -176,6 +184,7 @@ public class ScanBigDeliveryActivity extends AppCompatActivity implements Barcod
                     mAdapter.notifyDataSetChanged();
 
                     listCodes.add(_event.getBarcodeData());
+                    updateTitle();
                 } else {
                     Utils.showAlert(ScanBigDeliveryActivity.this, mContext.getString(R.string.delivery_same) );
                 }
@@ -241,10 +250,10 @@ public class ScanBigDeliveryActivity extends AppCompatActivity implements Barcod
         if (barcodeReader != null) {
 //            barcodeReader.release();
             // unregister barcode event listener
-//            barcodeReader.removeBarcodeListener(this);
+            barcodeReader.removeBarcodeListener(this);
 
             // unregister trigger state change listener
-//            barcodeReader.removeTriggerListener(this);
+            barcodeReader.removeTriggerListener(this);
         }
     }
 

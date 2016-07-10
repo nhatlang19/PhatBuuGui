@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import vn.com.vietatech.dao.ReasonsDataSource;
+import vn.com.vietatech.dto.GiayTo;
 import vn.com.vietatech.dto.Reason;
 
 public class ReasonListAdapter extends ArrayAdapter<Reason>{
@@ -31,6 +32,18 @@ public class ReasonListAdapter extends ArrayAdapter<Reason>{
 			this.values = (ArrayList<Reason>) ds.getAllReasons();
 			ds.close();
 		}
+	}
+
+	public int getItemIndexByCode(String code) {
+        int id = Integer.parseInt(code);
+		int index = 0;
+		for(Reason reason : values) {
+			if(reason.getId() == id) {
+				return index;
+			}
+			index++;
+		}
+		return -1;
 	}
 
 	public int getCount() {

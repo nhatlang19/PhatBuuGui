@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import vn.com.vietatech.dto.Reason;
 import vn.com.vietatech.dto.Solution;
 
 public class SolutionListAdapter extends ArrayAdapter<Solution>{
@@ -24,6 +25,18 @@ public class SolutionListAdapter extends ArrayAdapter<Solution>{
 		setValues(solutions);
 		this.context = context;
 
+	}
+
+	public int getItemIndexByCode(String code) {
+		int id = Integer.parseInt(code);
+		int index = 0;
+		for(Solution solution : values) {
+			if(solution.getId() == id) {
+				return index;
+			}
+			index++;
+		}
+		return -1;
 	}
 
 	public int getCount() {

@@ -17,12 +17,13 @@ import vn.com.vietatech.dao.DeliveryDataSource;
 import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.R;
+import vn.com.vietatech.phatbuugui.ScanBigDeliveryActivity;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
 
 public class ListViewScanAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
-    private static ArrayList<Delivery> deliveries;
+    private ArrayList<Delivery> deliveries;
     private DeliveryDataSource dataSource;
     private Delivery selectedDelivery = null;
     private int selectedDeliveryIndex = -1;
@@ -74,6 +75,9 @@ public class ListViewScanAdapter extends BaseSwipeAdapter {
                             adapter.closeItem(_position);
 
                             listCodes.remove(_position);
+
+                            ScanBigDeliveryActivity act = (ScanBigDeliveryActivity) mContext;
+                            act.updateTitle();
                         } catch (Exception ex) {
                             Utils.showAlert(mContext, ex.getMessage());
                         }

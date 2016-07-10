@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import vn.com.vietatech.dto.City;
 import vn.com.vietatech.dto.GiayTo;
 
 public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
@@ -29,6 +30,17 @@ public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
 		this.values.add(new GiayTo(3, "Bằng lái xe"));
 		this.values.add(new GiayTo(4, "Thẻ học sinh"));
 		this.values.add(new GiayTo(4, "Thẻ sinh viên"));
+	}
+
+	public int getItemIndexByName(String name) {
+		int index = 0;
+		for(GiayTo giayto : values) {
+			if(giayto.getName().equals(name)) {
+				return index;
+			}
+			index++;
+		}
+		return -1;
 	}
 
 	public int getCount() {

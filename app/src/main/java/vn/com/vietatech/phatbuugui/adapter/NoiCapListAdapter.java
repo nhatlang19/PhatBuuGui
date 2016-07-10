@@ -33,6 +33,17 @@ public class NoiCapListAdapter extends ArrayAdapter<City>{
 		}
 	}
 
+	public int getItemIndexByDesc(String desc) {
+		int index = 0;
+		for(City city : values) {
+			if(city.getDesc().equals(desc)) {
+				return index;
+			}
+			index++;
+		}
+		return -1;
+	}
+
 	public int getCount() {
 		return values.size();
 	}

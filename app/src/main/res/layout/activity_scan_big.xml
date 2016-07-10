@@ -14,9 +14,9 @@
         android:id="@+id/mainView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingLeft="0dp"
-        android:paddingRight="10dp">
+        >
 
         <EditText
             android:id="@+id/txtCodeList"
@@ -26,9 +26,15 @@
             android:clickable="false"
             android:singleLine="true"
             android:text=""
+            android:hint="Quét bưu gửi"
+            android:paddingLeft="10dp"
             android:textColor="#000000"
             android:textSize="26dp"
             android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="#125688" />
     </LinearLayout>
 
     <ListView

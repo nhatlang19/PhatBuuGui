@@ -36,6 +36,9 @@ public class DeliveryFragment extends Fragment implements IFragment  {
     private Spinner spinnerNoiCap;
     private CheckBox rbPhatHoan;
 
+    private NoiCapListAdapter noiCapListAdapter;
+    private GiayToListAdapter tableListAdapter;
+
     public DeliveryFragment() {
         // Required empty public constructor
         super();
@@ -61,11 +64,11 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         spinnerNoiCap = (Spinner) view.findViewById(R.id.spinnerNoiCap);
         rbPhatHoan = (CheckBox) view.findViewById(R.id.rbPhatHoan1);
 
-        GiayToListAdapter tableListAdapter = new GiayToListAdapter(this.getContext(),
+        tableListAdapter = new GiayToListAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item);
         spinnerGiayTo.setAdapter(tableListAdapter);
 
-        NoiCapListAdapter noiCapListAdapter = new NoiCapListAdapter(this.getContext(),
+        noiCapListAdapter = new NoiCapListAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item);
         spinnerNoiCap.setAdapter(noiCapListAdapter);
 
@@ -124,10 +127,10 @@ public class DeliveryFragment extends Fragment implements IFragment  {
     @Override
     public Delivery getData() {
         Delivery _delivery = new Delivery();
-        _delivery.setDeliveryCertificateName(((GiayTo)spinnerGiayTo.getSelectedItem()).getName());
+        _delivery.setDeliveryCertificateName(String.valueOf(((GiayTo)spinnerGiayTo.getSelectedItem()).getName()));
         _delivery.setDeliveryCertificateNumber(txtSoGiayTo.getText().toString());
         _delivery.setDeliveryCertificateDateOfIssue(txtNgayCap.getText().toString());
-        _delivery.setDeliveryCertificatePlaceOfIssue(((City)spinnerNoiCap.getSelectedItem()).getCode());
+        _delivery.setDeliveryCertificatePlaceOfIssue(String.valueOf(((City)spinnerNoiCap.getSelectedItem()).getDesc()));
         _delivery.setIsDeliverable(Delivery.PHAT_DUOC);
 
         if(rbPhatHoan.isChecked()) {
@@ -165,8 +168,12 @@ public class DeliveryFragment extends Fragment implements IFragment  {
 
         txtSoGiayTo.setText(delivery.getDeliveryCertificateNumber());
         txtNgayCap.setText(delivery.getDeliveryCertificateDateOfIssue());
-        spinnerGiayTo.setSelection(0);
-        spinnerNoiCap.setSelection(0);
+
+        int indexGiayTo = tableListAdapter.getItemIndexByName(delivery.getDeliveryCertificateName());
+        spinnerGiayTo.setSelection(indexGiayTo);
+
+        int indexNoiCap = noiCapListAdapter.getItemIndexByDesc(delivery.getDeliveryCertificatePlaceOfIssue());
+        spinnerNoiCap.setSelection(indexNoiCap);
 
         if(delivery.getDeliveryReturn().equals(Delivery.PHAT_HOAN)) {
             rbPhatHoan.setChecked(true);

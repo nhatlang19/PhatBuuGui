@@ -31,6 +31,8 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
     private ReasonListAdapter reasonListAdapter;
     private SolutionListAdapter solutionListAdapter;
 
+    private String solutionCode;
+
     public NoDeliveryFragment() {
         super();
         // Required empty public constructor
@@ -62,7 +64,13 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
                 List<Solution> solutions = ((Reason) spinReason.getSelectedItem()).getSolutions();
                 solutionListAdapter = new SolutionListAdapter(context,  android.R.layout.simple_spinner_item, solutions);
                 spinSolution.setAdapter(solutionListAdapter);
-                spinSolution.setSelection(0);
+
+                if(solutionCode != null && solutionCode.length() != 0) {
+                    int indexSolution = solutionListAdapter.getItemIndexByCode(solutionCode);
+                    spinSolution.setSelection(indexSolution);
+                } else {
+                    spinSolution.setSelection(0);
+                }
             }
 
             @Override
@@ -102,14 +110,14 @@ public class NoDeliveryFragment extends Fragment implements IFragment{
 
     @Override
     public void setFields(Delivery delivery) {
-        spinReason.setSelection(0);
-        spinSolution.setSelection(0);
-
         if(delivery.getDeliveryReturn().equals(Delivery.PHAT_HOAN)) {
             cbPhatHoan.setChecked(true);
         }
 
-//        Reason reason = reasonListAdapter.getItem(spinReason.getSelectedItemPosition());
-//        Solution solution = solutionListAdapter.getItem(spinSolution.getSelectedItemPosition());
+        String causeCode = delivery.getCauseCode();
+        int indexReason = reasonListAdapter.getItemIndexByCode(causeCode);
+        spinReason.setSelection(indexReason, true);
+
+        solutionCode = delivery.getSolutionCode();
     }
 }

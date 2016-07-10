@@ -446,12 +446,11 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     public void onDestroy() {
         super.onDestroy();
         if (barcodeReader != null) {
-//            barcodeReader.release();
             // unregister barcode event listener
 //            barcodeReader.removeBarcodeListener(this);
 
             // unregister trigger state change listener
-//            barcodeReader.removeTriggerListener(this);
+           // barcodeReader.removeTriggerListener(this);
         }
     }
 }
