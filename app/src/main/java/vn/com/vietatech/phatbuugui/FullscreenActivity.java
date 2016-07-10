@@ -11,6 +11,10 @@ import android.widget.Button;
 import com.honeywell.aidc.AidcManager;
 import com.honeywell.aidc.BarcodeReader;
 
+import vn.com.vietatech.dto.User;
+import vn.com.vietatech.lib.Utils;
+import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
+
 public class FullscreenActivity extends AppCompatActivity {
     protected Button btnNguoiDung;
     protected Button btnPhatBuuGui;
@@ -69,6 +73,13 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
 
+        MyApplication globalVariable = (MyApplication) this.getApplication();
+        User user = globalVariable.getUser();
+        if(!user.getRole().toLowerCase().equals("admin")) {
+            btnNguoiDung.setVisibility(View.GONE);
+            btnCauHinh.setVisibility(View.GONE);
+        }
+
         // create the AidcManager providing a Context and a
         // CreatedCallback implementation.
         AidcManager.create(this, new AidcManager.CreatedCallback() {
@@ -95,8 +106,19 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void phatBuuGui() {
-        Intent intent = new Intent(FullscreenActivity.this, DeliveryActivity.class);
-        startActivity(intent);
+        MyApplication globalVariable = (MyApplication) this.getApplication();
+        User user = globalVariable.getUser();
+        if(user.getRole().toLowerCase().equals("admin")) {
+            new DialogConfirm(this, this.getString(R.string.phat_buu_gui_for_admin)) {
+                public void run() {
+                    Intent intent = new Intent(FullscreenActivity.this, DeliveryActivity.class);
+                    startActivity(intent);
+                }
+            };
+        } else {
+            Intent intent = new Intent(FullscreenActivity.this, DeliveryActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void loadUsers() {

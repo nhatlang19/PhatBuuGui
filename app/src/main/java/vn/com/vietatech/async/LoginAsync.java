@@ -39,6 +39,9 @@ public class LoginAsync extends AsyncTask<String, String, User> {
 			UsersDataSource dataSource = UsersDataSource.getInstance(mContext);
             dataSource.open();
 			user = dataSource.login(new User(username, password));
+			if(user == null) {
+				user = new User(username, password);
+			}
 			dataSource.close();
 		} catch (Exception e) {
 			Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();

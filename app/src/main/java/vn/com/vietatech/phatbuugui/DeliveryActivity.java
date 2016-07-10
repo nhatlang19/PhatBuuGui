@@ -282,15 +282,15 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
             delivery = ((NoDeliveryFragment)adapter.getItem(position)).getData ();
         }
 
-        delivery.setItemCode(txtCode.getText().toString());
+
         if(cbBatch.isChecked()) {
             delivery.setBatchDelivery(Delivery.BATCH);
         }
 
         // get code
         ConfigUtils utils = ConfigUtils.getInstance(this);
-        String code = utils.displaySharedPreferences().getCode();
-        delivery.setToPOSCode(code);
+        String _code = utils.displaySharedPreferences().getCode();
+        delivery.setToPOSCode(_code);
 
         long date = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -303,12 +303,19 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
 
         DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
         ds.open();
-        if(!ds.existsDelivery(delivery)) {
-            delivery = ds.createDelivery(delivery);
-            Utils.showAlert(context, context.getString(R.string.save_delivery_success) + " " + delivery.getItemCode());
-        } else {
-            delivery = ds.updateDelivery(delivery);
-            Utils.showAlert(context, context.getString(R.string.update_delivery_success) + " " + delivery.getItemCode());
+
+        String codes = txtCode.getText().toString().trim();
+        String[] listCodes = codes.split(",");
+        for(String code : listCodes) {
+            code = code.trim();
+            delivery.setItemCode(code);
+            if(!ds.existsDelivery(delivery)) {
+                delivery = ds.createDelivery(delivery);
+                Utils.showAlert(context, context.getString(R.string.save_delivery_success) + " " + delivery.getItemCode());
+            } else {
+                delivery = ds.updateDelivery(delivery);
+                Utils.showAlert(context, context.getString(R.string.update_delivery_success) + " " + delivery.getItemCode());
+            }
         }
         ds.close();
         updateTitle();
@@ -331,6 +338,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         } else {
             ((NoDeliveryFragment)adapter.getItem(position)).clearView ();
         }
+
+        cbBatch.setEnabled(true);
     }
 
     private void loadDelivery() {
@@ -360,6 +369,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
                 viewPager.setCurrentItem(1);
             }
             txtCode.setBackgroundColor(Color.parseColor("#f7bc3c"));
+            cbBatch.setEnabled(false);
         }
     }
 
@@ -372,7 +382,16 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         if (requestCode == REQUEST_CODE_VIEW_LIST) {
             updateTitle();
         } else if(requestCode == REQUEST_CODE_SCAN_BIG) {
-            clearAllView();
+            if (resultCode == RESULT_OK) {
+                clearAllView();
+
+                String codes = data.getStringExtra("codes");
+                txtCode.setText(codes);
+
+                if(codes.split(",").length > 1) {
+                    loadDelivery();
+                }
+            }
         }
     }
 

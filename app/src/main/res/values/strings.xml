@@ -29,6 +29,7 @@
     <string name="nguoi_dung">Người dùng</string>
     <string name="xoa_buu_gui">Xoá bưu gửi</string>
     <string name="cau_hinh">Cấu hình</string>
+    <string name="phat_buu_gui_for_admin">Tài khoản Admin chỉ đùng để cài đặt máy. Nếu có phát bưu gửi hãy XOÁ DATA để tránh nhầm data với BƯU TÁ</string>
 
     <!-- Add User -->
     <string name="user_exists">Tên đăng nhập này đã tồn tại</string>

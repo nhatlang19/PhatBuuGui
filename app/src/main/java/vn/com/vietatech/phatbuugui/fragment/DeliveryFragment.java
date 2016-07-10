@@ -141,6 +141,10 @@ public class DeliveryFragment extends Fragment implements IFragment  {
             _delivery.setRelateWithReceive(Delivery.STATUS_DUONGSU);
         }
 
+        if(rbKhac.isChecked()) {
+            _delivery.setRelateWithReceive(Delivery.STATUS_KHAC);
+        }
+
         _delivery.setRealReciverName(txtHoten.getText().toString());
         return _delivery;
     }
@@ -161,9 +165,9 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         txtHoten.setText(delivery.getRealReciverName());
 
         if(delivery.getRelateWithReceive().equals(Delivery.STATUS_DUONGSU)) {
-            rbDuongSu.setSelected(true);
+            rbDuongSu.setChecked(true);
         } else {
-            rbKhac.setSelected(true);
+            rbKhac.setChecked(true);
         }
 
         txtSoGiayTo.setText(delivery.getDeliveryCertificateNumber());

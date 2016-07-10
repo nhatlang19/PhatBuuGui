@@ -138,7 +138,7 @@ public class UsersDataSource {
                 MySQLiteHelper.KEY_USER_PASSWORD + "=?";
         Cursor cursor = db.query(MySQLiteHelper.TABLE_USERS, allColumns, where, new String[] {_user.getUsername(), _user.getPassword()}, null, null,
                 null);
-        User user = new User();
+        User user = null;
         if(cursor.getCount() != 0) {
             cursor.moveToFirst();
             user = cursorToUser(cursor);
