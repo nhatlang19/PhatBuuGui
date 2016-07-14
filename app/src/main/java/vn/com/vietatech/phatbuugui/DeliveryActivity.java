@@ -35,8 +35,10 @@ import vn.com.vietatech.dao.DeliveryDataSource;
 import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.ConfigUtils;
+import vn.com.vietatech.lib.UploadHandler;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.adapter.ViewPagerAdapter;
+import vn.com.vietatech.phatbuugui.dialog.TransparentProgressDialog;
 import vn.com.vietatech.phatbuugui.fragment.DeliveryFragment;
 import vn.com.vietatech.phatbuugui.fragment.NoDeliveryFragment;
 
@@ -254,7 +256,23 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     }
 
     protected void upload() {
-        Utils.showAlert(context, "Test Uploaded");
+        TransparentProgressDialog pd = new TransparentProgressDialog(context, R.drawable.spinner);
+        pd.show();
+
+        DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
+        ds.open();
+        List<Delivery> lists = ds.getAllDeliveriesNotUploaded();
+        ds.close();
+
+        List<String> itemCodes = UploadHandler.batchUploads(lists);
+        ds.open();
+        ds.updatesMulti(itemCodes);
+        ds.close();
+
+        updateTitle();
+
+        pd.dismiss();
+        Utils.showAlert(context, "Uploaded Successful!");
     }
 
     /**

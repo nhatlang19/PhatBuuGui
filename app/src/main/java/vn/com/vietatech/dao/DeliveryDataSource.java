@@ -5,8 +5,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import vn.com.vietatech.dto.Delivery;
@@ -98,6 +100,19 @@ public class DeliveryDataSource {
         return Delivery;
     }
 
+    public boolean updatesMulti(List<String> itemCodes) {
+        itemCodes.add(0, Delivery.UPLOADED);
+
+        String[] id = itemCodes.toArray(new String[itemCodes.size()]);
+        String query = "UPDATE " + MySQLiteHelper.TABLE_DELIVERIES
+                + " SET " + MySQLiteHelper.KEY_UPLOAD + " = ?"
+                + " WHERE " + MySQLiteHelper.KEY_ITEM_CODE  + " IN (" + TextUtils.join(",", Collections.nCopies(itemCodes.size(), "?"))  + ")";
+        Cursor cursor = db.rawQuery(query, id);
+        cursor.moveToFirst();
+        cursor.close();
+        return true;
+    }
+
     public Delivery updateDelivery(Delivery _delivery) {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.KEY_POS_CODE, _delivery.getToPOSCode());
@@ -128,6 +143,13 @@ public class DeliveryDataSource {
         db.delete(MySQLiteHelper.TABLE_DELIVERIES, whereClause, new String[]{id});
     }
 
+    public void deleteDeliveryByUser() {
+        MyApplication globalVariable = (MyApplication) context.getApplicationContext();
+        User user = globalVariable.getUser();
+        String whereClause = MySQLiteHelper.KEY_DELIVERY_USER + "= ?";
+        db.delete(MySQLiteHelper.TABLE_DELIVERIES, whereClause, new String[]{user.getUsername()});
+    }
+
     public List<Delivery> getAllDeliveries() {
         List<Delivery> list = new ArrayList<Delivery>();
 
@@ -135,6 +157,24 @@ public class DeliveryDataSource {
         User user = globalVariable.getUser();
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
                 MySQLiteHelper.KEY_DELIVERY_USER + "= ?", new String[]{user.getUsername()}, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Delivery Delivery = cursorToDelivery(cursor);
+            list.add(Delivery);
+        }
+        cursor.close();
+        helper.close();
+        return list;
+    }
+
+    public List<Delivery> getAllDeliveriesNotUploaded() {
+        List<Delivery> list = new ArrayList<Delivery>();
+
+        MyApplication globalVariable = (MyApplication) context.getApplicationContext();
+        User user = globalVariable.getUser();
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
+                MySQLiteHelper.KEY_DELIVERY_USER + " = ? and " + MySQLiteHelper.KEY_UPLOAD + " = ? ",
+                new String[]{user.getUsername(), Delivery.UNUPLOADED}, null, null, null);
 
         while (cursor.moveToNext()) {
             Delivery Delivery = cursorToDelivery(cursor);

@@ -11,6 +11,10 @@ import android.widget.Button;
 import com.honeywell.aidc.AidcManager;
 import com.honeywell.aidc.BarcodeReader;
 
+import java.util.List;
+
+import vn.com.vietatech.dao.DeliveryDataSource;
+import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
@@ -102,7 +106,11 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void xoaBuuGui() {
-
+        DeliveryDataSource ds = DeliveryDataSource.getInstance(this);
+        ds.open();
+        ds.deleteDeliveryByUser();
+        ds.close();
+        Utils.showAlert(this, this.getString(R.string.xoa_thanh_cong_buu_gui));
     }
 
     private void phatBuuGui() {
