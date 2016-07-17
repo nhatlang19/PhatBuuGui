@@ -1,9 +1,14 @@
 package vn.com.vietatech.lib;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Properties;
 
 import vn.com.vietatech.dto.Config;
 
@@ -30,4 +35,26 @@ public class ConfigUtils {
         return new Config(server, port, code);
     }
 
+    public String getServiceUrl() throws IOException {
+        Properties prop = new Properties();
+        String propFileName = "config";
+        InputStream inputStream = null;
+
+        try {
+            inputStream = mContext.getResources().openRawResource(mContext.getResources().getIdentifier(propFileName, "raw", mContext.getPackageName()));
+
+            if (inputStream != null) {
+                InputStreamReader isr = new InputStreamReader(inputStream, "UTF-8");
+                prop.load(isr);
+            } else {
+                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+            }
+        } catch (Exception e) {
+            System.out.println("Exception: " + e);
+        } finally {
+            inputStream.close();
+        }
+
+        return prop.getProperty("service_url");
+    }
 }

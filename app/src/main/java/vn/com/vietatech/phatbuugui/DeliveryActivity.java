@@ -131,16 +131,16 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(ev.getAction() == MotionEvent.ACTION_UP) {
+        if (ev.getAction() == MotionEvent.ACTION_UP) {
             final View view = getCurrentFocus();
 
-            if(view != null) {
+            if (view != null) {
                 final boolean consumed = super.dispatchTouchEvent(ev);
 
                 final View viewTmp = getCurrentFocus();
                 final View viewNew = viewTmp != null ? viewTmp : view;
 
-                if(viewNew.equals(view)) {
+                if (viewNew.equals(view)) {
                     final Rect rect = new Rect();
                     final int[] coordinates = new int[2];
 
@@ -151,11 +151,10 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
                     final int x = (int) ev.getX();
                     final int y = (int) ev.getY();
 
-                    if(rect.contains(x, y)) {
+                    if (rect.contains(x, y)) {
                         return consumed;
                     }
-                }
-                else if(viewNew instanceof EditText) {
+                } else if (viewNew instanceof EditText) {
                     return consumed;
                 }
 
@@ -179,9 +178,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         ds.close();
 
         int count = 0;
-        for(Delivery delivery : deliveries)
-        {
-            if(delivery.getUpload().equals(Delivery.UNUPLOADED)) {
+        for (Delivery delivery : deliveries) {
+            if (delivery.getUpload().equals(Delivery.UNUPLOADED)) {
                 count++;
             }
         }
@@ -191,7 +189,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new DeliveryFragment(),  this.getString(R.string.delivery));
+        adapter.addFragment(new DeliveryFragment(), this.getString(R.string.delivery));
         adapter.addFragment(new NoDeliveryFragment(), this.getString(R.string.no_delivery));
         viewPager.setAdapter(adapter);
     }
@@ -238,9 +236,9 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     }
 
     protected void delete() {
-        if(txtCode.getText().toString().trim().length() == 0) {
+        if (txtCode.getText().toString().trim().length() == 0) {
             Utils.showAlert(context, this.getString(R.string.delete_error_no_code));
-            return ;
+            return;
         }
 
         DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
@@ -258,20 +256,44 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     protected void upload() {
         TransparentProgressDialog pd = new TransparentProgressDialog(context, R.drawable.spinner);
         pd.show();
+        try {
+            DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
+            ds.open();
+            List<Delivery> lists = ds.getAllDeliveriesNormal();
+            ds.close();
+            List<String> itemCodes;
 
-        DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
-        ds.open();
-        List<Delivery> lists = ds.getAllDeliveriesNotUploaded();
-        ds.close();
+            if (lists.isEmpty()) {
+                Utils.showAlert(context, "Không có data bưu gửi thường để upload");
+            } else {
+                itemCodes = UploadHandler.uploads(context, lists, false);
+                ds.open();
+                ds.updatesMulti(itemCodes);
+                ds.close();
 
-        List<String> itemCodes = UploadHandler.batchUploads(lists);
-        ds.open();
-        ds.updatesMulti(itemCodes);
-        ds.close();
+                Utils.showAlert(context, "Upload thành công: " + itemCodes.size() + " bưu gửi thường");
+            }
 
-        updateTitle();
+            ds.open();
+            lists = ds.getAllDeliveriesBatch();
+            ds.close();
+            if (!lists.isEmpty()) {
+                Utils.showAlert(context, "Không có data bưu gửi lô để upload");
+            } else {
+                itemCodes = UploadHandler.uploads(context, lists, true); // batch
+                ds.open();
+                ds.updatesMulti(itemCodes);
+                ds.close();
 
-        pd.dismiss();
+                Utils.showAlert(context, "Upload thành công: " + itemCodes.size() + " LÔ bưu gửi");
+            }
+        } catch (Exception e) {
+            Utils.showAlert(context, e.getMessage());
+        } finally {
+            updateTitle();
+            pd.dismiss();
+        }
+
         Utils.showAlert(context, "Uploaded Successful!");
     }
 
@@ -280,28 +302,28 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
      */
     protected void save() {
         int position = viewPager.getCurrentItem();
-        ViewPagerAdapter adapter = (ViewPagerAdapter)viewPager.getAdapter();
+        ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 
-        if(txtCode.getText().toString().trim().length() == 0) {
+        if (txtCode.getText().toString().trim().length() == 0) {
             Utils.showAlert(context, this.getString(R.string.error_no_code));
-            return ;
+            return;
         }
 
         Delivery delivery;
         if (position == 0) {
-            delivery = ((DeliveryFragment)adapter.getItem(position)).getData ();
-            if(delivery.getRelateWithReceive().equals(Delivery.STATUS_KHAC)) {
-                if(delivery.getRealReciverName().trim().length() == 0) {
+            delivery = ((DeliveryFragment) adapter.getItem(position)).getData();
+            if (delivery.getRelateWithReceive().equals(Delivery.STATUS_KHAC)) {
+                if (delivery.getRealReciverName().trim().length() == 0) {
                     Utils.showAlert(context, this.getString(R.string.error_no_name));
-                    return ;
+                    return;
                 }
             }
         } else {
-            delivery = ((NoDeliveryFragment)adapter.getItem(position)).getData ();
+            delivery = ((NoDeliveryFragment) adapter.getItem(position)).getData();
         }
 
 
-        if(cbBatch.isChecked()) {
+        if (cbBatch.isChecked()) {
             delivery.setBatchDelivery(Delivery.BATCH);
         }
 
@@ -324,10 +346,10 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
 
         String codes = txtCode.getText().toString().trim();
         String[] listCodes = codes.split(",");
-        for(String code : listCodes) {
+        for (String code : listCodes) {
             code = code.trim();
             delivery.setItemCode(code);
-            if(!ds.existsDelivery(delivery)) {
+            if (!ds.existsDelivery(delivery)) {
                 delivery = ds.createDelivery(delivery);
                 Utils.showAlert(context, context.getString(R.string.save_delivery_success) + " " + delivery.getItemCode());
             } else {
@@ -346,23 +368,23 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
      */
     private void clearAllView() {
         int position = viewPager.getCurrentItem();
-        ViewPagerAdapter adapter = (ViewPagerAdapter)viewPager.getAdapter();
+        ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
 
         txtCode.getText().clear();
         cbBatch.setChecked(false);
         txtCode.setBackgroundColor(Color.parseColor("#FFFFFF"));
         if (position == 0) {
-            ((DeliveryFragment)adapter.getItem(position)).clearView ();
+            ((DeliveryFragment) adapter.getItem(position)).clearView();
         } else {
-            ((NoDeliveryFragment)adapter.getItem(position)).clearView ();
+            ((NoDeliveryFragment) adapter.getItem(position)).clearView();
         }
 
         cbBatch.setEnabled(true);
     }
 
     private void loadDelivery() {
-        if(txtCode.getText().toString().trim().length() == 0) {
-            return ;
+        if (txtCode.getText().toString().trim().length() == 0) {
+            return;
         }
         String code = txtCode.getText().toString();
         viewPager.setCurrentItem(0);
@@ -374,16 +396,16 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         delivery = ds.getDelivery(delivery);
         ds.close();
 
-        if(delivery != null) {
-            if(delivery.getBatchDelivery().equals(Delivery.BATCH)) {
+        if (delivery != null) {
+            if (delivery.getBatchDelivery().equals(Delivery.BATCH)) {
                 cbBatch.setChecked(true);
             }
-            ViewPagerAdapter adapter = (ViewPagerAdapter)viewPager.getAdapter();
-            if(delivery.getIsDeliverable().equals(Delivery.PHAT_DUOC)) {
-                ((DeliveryFragment)adapter.getItem(0)).setFields(delivery);
+            ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
+            if (delivery.getIsDeliverable().equals(Delivery.PHAT_DUOC)) {
+                ((DeliveryFragment) adapter.getItem(0)).setFields(delivery);
                 viewPager.setCurrentItem(0);
             } else {
-                ((NoDeliveryFragment)adapter.getItem(1)).setFields(delivery);
+                ((NoDeliveryFragment) adapter.getItem(1)).setFields(delivery);
                 viewPager.setCurrentItem(1);
             }
             txtCode.setBackgroundColor(Color.parseColor("#f7bc3c"));
@@ -399,14 +421,14 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == REQUEST_CODE_VIEW_LIST) {
             updateTitle();
-        } else if(requestCode == REQUEST_CODE_SCAN_BIG) {
+        } else if (requestCode == REQUEST_CODE_SCAN_BIG) {
             if (resultCode == RESULT_OK) {
                 clearAllView();
 
                 String codes = data.getStringExtra("codes");
                 txtCode.setText(codes);
 
-                if(codes.split(",").length > 1) {
+                if (codes.split(",").length > 1) {
                     loadDelivery();
                 }
             }
@@ -487,7 +509,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
 //            barcodeReader.removeBarcodeListener(this);
 
             // unregister trigger state change listener
-           // barcodeReader.removeTriggerListener(this);
+            // barcodeReader.removeTriggerListener(this);
         }
     }
 }

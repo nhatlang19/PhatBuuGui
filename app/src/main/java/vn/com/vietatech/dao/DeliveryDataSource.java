@@ -167,14 +167,32 @@ public class DeliveryDataSource {
         return list;
     }
 
-    public List<Delivery> getAllDeliveriesNotUploaded() {
+    public List<Delivery> getAllDeliveriesNormal() {
         List<Delivery> list = new ArrayList<Delivery>();
 
         MyApplication globalVariable = (MyApplication) context.getApplicationContext();
         User user = globalVariable.getUser();
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
-                MySQLiteHelper.KEY_DELIVERY_USER + " = ? and " + MySQLiteHelper.KEY_UPLOAD + " = ? ",
-                new String[]{user.getUsername(), Delivery.UNUPLOADED}, null, null, null);
+                MySQLiteHelper.KEY_UPLOAD + " = ? and " + MySQLiteHelper.KEY_BATCH_DELIVERY + " = ? ",
+                new String[]{Delivery.UNUPLOADED, Delivery.NOBATCH}, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Delivery Delivery = cursorToDelivery(cursor);
+            list.add(Delivery);
+        }
+        cursor.close();
+        helper.close();
+        return list;
+    }
+
+    public List<Delivery> getAllDeliveriesBatch() {
+        List<Delivery> list = new ArrayList<Delivery>();
+
+        MyApplication globalVariable = (MyApplication) context.getApplicationContext();
+        User user = globalVariable.getUser();
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
+                MySQLiteHelper.KEY_UPLOAD + " = ? and " + MySQLiteHelper.KEY_BATCH_DELIVERY + " = ? ",
+                new String[]{Delivery.UNUPLOADED, Delivery.BATCH}, null, null, null);
 
         while (cursor.moveToNext()) {
             Delivery Delivery = cursorToDelivery(cursor);

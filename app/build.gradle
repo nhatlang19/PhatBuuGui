@@ -21,6 +21,10 @@ android {
     }
 }
 
+repositories {
+    maven { url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases' }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -31,4 +35,5 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.google.android.gms:play-services:9.0.2'
     compile files('src/main/java/vn/com/vietatech/lib/DataCollection.jar')
+    compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.1'
 }
