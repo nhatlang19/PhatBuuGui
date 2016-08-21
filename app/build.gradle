@@ -36,4 +36,5 @@ dependencies {
     compile 'com.google.android.gms:play-services:9.0.2'
     compile files('src/main/java/vn/com/vietatech/lib/DataCollection.jar')
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.1'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
 }

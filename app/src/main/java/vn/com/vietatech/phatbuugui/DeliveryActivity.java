@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,6 +30,7 @@ import com.honeywell.aidc.UnsupportedPropertyException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import vn.com.vietatech.dao.DeliveryDataSource;
@@ -211,8 +213,28 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.btnShowMap:
-                Intent intent = new Intent(this, MapsActivity.class);
-                startActivity(intent);
+                GPSTracker gps = new GPSTracker(DeliveryActivity.this);
+                // check if GPS enabled
+                if(gps.canGetLocation()){
+
+                    double latitude = gps.getLatitude();
+                    double longitude = gps.getLongitude();
+                    System.out.println(latitude);
+                    System.out.println(longitude);
+                    //                Intent intent = new Intent(this, MapsActivity.class);
+//                startActivity(intent);
+                    String uri = String.format(Locale.ENGLISH, "https://www.google.com/maps/@%f,%f,%sz", latitude, longitude, "17");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    startActivity(intent);
+
+
+
+                } else {
+                    // can't get location
+                    // GPS or Network is not enabled
+                    // Ask user to enable GPS/network in settings
+                    gps.showSettingsAlert();
+                }
                 break;
             case R.id.btnSaveDelivery:
                 this.save();
@@ -258,34 +280,22 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         pd.show();
         try {
             DeliveryDataSource ds = DeliveryDataSource.getInstance(context);
+            UploadHandler uploadHandler = UploadHandler.getInstance(context);
+
             ds.open();
-            List<Delivery> lists = ds.getAllDeliveriesNormal();
+            List<Delivery> lists = ds.getAllDeliveriesUnupload();
             ds.close();
             List<String> itemCodes;
 
             if (lists.isEmpty()) {
-                Utils.showAlert(context, "Không có data bưu gửi thường để upload");
+                Utils.showAlert(context, "Không có data bưu gửi để upload");
             } else {
-                itemCodes = UploadHandler.uploads(context, lists, false);
+                itemCodes = uploadHandler.uploads(context, lists);
                 ds.open();
                 ds.updatesMulti(itemCodes);
                 ds.close();
 
-                Utils.showAlert(context, "Upload thành công: " + itemCodes.size() + " bưu gửi thường");
-            }
-
-            ds.open();
-            lists = ds.getAllDeliveriesBatch();
-            ds.close();
-            if (!lists.isEmpty()) {
-                Utils.showAlert(context, "Không có data bưu gửi lô để upload");
-            } else {
-                itemCodes = UploadHandler.uploads(context, lists, true); // batch
-                ds.open();
-                ds.updatesMulti(itemCodes);
-                ds.close();
-
-                Utils.showAlert(context, "Upload thành công: " + itemCodes.size() + " LÔ bưu gửi");
+                Utils.showAlert(context, "Upload thành công: " + itemCodes.size() + " bưu gửi");
             }
         } catch (Exception e) {
             Utils.showAlert(context, e.getMessage());

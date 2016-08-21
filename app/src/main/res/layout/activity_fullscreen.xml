@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,6 +20,7 @@
             android:layout_height="wrap_content"
             android:text="@string/phat_buu_gui"
             android:id="@+id/btnPhatBuuGui"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -26,6 +28,7 @@
             android:layout_height="wrap_content"
             android:text="@string/xoa_buu_gui"
             android:id="@+id/btnXoaBuuGui"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -33,6 +36,7 @@
             android:layout_height="wrap_content"
             android:text="@string/nguoi_dung"
             android:id="@+id/btnNguoiDung"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -40,6 +44,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cau_hinh"
             android:id="@+id/btnCauHinh"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -47,6 +52,7 @@
             android:layout_height="wrap_content"
             android:text="@string/exit"
             android:id="@+id/btnThoat"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </RelativeLayout>

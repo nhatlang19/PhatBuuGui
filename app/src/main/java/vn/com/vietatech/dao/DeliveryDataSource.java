@@ -36,9 +36,11 @@ public class DeliveryDataSource {
             MySQLiteHelper.KEY_REAL_RECEIVER_IDENTIFICATION,
             MySQLiteHelper.KEY_DELIVERY_USER,
             MySQLiteHelper.KEY_BATCH_DELIVERY,
+            MySQLiteHelper.KEY_LATITUDE,
+            MySQLiteHelper.KEY_LONGTITUDE,
+            MySQLiteHelper.KEY_PRICE,
             MySQLiteHelper.KEY_UPLOAD
     };
-
     private static DeliveryDataSource sInstance;
     private static Context context;
 
@@ -84,6 +86,9 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_DELIVERY_USER, _delivery.getDeliveryUser());
         values.put(MySQLiteHelper.KEY_BATCH_DELIVERY, _delivery.getBatchDelivery());
         values.put(MySQLiteHelper.KEY_UPLOAD, _delivery.getUpload());
+        values.put(MySQLiteHelper.KEY_LATITUDE, _delivery.getLatitude());
+        values.put(MySQLiteHelper.KEY_LONGTITUDE, _delivery.getLongtitude());
+        values.put(MySQLiteHelper.KEY_PRICE, _delivery.getPrice());
 
         db.insert(MySQLiteHelper.TABLE_DELIVERIES, null,
                 values);
@@ -131,6 +136,9 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_DELIVERY_USER, _delivery.getDeliveryUser());
         values.put(MySQLiteHelper.KEY_BATCH_DELIVERY, _delivery.getBatchDelivery());
         values.put(MySQLiteHelper.KEY_UPLOAD, _delivery.getUpload());
+        values.put(MySQLiteHelper.KEY_LATITUDE, _delivery.getLatitude());
+        values.put(MySQLiteHelper.KEY_LONGTITUDE, _delivery.getLongtitude());
+        values.put(MySQLiteHelper.KEY_PRICE, _delivery.getPrice());
 
         db.update(MySQLiteHelper.TABLE_DELIVERIES, values, MySQLiteHelper.KEY_ITEM_CODE + "= ?", new String[]{_delivery.getItemCode()});
         return _delivery;
@@ -155,8 +163,25 @@ public class DeliveryDataSource {
 
         MyApplication globalVariable = (MyApplication) context.getApplicationContext();
         User user = globalVariable.getUser();
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            Delivery Delivery = cursorToDelivery(cursor);
+            list.add(Delivery);
+        }
+        cursor.close();
+        helper.close();
+        return list;
+    }
+
+    public List<Delivery> getAllDeliveriesUnupload() {
+        List<Delivery> list = new ArrayList<Delivery>();
+
+        MyApplication globalVariable = (MyApplication) context.getApplicationContext();
+        User user = globalVariable.getUser();
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES, allColumns,
-                MySQLiteHelper.KEY_DELIVERY_USER + "= ?", new String[]{user.getUsername()}, null, null, null);
+                MySQLiteHelper.KEY_UPLOAD + " = ? ",
+                new String[]{Delivery.UNUPLOADED}, null, null, null);
 
         while (cursor.moveToNext()) {
             Delivery Delivery = cursorToDelivery(cursor);
@@ -248,8 +273,10 @@ public class DeliveryDataSource {
         int indexRealReceivertIdent = cursor.getColumnIndex(MySQLiteHelper.KEY_REAL_RECEIVER_IDENTIFICATION);
         int indexDeliveryUser = cursor.getColumnIndex(MySQLiteHelper.KEY_DELIVERY_USER);
         int indexBatchDelivery = cursor.getColumnIndex(MySQLiteHelper.KEY_BATCH_DELIVERY);
+        int indexLat = cursor.getColumnIndex(MySQLiteHelper.KEY_LATITUDE);
+        int indexLong = cursor.getColumnIndex(MySQLiteHelper.KEY_LONGTITUDE);
+        int indexPrice = cursor.getColumnIndex(MySQLiteHelper.KEY_PRICE);
         int indexUpload = cursor.getColumnIndex(MySQLiteHelper.KEY_UPLOAD);
-
 
         Delivery _delivery = new Delivery();
         _delivery.setItemCode(cursor.getString(indexItemCode));
@@ -268,6 +295,9 @@ public class DeliveryDataSource {
         _delivery.setRealReceiverIdentification(cursor.getString(indexRealReceivertIdent));
         _delivery.setDeliveryUser(cursor.getString(indexDeliveryUser));
         _delivery.setBatchDelivery(cursor.getString(indexBatchDelivery));
+        _delivery.setLatitude(cursor.getDouble(indexLat));
+        _delivery.setLongtitude(cursor.getDouble(indexLong));
+        _delivery.setPrice(cursor.getDouble(indexPrice));
         _delivery.setUpload(cursor.getString(indexUpload));
 
         return _delivery;

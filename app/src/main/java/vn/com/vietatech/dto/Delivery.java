@@ -14,13 +14,16 @@ public class Delivery implements Serializable {
     private String deliveryCertificateNumber; // so giay to
     private String deliveryCertificateDateOfIssue; // ngay cap
     private String deliveryCertificatePlaceOfIssue; // noi cap
-    private String deliveryReturn;
     private String relateWithReceive;
+    private String deliveryReturn;
     private String realReciverName;
     private String realReceiverIdentification;
     private String deliveryUser;
     private String batchDelivery;
     private String upload;
+    private double latitude;
+    private double longtitude;
+    private double price;
 
     public static final String STATUS_DUONGSU = "0";
     public static final String STATUS_KHAC = "1";
@@ -191,5 +194,29 @@ public class Delivery implements Serializable {
 
     public void setDeliveryReturn(String deliveryReturn) {
         this.deliveryReturn = deliveryReturn;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(double longtitude) {
+        this.longtitude = longtitude;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -2,8 +2,6 @@ package vn.com.vietatech.phatbuugui.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,15 +10,13 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.Spinner;
-
-import java.util.ArrayList;
 
 import vn.com.vietatech.dto.City;
 import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.dto.GiayTo;
+import vn.com.vietatech.phatbuugui.GPSTracker;
 import vn.com.vietatech.phatbuugui.R;
 import vn.com.vietatech.phatbuugui.adapter.GiayToListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.NoiCapListAdapter;
@@ -35,6 +31,7 @@ public class DeliveryFragment extends Fragment implements IFragment  {
     private EditText txtNgayCap;
     private Spinner spinnerNoiCap;
     private CheckBox rbPhatHoan;
+    private EditText txtGiaTien;
 
     private NoiCapListAdapter noiCapListAdapter;
     private GiayToListAdapter tableListAdapter;
@@ -63,6 +60,7 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         txtNgayCap = (EditText) view.findViewById(R.id.txtNgayCap);
         spinnerNoiCap = (Spinner) view.findViewById(R.id.spinnerNoiCap);
         rbPhatHoan = (CheckBox) view.findViewById(R.id.rbPhatHoan1);
+        txtGiaTien = (EditText) view.findViewById(R.id.txtPrice);
 
         tableListAdapter = new GiayToListAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item);
@@ -132,6 +130,21 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         _delivery.setDeliveryCertificateDateOfIssue(txtNgayCap.getText().toString());
         _delivery.setDeliveryCertificatePlaceOfIssue(String.valueOf(((City)spinnerNoiCap.getSelectedItem()).getDesc()));
         _delivery.setIsDeliverable(Delivery.PHAT_DUOC);
+        _delivery.setPrice(Double.valueOf(txtGiaTien.getText().toString()));
+
+        GPSTracker gps = new GPSTracker(this.getContext());
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            _delivery.setLatitude(latitude);
+            _delivery.setLongtitude(longitude);
+        } else {
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
 
         if(rbPhatHoan.isChecked()) {
             _delivery.setDeliveryReturn(Delivery.PHAT_HOAN);

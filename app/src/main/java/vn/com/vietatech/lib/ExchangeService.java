@@ -44,7 +44,8 @@ public class ExchangeService {
         String serviceUri = configUtils.getServiceUrl();
 
         NAMESPACE = "http://tempuri.org/";
-        URL = config.getServer() + ":" + config.getPort() + serviceUri;
+//        URL = config.getServer() + ":" + config.getPort() + serviceUri;
+        URL = "http://113.161.79.56/VNPostService/VNPostService.asmx";
 
         if (!Utils.isNetworkAvailable(context)) {
             throw new Exception("No Internet Connection");

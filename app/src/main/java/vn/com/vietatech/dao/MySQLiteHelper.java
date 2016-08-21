@@ -4,16 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.List;
-
-import vn.com.vietatech.async.MapCitiesAsync;
-import vn.com.vietatech.dto.City;
-import vn.com.vietatech.dto.User;
-
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 10;
 
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
@@ -67,6 +61,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_DELIVERY_USER = "deliveryUser";
     public static final String KEY_BATCH_DELIVERY = "batchDelivery";
     public static final String KEY_UPLOAD = "upload";
+    public static final String KEY_LATITUDE = "latitude";
+    public static final String KEY_LONGTITUDE = "longtitude";
+    public static final String KEY_PRICE = "price";
 
 
     private static MySQLiteHelper sInstance;
@@ -164,9 +161,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_REAL_RECEIVER_IDENTIFICATION + " TEXT," +
                 KEY_DELIVERY_USER + " TEXT," +
                 KEY_BATCH_DELIVERY + " TEXT," +
+                KEY_LATITUDE + " DOUBLE," +
+                KEY_LONGTITUDE + " DOUBLE," +
+                KEY_PRICE + " DOUBLE," +
                 KEY_UPLOAD + " TEXT" +
                 ")";
-
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_CITIES_TABLE);
         db.execSQL(CREATE_REASONS_TABLE);
