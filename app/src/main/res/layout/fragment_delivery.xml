@@ -20,22 +20,14 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
 
-            <TextView
-                android:id="@+id/lbHoTen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Họ tên"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
             <EditText
                 android:id="@+id/txtHoTen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:singleLine="true"
-                android:textSize="25dp"
-                android:text="" />
+                android:text=""
+                android:hint="Họ tên" />
         </TableRow>
 
         <TableRow
@@ -47,18 +39,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="" />
             <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/rbDuongSu"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:checked="true"
                     android:text="Đương sự"
                     android:textSize="20dp"
@@ -68,7 +60,6 @@
                     android:id="@+id/rbKhac"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
                     android:checked="false"
                     android:text="Khác"
                     android:textSize="20dp"
@@ -82,20 +73,11 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
-
-            <TextView
-                android:id="@+id/lbGiayTo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Giấy tờ"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
             <Spinner android:id="@+id/spinnerGiayTo"
-                android:layout_column="1"
-
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:spinnerMode="dialog"
                 android:layout_weight="1"
-                android:spinnerMode="dialog" />
+                android:layout_height="wrap_content" />
         </TableRow>
 
         <TableRow
@@ -104,47 +86,23 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
-
-            <TextView
-                android:id="@+id/lbSoGiayTo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Số giấy tờ"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
             <EditText
                 android:id="@+id/txtSoGiayTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="25dp"
-                android:singleLine="true" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
-
-            <TextView
-                android:id="@+id/lbNgayCap"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Ngày cấp"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:singleLine="true"
+                android:hint="Số giấy tờ"
+                android:maxWidth="20dp" />
 
             <EditText
                 android:id="@+id/txtNgayCap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:layout_weight="1"
                 android:singleLine="true"
-                android:textSize="25dp" />
+                android:layout_weight="1"
+                android:hint="Ngày cấp" />
         </TableRow>
 
         <TableRow
@@ -154,17 +112,9 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
 
-            <TextView
-                android:id="@+id/lbNoiCap"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:text="Nơi cấp"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
             <Spinner android:id="@+id/spinnerNoiCap"
-                android:layout_column="1"
                 android:layout_weight="1"
+                style="@android:style/Widget.Holo.Light.Spinner"
                 android:spinnerMode="dialog" />
 
         </TableRow>
@@ -176,21 +126,13 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp">
 
-            <TextView
-                android:id="@+id/lbGiaTien"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Giá tiền"
-                android:textSize="20dp"
-                android:textStyle="bold" />
             <EditText
                 android:id="@+id/txtPrice"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:singleLine="true"
-                android:textSize="25dp"
-                android:numeric="decimal" />
+                android:layout_weight="1"
+                android:hint="Giá tiền" />
         </TableRow>
 
         <TableRow
@@ -202,11 +144,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+
                 android:text="" />
             <CheckBox
                 android:id="@+id/rbPhatHoan1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+
                 android:text="Phát Hoàn"
                 android:textSize="20dp"
                 android:textStyle="bold" />

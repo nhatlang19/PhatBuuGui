@@ -1,6 +1,5 @@
 package vn.com.vietatech.phatbuugui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import vn.com.vietatech.dto.City;
 import vn.com.vietatech.dto.GiayTo;
+import vn.com.vietatech.phatbuugui.R;
 
 public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
 
@@ -29,7 +28,8 @@ public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
 		this.values.add(new GiayTo(2, "CMND quân đội"));
 		this.values.add(new GiayTo(3, "Bằng lái xe"));
 		this.values.add(new GiayTo(4, "Thẻ học sinh"));
-		this.values.add(new GiayTo(4, "Thẻ sinh viên"));
+		this.values.add(new GiayTo(5, "Thẻ sinh viên"));
+		this.values.add(new GiayTo(6, "[Chọn giấy tờ]"));
 	}
 
 	public int getItemIndexByName(String name) {
@@ -44,7 +44,8 @@ public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
 	}
 
 	public int getCount() {
-		return values.size();
+        int size = values.size();
+        return size > 0 ? size - 1 : size;
 	}
 
 	public GiayTo getItem(int position) {
@@ -57,34 +58,33 @@ public class GiayToListAdapter extends ArrayAdapter<GiayTo>{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView label;
-		
-		if (convertView != null){
-			label = (TextView) convertView;
-        } else {
-        	LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        	label = (TextView) inflater.inflate(
-                    android.R.layout.simple_dropdown_item_1line, parent, false
-            );
-        }
-        label.setTextSize(20);
-		label.setText(values.get(position).getName().trim());
-		return label;
+        // 1. Create inflater
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // 2. Get rowView from inflater
+        View rowView = inflater.inflate(R.layout.row, parent, false);
+
+        // 3. Get the two text view from the rowView
+        TextView labelView = (TextView) rowView.findViewById(R.id.label);
+        labelView.setText(values.get(position).getName().trim());
+        labelView.setPadding(5, 12, 5, 17);
+        return rowView;
 	}
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		TextView label;
-		if (convertView != null){
-			label = (TextView) convertView;
-        } else {
-        	LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        	label = (TextView) inflater.inflate(
-                    android.R.layout.simple_dropdown_item_1line, parent, false
-            );
-        }
-        label.setTextSize(20);
-		label.setText(values.get(position).getName().trim());
-		return label;
+        // 1. Create inflater
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // 2. Get rowView from inflater
+        View rowView = inflater.inflate(R.layout.row, parent, false);
+
+        // 3. Get the two text view from the rowView
+        TextView labelView = (TextView) rowView.findViewById(R.id.label);
+        labelView.setText(values.get(position).getName().trim());
+        labelView.setPadding(5, 12, 5, 17);
+        return rowView;
 	}
 }

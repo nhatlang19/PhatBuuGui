@@ -65,10 +65,12 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         tableListAdapter = new GiayToListAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item);
         spinnerGiayTo.setAdapter(tableListAdapter);
+        spinnerGiayTo.setSelection(tableListAdapter.getCount());
 
         noiCapListAdapter = new NoiCapListAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item);
         spinnerNoiCap.setAdapter(noiCapListAdapter);
+        spinnerNoiCap.setSelection(noiCapListAdapter.getCount());
 
         // txtNgayCap click
         txtNgayCap.setClickable(true);
