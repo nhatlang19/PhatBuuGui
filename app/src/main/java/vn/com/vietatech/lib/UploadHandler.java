@@ -28,27 +28,44 @@ public class UploadHandler {
         return instance;
     }
 
-    private boolean addDelivery(List<Delivery> deliveries) {
+    private boolean addDelivery(Delivery delivery) {
         client.setMethod("Upload");
 
         Map<String, String> params = new HashMap<>();
         params.put("connString", cnnString);
         Gson gson = new Gson();
-        params.put("dtUpload", gson.toJson(deliveries));
+        params.put("uploadString", gson.toJson(delivery));
 
+        boolean res = false;
         try {
-            return Boolean.parseBoolean(client.callService(params).toString());
+            String result = client.callService(params).toString();
+            res = getResult(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return res;
+    }
+    
+    private boolean getResult(String result) {
+        String[] list = result.split("-");
+
+        if(list.length != 2) {
+            return false;
+        }
+
+        if(!list[0].equals("1")) {
+            return false;
+        }
+
+        return true;
     }
 
     public List<String> uploads(Context context, List<Delivery> lists) throws Exception {
         List<String> itemCodes = new ArrayList<>();
-        boolean result = addDelivery(lists);
-        if(result) {
-            for (Delivery delivery : lists) {
+
+        for (Delivery delivery : lists) {
+            boolean result = addDelivery(delivery);
+            if(result) {
                 itemCodes.add(delivery.getItemCode());
             }
         }

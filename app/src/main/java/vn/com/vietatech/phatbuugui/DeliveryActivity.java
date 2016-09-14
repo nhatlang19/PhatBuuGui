@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -64,6 +65,11 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         updateTitle();
 
@@ -291,11 +297,16 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
                 Utils.showAlert(context, "Không có data bưu gửi để upload");
             } else {
                 itemCodes = uploadHandler.uploads(context, lists);
+                int size = itemCodes.size();
                 ds.open();
                 ds.updatesMulti(itemCodes);
                 ds.close();
 
-                Utils.showAlert(context, "Upload thành công: " + itemCodes.size() + " bưu gửi");
+                if(size != 0) {
+                    Utils.showAlert(context, "Upload thành công: " + size + " bưu gửi");
+                } else {
+                    Utils.showAlert(context, "Có lỗi trong quá trình upload");
+                }
             }
         } catch (Exception e) {
             Utils.showAlert(context, e.getMessage());
@@ -303,8 +314,6 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
             updateTitle();
             pd.dismiss();
         }
-
-        Utils.showAlert(context, "Uploaded Successful!");
     }
 
     /**

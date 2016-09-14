@@ -106,12 +106,13 @@ public class DeliveryDataSource {
     }
 
     public boolean updatesMulti(List<String> itemCodes) {
-        itemCodes.add(0, Delivery.UPLOADED);
+        List<String> temp = itemCodes;
+        temp.add(0, Delivery.UPLOADED);
 
         String[] id = itemCodes.toArray(new String[itemCodes.size()]);
         String query = "UPDATE " + MySQLiteHelper.TABLE_DELIVERIES
                 + " SET " + MySQLiteHelper.KEY_UPLOAD + " = ?"
-                + " WHERE " + MySQLiteHelper.KEY_ITEM_CODE  + " IN (" + TextUtils.join(",", Collections.nCopies(itemCodes.size(), "?"))  + ")";
+                + " WHERE " + MySQLiteHelper.KEY_ITEM_CODE  + " IN (" + TextUtils.join(",", Collections.nCopies(temp.size(), "?"))  + ")";
         Cursor cursor = db.rawQuery(query, id);
         cursor.moveToFirst();
         cursor.close();
@@ -295,9 +296,9 @@ public class DeliveryDataSource {
         _delivery.setRealReceiverIdentification(cursor.getString(indexRealReceivertIdent));
         _delivery.setDeliveryUser(cursor.getString(indexDeliveryUser));
         _delivery.setBatchDelivery(cursor.getString(indexBatchDelivery));
-        _delivery.setLatitude(cursor.getDouble(indexLat));
-        _delivery.setLongtitude(cursor.getDouble(indexLong));
-        _delivery.setPrice(cursor.getDouble(indexPrice));
+        _delivery.setLatitude(cursor.getString(indexLat));
+        _delivery.setLongtitude(cursor.getString(indexLong));
+        _delivery.setPrice(cursor.getString(indexPrice));
         _delivery.setUpload(cursor.getString(indexUpload));
 
         return _delivery;

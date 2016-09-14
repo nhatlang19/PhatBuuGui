@@ -4,17 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.honeywell.aidc.AidcManager;
 import com.honeywell.aidc.BarcodeReader;
 
-import java.util.List;
-
 import vn.com.vietatech.dao.DeliveryDataSource;
-import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
@@ -22,6 +17,7 @@ import vn.com.vietatech.phatbuugui.dialog.DialogConfirm;
 public class FullscreenActivity extends AppCompatActivity {
     protected Button btnNguoiDung;
     protected Button btnPhatBuuGui;
+    protected Button btnBuuTaThu;
     protected Button btnCauHinh;
     protected Button btnXoaBuuGui;
     protected Button btnThoat;
@@ -37,6 +33,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         btnNguoiDung = (Button) findViewById(R.id.btnNguoiDung);
         btnPhatBuuGui = (Button) findViewById(R.id.btnPhatBuuGui);
+        btnBuuTaThu = (Button) findViewById(R.id.btnBuuTaThu);
         btnCauHinh = (Button) findViewById(R.id.btnCauHinh);
         btnXoaBuuGui = (Button) findViewById(R.id.btnXoaBuuGui);
         btnThoat = (Button) findViewById(R.id.btnThoat);
@@ -53,6 +50,13 @@ public class FullscreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 phatBuuGui();
+            }
+        });
+
+        btnBuuTaThu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buuTaThu();
             }
         });
 
@@ -127,6 +131,11 @@ public class FullscreenActivity extends AppCompatActivity {
             Intent intent = new Intent(FullscreenActivity.this, DeliveryActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void buuTaThu() {
+        Intent intent = new Intent(FullscreenActivity.this, DeliverySendActivity.class);
+        startActivity(intent);
     }
 
     private void loadUsers() {

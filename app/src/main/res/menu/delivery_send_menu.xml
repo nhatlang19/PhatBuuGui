@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/btnSaveDeliverySend"
+        android:icon="@drawable/ic_save"
+        android:title="Lưu"
+        android:orderInCategory="0"/>
+    <item
+        android:id="@+id/btnInBienNhan"
+        android:title="In biên nhận"
+        android:orderInCategory="1"/>
+    <item
+        android:id="@+id/btnXemDanhSachSend"
+        android:title="Xem danh sách"
+        android:orderInCategory="2"/>
+    <item
+        android:id="@+id/btnXoaBuuGuiSend"
+        android:title="Xoá bưu gửi"
+        android:orderInCategory="3"/>
+    <item
+        android:id="@+id/btnUploadSend"
+        android:title="Upload"
+        android:orderInCategory="4"/>
+</menu>

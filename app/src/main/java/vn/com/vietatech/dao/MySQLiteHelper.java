@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Info
     private static final String DATABASE_NAME = "phatbuugui";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 12;
 
     // Table Names
     public static final String TABLE_USERS = "tbl_users";
@@ -16,6 +16,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String TABLE_SOLUTIONS = "tbl_solutions";
     public static final String TABLE_REASON_SOLUTION_MAPS = "tbl_reason_solution_maps";
     public static final String TABLE_DELIVERIES = "tbl_deliveries";
+    public static final String TABLE_DELIVERIES_SEND = "tbl_deliveries_send";
+
+    // Delivery Send Table Columns
+    public static final String KEY_SEND_ITEM_CODE = "itemCode";
+    public static final String KEY_SEND_NAME = "name";
+    public static final String KEY_SEND_POS_CODE = "toPOSCode";
+    public static final String KEY_SEND_IDENTITY = "identity";
+    public static final String KEY_SEND_ADDRESS = "address";
+    public static final String KEY_SEND_UPLOAD = "upload";
 
     // User Table Columns
     public static final String KEY_USER_ID = "id";
@@ -143,7 +152,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 TABLE_SOLUTIONS + "(id) " +
                 ")";
 
-        String CREATE_DILIVERIES_TABLE = "CREATE TABLE " + TABLE_DELIVERIES +
+        String CREATE_DELIVERIES_TABLE = "CREATE TABLE " + TABLE_DELIVERIES +
                 "(" +
                 KEY_ITEM_CODE + " TEXT PRIMARY KEY ," +
                 KEY_POS_CODE + " TEXT," +
@@ -161,17 +170,29 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_REAL_RECEIVER_IDENTIFICATION + " TEXT," +
                 KEY_DELIVERY_USER + " TEXT," +
                 KEY_BATCH_DELIVERY + " TEXT," +
-                KEY_LATITUDE + " DOUBLE," +
-                KEY_LONGTITUDE + " DOUBLE," +
-                KEY_PRICE + " DOUBLE," +
+                KEY_LATITUDE + " TEXT," +
+                KEY_LONGTITUDE + " TEXT," +
+                KEY_PRICE + " TEXT," +
                 KEY_UPLOAD + " TEXT" +
                 ")";
+
+        String CREATE_DELIVERIES_SEND_TABLE = "CREATE TABLE " + TABLE_DELIVERIES_SEND +
+                "(" +
+                KEY_SEND_ITEM_CODE + " TEXT PRIMARY KEY ," +
+                KEY_SEND_POS_CODE + " TEXT," +
+                KEY_SEND_NAME + " TEXT," +
+                KEY_SEND_IDENTITY + " TEXT," +
+                KEY_SEND_ADDRESS + " TEXT," +
+                KEY_SEND_UPLOAD + " TEXT" +
+                ")";
+
         db.execSQL(CREATE_USERS_TABLE);
         db.execSQL(CREATE_CITIES_TABLE);
         db.execSQL(CREATE_REASONS_TABLE);
         db.execSQL(CREATE_SOLUTIONS_TABLE);
         db.execSQL(CREATE_MAPS_TABLE);
-        db.execSQL(CREATE_DILIVERIES_TABLE);
+        db.execSQL(CREATE_DELIVERIES_TABLE);
+        db.execSQL(CREATE_DELIVERIES_SEND_TABLE);
     }
 
     // Called when the database needs to be upgraded.
@@ -187,6 +208,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOLUTIONS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_REASON_SOLUTION_MAPS);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_DELIVERIES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_DELIVERIES_SEND);
 
             onCreate(db);
         }

@@ -21,9 +21,9 @@ public class Delivery implements Serializable {
     private String deliveryUser;
     private String batchDelivery;
     private String upload;
-    private double latitude;
-    private double longtitude;
-    private double price;
+    private String latitude;
+    private String longtitude;
+    private String price;
 
     public static final String STATUS_DUONGSU = "0";
     public static final String STATUS_KHAC = "1";
@@ -58,6 +58,9 @@ public class Delivery implements Serializable {
         deliveryUser = "";
         batchDelivery = NOBATCH;
         upload = UNUPLOADED;
+        price= "";
+        latitude = "";
+        longtitude = "";
     }
 
     public String getItemCode() {
@@ -196,27 +199,27 @@ public class Delivery implements Serializable {
         this.deliveryReturn = deliveryReturn;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongtitude() {
+    public String getLongtitude() {
         return longtitude;
     }
 
-    public void setLongtitude(double longtitude) {
+    public void setLongtitude(String longtitude) {
         this.longtitude = longtitude;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 }

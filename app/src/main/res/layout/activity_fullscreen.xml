@@ -26,6 +26,14 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/buu_ta_thu"
+            android:id="@+id/btnBuuTaThu"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/xoa_buu_gui"
             android:id="@+id/btnXoaBuuGui"
             style="@style/Widget.AppCompat.Button.Colored"

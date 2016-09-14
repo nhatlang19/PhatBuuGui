@@ -63,8 +63,8 @@ public class ExchangeService {
     private final SoapSerializationEnvelope getSoapSerializationEnvelope(SoapObject request) {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
-        envelope.implicitTypes = true;
-        envelope.setAddAdornments(false);
+//        envelope.implicitTypes = true;
+//        envelope.setAddAdornments(false);
         envelope.setOutputSoapObject(request);
 
         return envelope;

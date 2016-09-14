@@ -20,12 +20,14 @@
     <string name="title_activity_add_userscreen">Thêm người dùng</string>
     <string name="title_activity_edit_userscreen">Chỉnh sửa người dùng</string>
     <string name="title_activity_delivery">Phát bưu gửi</string>
+    <string name="title_activity_delivery_send">Bưu tá thu</string>
     <string name="title_activity_delivery_list">Danh sách bưu gửi</string>
     <string name="title_activity_delivery_scan">Quét số lượng lớn</string>
     <string name="title_activity_maps">Map</string>
 
     <!-- Main Menu -->
     <string name="phat_buu_gui">Phát bưu gửi</string>
+    <string name="buu_ta_thu">Bưu tá thu</string>
     <string name="nguoi_dung">Người dùng</string>
     <string name="xoa_buu_gui">Xoá bưu gửi</string>
     <string name="cau_hinh">Cấu hình</string>

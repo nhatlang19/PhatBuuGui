@@ -132,15 +132,17 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         _delivery.setDeliveryCertificateDateOfIssue(txtNgayCap.getText().toString());
         _delivery.setDeliveryCertificatePlaceOfIssue(String.valueOf(((City)spinnerNoiCap.getSelectedItem()).getDesc()));
         _delivery.setIsDeliverable(Delivery.PHAT_DUOC);
-        _delivery.setPrice(Double.valueOf(txtGiaTien.getText().toString()));
+        if(txtGiaTien.getText().toString().trim().length() != 0) {
+            _delivery.setPrice(txtGiaTien.getText().toString());
+        }
 
         GPSTracker gps = new GPSTracker(this.getContext());
         // check if GPS enabled
         if(gps.canGetLocation()){
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
-            _delivery.setLatitude(latitude);
-            _delivery.setLongtitude(longitude);
+            _delivery.setLatitude(String.valueOf(latitude));
+            _delivery.setLongtitude(String.valueOf(longitude));
         } else {
             // can't get location
             // GPS or Network is not enabled
@@ -173,6 +175,7 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         txtNgayCap.getText().clear();
         spinnerNoiCap.setSelection(0);
         rbPhatHoan.setSelected(false);
+        txtGiaTien.getText().clear();
     }
 
     @Override
