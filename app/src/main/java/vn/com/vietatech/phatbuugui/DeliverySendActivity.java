@@ -1,6 +1,7 @@
 package vn.com.vietatech.phatbuugui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -149,6 +150,8 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.btnInBienNhan:
+                Intent intent = new Intent(DeliverySendActivity.this, PrintBluetoothActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btnSaveDeliverySend:
                 break;

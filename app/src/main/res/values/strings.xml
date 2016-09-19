@@ -22,6 +22,7 @@
     <string name="title_activity_delivery">Phát bưu gửi</string>
     <string name="title_activity_delivery_send">Bưu tá thu</string>
     <string name="title_activity_delivery_list">Danh sách bưu gửi</string>
+    <string name="print_data">In biên nhận</string>
     <string name="title_activity_delivery_scan">Quét số lượng lớn</string>
     <string name="title_activity_maps">Map</string>
 
