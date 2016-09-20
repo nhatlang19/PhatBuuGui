@@ -24,7 +24,11 @@ import com.citizen.port.android.BluetoothPort;
 import com.citizen.request.android.RequestHandler;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Vector;
+
+import vn.com.vietatech.dto.DeliverySend;
+import vn.com.vietatech.lib.InBuuTaThu;
 
 public class PrintBluetoothActivity extends AppCompatActivity
 {
@@ -47,8 +51,11 @@ public class PrintBluetoothActivity extends AppCompatActivity
     private Button connectButton;
     private Button searchButton;
     private ListView list;
+    private Button btnPrint;
     // BT
     private BluetoothPort bp;
+
+    private  DeliverySend deliverySend;
 
     /**
      * Set up Bluetooth.
@@ -225,6 +232,8 @@ public class PrintBluetoothActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bluetooth_menu);
 
+        deliverySend = (DeliverySend) getIntent().getSerializableExtra("delivery_send");
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -236,6 +245,7 @@ public class PrintBluetoothActivity extends AppCompatActivity
         connectButton = (Button) findViewById(R.id.Button02);
         searchButton = (Button) findViewById(R.id.Button01);
         list = (ListView) findViewById(R.id.ListView01);
+        btnPrint = (Button) findViewById(R.id.btnPrint);
         context = this;
         // Connect, Disconnect -- Button
         connectButton.setOnClickListener(new View.OnClickListener()
@@ -295,6 +305,26 @@ public class PrintBluetoothActivity extends AppCompatActivity
                 }
             }
         });
+
+        // Print
+        btnPrint.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // TODO Auto-generated method stub
+                if(connected)
+                {
+                    InBuuTaThu service = new InBuuTaThu();
+                    try {
+                        service.print(deliverySend);
+                    } catch (UnsupportedEncodingException e) {
+                        Log.e(TAG, e.getMessage(), e);
+                    }
+                }
+            }
+        });
+
         // Bluetooth Device List
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
         list.setAdapter(adapter);

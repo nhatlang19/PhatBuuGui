@@ -26,10 +26,16 @@ import com.honeywell.aidc.UnsupportedPropertyException;
 import java.util.HashMap;
 import java.util.Map;
 
+import vn.com.vietatech.dto.DeliverySend;
+
 public class DeliverySendActivity extends AppCompatActivity implements BarcodeReader.BarcodeListener,
         BarcodeReader.TriggerListener {
 
     private EditText txtCodeSend;
+    private EditText txtSendName;
+    private EditText txtSendIdentity;
+    private EditText txtSendAddress;
+
     private BarcodeReader barcodeReader;
 
     @Override
@@ -38,6 +44,9 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
         setContentView(R.layout.activity_delivery_send);
 
         txtCodeSend = (EditText) findViewById(R.id.txtCodeSend);
+        txtSendName = (EditText) findViewById(R.id.txtSendName);
+        txtSendIdentity = (EditText) findViewById(R.id.txtSendIdentity);
+        txtSendAddress = (EditText) findViewById(R.id.txtSendAddress);
 
         txtCodeSend.setFocusable(false);
         txtCodeSend.setEnabled(false);
@@ -150,8 +159,28 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.btnInBienNhan:
-                Intent intent = new Intent(DeliverySendActivity.this, PrintBluetoothActivity.class);
-                startActivity(intent);
+                String code = txtCodeSend.getText().toString().trim();
+                String name = txtSendName.getText().toString().trim();
+                String identity = txtSendIdentity.getText().toString().trim();
+                String address = txtSendAddress.getText().toString().trim();
+
+                if(code.length() == 0) {
+                    code = "ACDFDF";
+                }
+                if(code.length() == 0) {
+                    Toast toast = Toast.makeText(this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else {
+                    DeliverySend deliverySend = new DeliverySend();
+                    deliverySend.setItemCode(code);
+                    deliverySend.setName(name);
+                    deliverySend.setAddress(address);
+                    deliverySend.setIdentity(identity);
+
+                    Intent intent = new Intent(DeliverySendActivity.this, PrintBluetoothActivity.class);
+                    intent.putExtra("delivery_send", deliverySend);
+                    startActivity(intent);
+                }
                 break;
             case R.id.btnSaveDeliverySend:
                 break;
