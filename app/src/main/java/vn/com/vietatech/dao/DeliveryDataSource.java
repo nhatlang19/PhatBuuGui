@@ -39,6 +39,7 @@ public class DeliveryDataSource {
             MySQLiteHelper.KEY_LATITUDE,
             MySQLiteHelper.KEY_LONGTITUDE,
             MySQLiteHelper.KEY_PRICE,
+            MySQLiteHelper.KEY_SIGN,
             MySQLiteHelper.KEY_UPLOAD
     };
     private static DeliveryDataSource sInstance;
@@ -88,6 +89,7 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_UPLOAD, _delivery.getUpload());
         values.put(MySQLiteHelper.KEY_LATITUDE, _delivery.getLatitude());
         values.put(MySQLiteHelper.KEY_LONGTITUDE, _delivery.getLongtitude());
+        values.put(MySQLiteHelper.KEY_SIGN, _delivery.getSign());
         values.put(MySQLiteHelper.KEY_PRICE, _delivery.getPrice());
 
         db.insert(MySQLiteHelper.TABLE_DELIVERIES, null,
@@ -139,6 +141,7 @@ public class DeliveryDataSource {
         values.put(MySQLiteHelper.KEY_UPLOAD, _delivery.getUpload());
         values.put(MySQLiteHelper.KEY_LATITUDE, _delivery.getLatitude());
         values.put(MySQLiteHelper.KEY_LONGTITUDE, _delivery.getLongtitude());
+        values.put(MySQLiteHelper.KEY_SIGN, _delivery.getSign());
         values.put(MySQLiteHelper.KEY_PRICE, _delivery.getPrice());
 
         db.update(MySQLiteHelper.TABLE_DELIVERIES, values, MySQLiteHelper.KEY_ITEM_CODE + "= ?", new String[]{_delivery.getItemCode()});
@@ -277,6 +280,7 @@ public class DeliveryDataSource {
         int indexLat = cursor.getColumnIndex(MySQLiteHelper.KEY_LATITUDE);
         int indexLong = cursor.getColumnIndex(MySQLiteHelper.KEY_LONGTITUDE);
         int indexPrice = cursor.getColumnIndex(MySQLiteHelper.KEY_PRICE);
+        int indexSign = cursor.getColumnIndex(MySQLiteHelper.KEY_SIGN);
         int indexUpload = cursor.getColumnIndex(MySQLiteHelper.KEY_UPLOAD);
 
         Delivery _delivery = new Delivery();
@@ -299,6 +303,7 @@ public class DeliveryDataSource {
         _delivery.setLatitude(cursor.getString(indexLat));
         _delivery.setLongtitude(cursor.getString(indexLong));
         _delivery.setPrice(cursor.getString(indexPrice));
+        _delivery.setSign(cursor.getString(indexSign));
         _delivery.setUpload(cursor.getString(indexUpload));
 
         return _delivery;

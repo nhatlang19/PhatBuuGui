@@ -1,5 +1,14 @@
 package vn.com.vietatech.lib;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.os.Environment;
+import android.util.Log;
+
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -7,16 +16,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import vn.com.vietatech.phatbuugui.R;
 
@@ -125,4 +124,13 @@ public class Utils {
 		return POSBizDate;
 	}
 
+	public static File getAlbumStorageDir(String albumName) {
+		// Get the directory for the user's public pictures directory.
+		File file = new File(Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_PICTURES), albumName);
+		if (!file.mkdirs()) {
+			Log.e("SignaturePad", "Directory not created");
+		}
+		return file;
+	}
 }

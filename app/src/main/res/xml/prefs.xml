@@ -15,6 +15,10 @@
             android:key="code"
             android:summary="Nhập đúng mã bưu cục (6 số) của đơn vị đang sử dụng"
             android:title="Mã bưu cục" />
+        <EditTextPreference
+            android:key="bda"
+            android:summary="Nhập mã vạch của máy in"
+            android:title="Máy in" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,23 +1,33 @@
 package vn.com.vietatech.phatbuugui.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+
+import java.io.File;
 
 import vn.com.vietatech.dto.City;
 import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.dto.GiayTo;
+import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.GPSTracker;
 import vn.com.vietatech.phatbuugui.R;
+import vn.com.vietatech.phatbuugui.SignatureActivity;
 import vn.com.vietatech.phatbuugui.adapter.GiayToListAdapter;
 import vn.com.vietatech.phatbuugui.adapter.NoiCapListAdapter;
 
@@ -32,6 +42,8 @@ public class DeliveryFragment extends Fragment implements IFragment  {
     private Spinner spinnerNoiCap;
     private CheckBox rbPhatHoan;
     private EditText txtGiaTien;
+    private Button btnSign;
+    private ImageView signImage;
 
     private NoiCapListAdapter noiCapListAdapter;
     private GiayToListAdapter tableListAdapter;
@@ -61,6 +73,8 @@ public class DeliveryFragment extends Fragment implements IFragment  {
         spinnerNoiCap = (Spinner) view.findViewById(R.id.spinnerNoiCap);
         rbPhatHoan = (CheckBox) view.findViewById(R.id.rbPhatHoan1);
         txtGiaTien = (EditText) view.findViewById(R.id.txtPrice);
+        btnSign = (Button) view.findViewById(R.id.btnSign);
+        signImage = (ImageView) view.findViewById(R.id.imageView2);
 
         tableListAdapter = new GiayToListAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item);
@@ -82,7 +96,33 @@ public class DeliveryFragment extends Fragment implements IFragment  {
                 loadDatePickerDialog(layoutInflater);
             }
         });
+
+
+        final Context context = this.getContext();
+        btnSign.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SignatureActivity.class);
+                startActivityForResult(intent, SignatureActivity.GET_IMAGE);
+            }
+        });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getActivity();
+
+        if (requestCode == SignatureActivity.GET_IMAGE) {
+            if(resultCode == Activity.RESULT_OK){
+                String signImageStr = data.getStringExtra("signImage");
+                File photo = new File(Utils.getAlbumStorageDir("SignaturePad"), signImageStr);
+                Uri contentUri = Uri.fromFile(photo);
+                signImage.setImageURI(contentUri);
+            }
+        }
     }
 
     protected void loadDatePickerDialog(LayoutInflater layoutInflater) {

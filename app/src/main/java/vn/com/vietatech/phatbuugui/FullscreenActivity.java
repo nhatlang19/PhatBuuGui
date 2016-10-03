@@ -134,7 +134,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void buuTaThu() {
-        Intent intent = new Intent(FullscreenActivity.this, DeliverySendActivity.class);
+        Intent intent = new Intent(FullscreenActivity.this, DeliveryReceiveActivity.class);
         startActivity(intent);
     }
 

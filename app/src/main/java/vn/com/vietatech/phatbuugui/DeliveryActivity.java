@@ -1,15 +1,20 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -20,6 +25,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.citizen.port.android.BluetoothPort;
+import com.citizen.request.android.RequestHandler;
 import com.honeywell.aidc.BarcodeFailureEvent;
 import com.honeywell.aidc.BarcodeReadEvent;
 import com.honeywell.aidc.BarcodeReader;
@@ -28,6 +35,8 @@ import com.honeywell.aidc.ScannerUnavailableException;
 import com.honeywell.aidc.TriggerStateChangeEvent;
 import com.honeywell.aidc.UnsupportedPropertyException;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +47,7 @@ import vn.com.vietatech.dao.DeliveryDataSource;
 import vn.com.vietatech.dto.Delivery;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.lib.ConfigUtils;
+import vn.com.vietatech.lib.InBuuTaPhat;
 import vn.com.vietatech.lib.UploadHandler;
 import vn.com.vietatech.lib.Utils;
 import vn.com.vietatech.phatbuugui.adapter.ViewPagerAdapter;
@@ -60,6 +70,157 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     public static final int REQUEST_CODE_SCAN_BIG = 2;
 
     private BarcodeReader barcodeReader;
+
+    private static final String TAG = "PrintBluetoothActivity";
+
+    // Intent request codes
+    // private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+
+    private BluetoothAdapter mBluetoothAdapter;
+    private Thread hThread;
+    private static boolean connected;
+    // BT
+    private BluetoothPort bp;
+
+    private Delivery delivery;
+
+    /**
+     * Set up Bluetooth.
+     */
+    private void bluetoothSetup()
+    {
+        // Initialize
+        bp = BluetoothPort.getInstance();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null)
+        {
+            // Device does not support Bluetooth
+            return;
+        }
+        if (!mBluetoothAdapter.isEnabled())
+        {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+    }
+
+    // For the Desire Bluetooth close() bug.
+    private void connectInit()
+    {
+        if(!mBluetoothAdapter.isEnabled())
+        {
+            mBluetoothAdapter.enable();
+            try
+            {
+                Thread.sleep(3600);
+            }
+            catch(Exception e)
+            {
+                Log.e(TAG,e.getMessage(),e);
+            }
+        }
+    }
+
+    // Bluetooth Connection method.
+    private void btConn(final BluetoothDevice btDev) throws IOException
+    {
+        new DeliveryActivity.connTask().execute(btDev);
+    }
+
+    /** ======================================================================= */
+    public class connTask extends AsyncTask<BluetoothDevice, Void, Integer>
+    {
+        private final ProgressDialog dialog = new ProgressDialog(DeliveryActivity.this);
+
+        @Override
+        protected void onPreExecute()
+        {
+            dialog.setTitle("Bluetooth");
+            dialog.setMessage("Connecting");
+            dialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(BluetoothDevice... params)
+        {
+            Integer retVal = null;
+            try
+            {
+                bp.connect(params[0]);
+                retVal = new Integer(0);
+            }
+            catch (IOException e)
+            {
+                retVal = new Integer(-1);
+            }
+            return retVal;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result)
+        {
+            if(result.intValue() == 0)
+            {
+                RequestHandler rh = new RequestHandler();
+                hThread = new Thread(rh);
+                hThread.start();
+                connected = true;
+                // UI
+            }
+            if(dialog.isShowing())
+            {
+                String cmsg = "Bluetooth Not Connected.";
+                dialog.dismiss();
+                if(connected)
+                {
+                    cmsg = "Bluetooth Connected";
+                }
+                Toast toast = Toast.makeText(context, cmsg, Toast.LENGTH_SHORT);
+                toast.show();
+
+                InBuuTaPhat service = new InBuuTaPhat();
+                try {
+                    service.print(delivery);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            super.onPostExecute(result);
+        }
+    }
+    /** ============================================================================ */
+
+    private void btDisconn()
+    {
+        try
+        {
+            bp.disconnect();
+            Thread.sleep(1200);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        if((hThread != null) && (hThread.isAlive()))
+            hThread.interrupt();
+        connected = false;
+        Toast toast = Toast.makeText(context, "Bluetooth Disconnected", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    /**
+     * Bluetooth connection status.
+     * @return connected - boolean
+     */
+    public static boolean isConnected()
+    {
+        return connected;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +253,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         barcodeInstance();
+
+        bluetoothSetup();
     }
 
     public void barcodeInstance() {
@@ -232,9 +395,6 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
                     String uri = String.format(Locale.ENGLISH, "https://www.google.com/maps/@%f,%f,%sz", latitude, longitude, "17");
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                     startActivity(intent);
-
-
-
                 } else {
                     // can't get location
                     // GPS or Network is not enabled
@@ -259,8 +419,63 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
             case R.id.btnUpload:
                 this.upload();
                 break;
+            case R.id.printDelivery:
+                this.print();
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void print()
+    {
+        int position = viewPager.getCurrentItem();
+        ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
+//        txtCode.setText("asdasd ");
+        if (txtCode.getText().toString().trim().length() == 0) {
+            Utils.showAlert(context, this.getString(R.string.error_no_code));
+            return;
+        }
+
+        if (position == 0) {
+            delivery = ((DeliveryFragment) adapter.getItem(position)).getData();
+        }
+
+        if(delivery.getPrice().isEmpty()) {
+            Utils.showAlert(context, "Vui lòng điền số tiền");
+            return;
+        }
+        if(!connected)
+        {
+            connectInit();
+            try
+            {
+                ConfigUtils utils = ConfigUtils.getInstance(this);
+                String bdaCode = utils.displaySharedPreferences().getBda();
+                btConn(mBluetoothAdapter.getRemoteDevice(bdaCode));
+            }
+            catch(IllegalArgumentException e)
+            {
+                // Bluetooth Address Format [OO:OO:OO:OO:OO:OO]
+                Log.e(TAG,e.getMessage(),e);
+                Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+            catch (IOException e)
+            {
+                Log.e(TAG,e.getMessage(),e);
+                Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+        } else {
+            InBuuTaPhat service = new InBuuTaPhat();
+            try {
+                service.print(delivery);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected void delete() {
@@ -530,5 +745,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
             // unregister trigger state change listener
             // barcodeReader.removeTriggerListener(this);
         }
+
+        btDisconn();
     }
 }

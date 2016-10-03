@@ -259,7 +259,8 @@ public class PrintBluetoothActivity extends AppCompatActivity
                     connectInit();
                     try
                     {
-                        btConn(mBluetoothAdapter.getRemoteDevice(editText.getText().toString()));
+                        String code = "0C:A6:94:3A:23:66";
+                        btConn(mBluetoothAdapter.getRemoteDevice(code));
                     }
                     catch(IllegalArgumentException e)
                     {

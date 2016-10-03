@@ -1,11 +1,16 @@
 package vn.com.vietatech.phatbuugui;
 
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -15,6 +20,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.citizen.port.android.BluetoothPort;
+import com.citizen.request.android.RequestHandler;
 import com.honeywell.aidc.BarcodeFailureEvent;
 import com.honeywell.aidc.BarcodeReadEvent;
 import com.honeywell.aidc.BarcodeReader;
@@ -23,13 +30,23 @@ import com.honeywell.aidc.ScannerUnavailableException;
 import com.honeywell.aidc.TriggerStateChangeEvent;
 import com.honeywell.aidc.UnsupportedPropertyException;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 import vn.com.vietatech.dto.DeliverySend;
+import vn.com.vietatech.lib.ConfigUtils;
+import vn.com.vietatech.lib.InBuuTaThu;
 
-public class DeliverySendActivity extends AppCompatActivity implements BarcodeReader.BarcodeListener,
+public class DeliveryReceiveActivity extends AppCompatActivity implements BarcodeReader.BarcodeListener,
         BarcodeReader.TriggerListener {
+
+    private static final String TAG = "PrintBluetoothActivity";
+
+    // Intent request codes
+    // private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
 
     private EditText txtCodeSend;
     private EditText txtSendName;
@@ -37,6 +54,152 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
     private EditText txtSendAddress;
 
     private BarcodeReader barcodeReader;
+
+    private BluetoothAdapter mBluetoothAdapter;
+    private Thread hThread;
+    private static boolean connected;
+    private Context context;
+    // BT
+    private BluetoothPort bp;
+
+    private  DeliverySend deliverySend;
+
+    /**
+     * Set up Bluetooth.
+     */
+    private void bluetoothSetup()
+    {
+        // Initialize
+        bp = BluetoothPort.getInstance();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter == null)
+        {
+            // Device does not support Bluetooth
+            return;
+        }
+        if (!mBluetoothAdapter.isEnabled())
+        {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+    }
+
+    // For the Desire Bluetooth close() bug.
+    private void connectInit()
+    {
+        if(!mBluetoothAdapter.isEnabled())
+        {
+            mBluetoothAdapter.enable();
+            try
+            {
+                Thread.sleep(3600);
+            }
+            catch(Exception e)
+            {
+                Log.e(TAG,e.getMessage(),e);
+            }
+        }
+    }
+
+    // Bluetooth Connection method.
+    private void btConn(final BluetoothDevice btDev) throws IOException
+    {
+        new DeliveryReceiveActivity.connTask().execute(btDev);
+    }
+
+    /** ======================================================================= */
+    public class connTask extends AsyncTask<BluetoothDevice, Void, Integer>
+    {
+        private final ProgressDialog dialog = new ProgressDialog(DeliveryReceiveActivity.this);
+
+        @Override
+        protected void onPreExecute()
+        {
+            dialog.setTitle("Bluetooth");
+            dialog.setMessage("Connecting");
+            dialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Integer doInBackground(BluetoothDevice... params)
+        {
+            Integer retVal = null;
+            try
+            {
+                bp.connect(params[0]);
+                retVal = new Integer(0);
+            }
+            catch (IOException e)
+            {
+                retVal = new Integer(-1);
+            }
+            return retVal;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result)
+        {
+            if(result.intValue() == 0)
+            {
+                RequestHandler rh = new RequestHandler();
+                hThread = new Thread(rh);
+                hThread.start();
+                connected = true;
+                // UI
+            }
+            if(dialog.isShowing())
+            {
+                String cmsg = "Bluetooth Not Connected.";
+                dialog.dismiss();
+                if(connected)
+                {
+                    cmsg = "Bluetooth Connected";
+                }
+                Toast toast = Toast.makeText(context, cmsg, Toast.LENGTH_SHORT);
+                toast.show();
+
+                InBuuTaThu service = new InBuuTaThu();
+                try {
+                    service.print(deliverySend);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+//                btDisconn();
+            }
+            super.onPostExecute(result);
+        }
+    }
+    /** ============================================================================ */
+
+    private void btDisconn()
+    {
+        try
+        {
+            bp.disconnect();
+            Thread.sleep(1200);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        if((hThread != null) && (hThread.isAlive()))
+            hThread.interrupt();
+        connected = false;
+        Toast toast = Toast.makeText(context, "Bluetooth Disconnected", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    /**
+     * Bluetooth connection status.
+     * @return connected - boolean
+     */
+    public static boolean isConnected()
+    {
+        return connected;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +217,11 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        context = this;
+
         barcodeInstance();
+
+        bluetoothSetup();
     }
 
     public void barcodeInstance() {
@@ -164,22 +331,22 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
                 String identity = txtSendIdentity.getText().toString().trim();
                 String address = txtSendAddress.getText().toString().trim();
 
-                if(code.length() == 0) {
-                    code = "ACDFDF";
-                }
+//                if(code.length() == 0) {
+//                    code = "ACDFDF";
+//                }
+
+
                 if(code.length() == 0) {
                     Toast toast = Toast.makeText(this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
                     toast.show();
                 } else {
-                    DeliverySend deliverySend = new DeliverySend();
+                    deliverySend = new DeliverySend();
                     deliverySend.setItemCode(code);
                     deliverySend.setName(name);
                     deliverySend.setAddress(address);
                     deliverySend.setIdentity(identity);
 
-                    Intent intent = new Intent(DeliverySendActivity.this, PrintBluetoothActivity.class);
-                    intent.putExtra("delivery_send", deliverySend);
-                    startActivity(intent);
+                    print();
                 }
                 break;
             case R.id.btnSaveDeliverySend:
@@ -192,6 +359,42 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void print()
+    {
+        if(!connected)
+        {
+            connectInit();
+            try
+            {
+                ConfigUtils utils = ConfigUtils.getInstance(this);
+                String bdaCode = utils.displaySharedPreferences().getBda();
+                btConn(mBluetoothAdapter.getRemoteDevice(bdaCode));
+            }
+            catch(IllegalArgumentException e)
+            {
+                // Bluetooth Address Format [OO:OO:OO:OO:OO:OO]
+                Log.e(TAG,e.getMessage(),e);
+                Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+            catch (IOException e)
+            {
+                Log.e(TAG,e.getMessage(),e);
+                Toast toast = Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT);
+                toast.show();
+                return;
+            }
+        } else {
+            InBuuTaThu service = new InBuuTaThu();
+            try {
+                service.print(deliverySend);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -213,7 +416,7 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
 
             @Override
             public void run() {
-                Toast.makeText(DeliverySendActivity.this, "No data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DeliveryReceiveActivity.this, "No data", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -257,5 +460,26 @@ public class DeliverySendActivity extends AppCompatActivity implements BarcodeRe
             // notifications while paused.
             barcodeReader.release();
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        try
+        {
+            bp.disconnect();
+        }
+        catch (IOException e)
+        {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        if((hThread != null) && (hThread.isAlive()))
+        {
+            hThread.interrupt();
+            hThread = null;
+        }
+
+        btDisconn();
     }
 }

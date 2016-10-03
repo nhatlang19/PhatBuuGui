@@ -24,6 +24,7 @@ public class Delivery implements Serializable {
     private String latitude;
     private String longtitude;
     private String price;
+    private String sign;
 
     public static final String STATUS_DUONGSU = "0";
     public static final String STATUS_KHAC = "1";
@@ -221,5 +222,13 @@ public class Delivery implements Serializable {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
     }
 }

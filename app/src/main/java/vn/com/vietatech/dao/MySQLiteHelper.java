@@ -73,6 +73,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_LATITUDE = "latitude";
     public static final String KEY_LONGTITUDE = "longtitude";
     public static final String KEY_PRICE = "price";
+    public static final String KEY_SIGN = "sign";
 
 
     private static MySQLiteHelper sInstance;
@@ -173,6 +174,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 KEY_LATITUDE + " TEXT," +
                 KEY_LONGTITUDE + " TEXT," +
                 KEY_PRICE + " TEXT," +
+                KEY_SIGN + " TEXT," +
                 KEY_UPLOAD + " TEXT" +
                 ")";
 

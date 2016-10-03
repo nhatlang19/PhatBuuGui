@@ -5,10 +5,21 @@ public class Config {
     private String port;
     private String code; // ma buu cuc
 
-    public Config(String _server, String _port, String _code) {
+    public String getBda() {
+        return bda;
+    }
+
+    public void setBda(String bda) {
+        this.bda = bda;
+    }
+
+    private String bda;
+
+    public Config(String _server, String _port, String _code, String _bda) {
         server = _server;
         port = _port;
         code = _code;
+        bda = _bda;
     }
 
     public String getServer() {

@@ -24,6 +24,7 @@
     <string name="title_activity_delivery_list">Danh sách bưu gửi</string>
     <string name="print_data">In biên nhận</string>
     <string name="title_activity_delivery_scan">Quét số lượng lớn</string>
+    <string name="title_activity_signature">Ký tên</string>
     <string name="title_activity_maps">Map</string>
 
     <!-- Main Menu -->
@@ -58,4 +59,8 @@
     <string name="error_no_code">Chưa quét bưu gửi: </string>
     <string name="error_no_name">Vui lòng nhập tên người nhận </string>
     <string name="delete_error_no_code">Chưa quét mã bưu gửi để xoá khỏi danh sách </string>
+
+    <string name="agreement">I agree the terms and conditions.</string>
+    <string name="clear_pad">Clear Pad</string>
+    <string name="save_signature">Save Signature</string>
 </resources>

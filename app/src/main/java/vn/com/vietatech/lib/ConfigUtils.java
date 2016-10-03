@@ -30,9 +30,10 @@ public class ConfigUtils {
         String server = prefs.getString("server", "");
         String port = prefs.getString("port", "0");
         String code = prefs.getString("code", "0");
+        String bda = prefs.getString("bda", "");
 
 
-        return new Config(server, port, code);
+        return new Config(server, port, code, bda);
     }
 
     public String getServiceUrl() throws IOException {
