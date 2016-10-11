@@ -33,11 +33,16 @@ import com.honeywell.aidc.UnsupportedPropertyException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import vn.com.vietatech.dto.DeliverySend;
+import vn.com.vietatech.dao.DeliveryReceiveDataSource;
+import vn.com.vietatech.dto.DeliveryReceive;
 import vn.com.vietatech.lib.ConfigUtils;
 import vn.com.vietatech.lib.InBuuTaThu;
+import vn.com.vietatech.lib.UploadHandler;
+import vn.com.vietatech.lib.Utils;
+import vn.com.vietatech.phatbuugui.dialog.TransparentProgressDialog;
 
 public class DeliveryReceiveActivity extends AppCompatActivity implements BarcodeReader.BarcodeListener,
         BarcodeReader.TriggerListener {
@@ -62,7 +67,7 @@ public class DeliveryReceiveActivity extends AppCompatActivity implements Barcod
     // BT
     private BluetoothPort bp;
 
-    private  DeliverySend deliverySend;
+    private DeliveryReceive deliveryReceive;
 
     /**
      * Set up Bluetooth.
@@ -161,7 +166,7 @@ public class DeliveryReceiveActivity extends AppCompatActivity implements Barcod
 
                 InBuuTaThu service = new InBuuTaThu();
                 try {
-                    service.print(deliverySend);
+                    service.print(deliveryReceive);
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
@@ -211,8 +216,8 @@ public class DeliveryReceiveActivity extends AppCompatActivity implements Barcod
         txtSendIdentity = (EditText) findViewById(R.id.txtSendIdentity);
         txtSendAddress = (EditText) findViewById(R.id.txtSendAddress);
 
-        txtCodeSend.setFocusable(false);
-        txtCodeSend.setEnabled(false);
+//        txtCodeSend.setFocusable(false);
+//        txtCodeSend.setEnabled(false);
         txtCodeSend.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -326,39 +331,112 @@ public class DeliveryReceiveActivity extends AppCompatActivity implements Barcod
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.btnInBienNhan:
-                String code = txtCodeSend.getText().toString().trim();
-                String name = txtSendName.getText().toString().trim();
-                String identity = txtSendIdentity.getText().toString().trim();
-                String address = txtSendAddress.getText().toString().trim();
-
-//                if(code.length() == 0) {
-//                    code = "ACDFDF";
-//                }
-
-
-                if(code.length() == 0) {
-                    Toast toast = Toast.makeText(this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else {
-                    deliverySend = new DeliverySend();
-                    deliverySend.setItemCode(code);
-                    deliverySend.setName(name);
-                    deliverySend.setAddress(address);
-                    deliverySend.setIdentity(identity);
-
-                    print();
-                }
+                this.inBienNhan();
                 break;
             case R.id.btnSaveDeliverySend:
+                this.save();
                 break;
             case R.id.btnXemDanhSachSend:
                 break;
             case R.id.btnXoaBuuGuiSend:
                 break;
             case R.id.btnUploadSend:
+                this.upload();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void upload()
+    {
+        TransparentProgressDialog pd = new TransparentProgressDialog(context, R.drawable.spinner);
+        pd.show();
+        try {
+            DeliveryReceiveDataSource ds = DeliveryReceiveDataSource.getInstance(context);
+            UploadHandler uploadHandler = UploadHandler.getInstance(context);
+
+            ds.open();
+            List<DeliveryReceive> lists = ds.getAllDeliveriesUnupload();
+            ds.close();
+            List<String> itemCodes;
+
+            if (lists.isEmpty()) {
+                Utils.showAlert(context, "Không có data bưu thu để upload");
+            } else {
+                itemCodes = uploadHandler.uploadReceive(context, lists);
+                int size = itemCodes.size();
+                ds.open();
+                ds.updatesMulti(itemCodes);
+                ds.close();
+
+                if(size != 0) {
+                    Utils.showAlert(context, "Upload thành công: " + size + " bưu thu");
+                } else {
+                    Utils.showAlert(context, "Có lỗi trong quá trình upload");
+                }
+            }
+        } catch (Exception e) {
+            Utils.showAlert(context, e.getMessage());
+        } finally {
+            pd.dismiss();
+        }
+    }
+
+    private void save()
+    {
+        String code = txtCodeSend.getText().toString().trim();
+        String name = txtSendName.getText().toString().trim();
+        String identity = txtSendIdentity.getText().toString().trim();
+        String address = txtSendAddress.getText().toString().trim();
+
+        DeliveryReceive _deliveryReceive = new DeliveryReceive();
+        _deliveryReceive.setItemCode(code);
+        _deliveryReceive.setName(name);
+        _deliveryReceive.setAddress(address);
+        _deliveryReceive.setIdentity(identity);
+
+        // get code
+        ConfigUtils utils = ConfigUtils.getInstance(this);
+        String _code = utils.displaySharedPreferences().getCode();
+        _deliveryReceive.setToPOSCode(_code);
+
+        DeliveryReceiveDataSource ds = DeliveryReceiveDataSource.getInstance(context);
+        ds.open();
+
+        if (!ds.existsDelivery(_deliveryReceive)) {
+            _deliveryReceive = ds.createDelivery(_deliveryReceive);
+            Utils.showAlert(context, context.getString(R.string.save_delivery_success) + " " + _deliveryReceive.getItemCode());
+        } else {
+            _deliveryReceive = ds.updateDelivery(_deliveryReceive);
+            Utils.showAlert(context, context.getString(R.string.update_delivery_success) + " " + _deliveryReceive.getItemCode());
+        }
+        ds.close();
+
+        txtCodeSend.setText("");
+        txtSendName.setText("");
+        txtSendIdentity.setText("");
+        txtSendAddress.setText("");
+    }
+
+    private void inBienNhan()
+    {
+        String code = txtCodeSend.getText().toString().trim();
+        String name = txtSendName.getText().toString().trim();
+        String identity = txtSendIdentity.getText().toString().trim();
+        String address = txtSendAddress.getText().toString().trim();
+
+        if(code.length() == 0) {
+            Toast toast = Toast.makeText(this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT);
+            toast.show();
+        } else {
+            deliveryReceive = new DeliveryReceive();
+            deliveryReceive.setItemCode(code);
+            deliveryReceive.setName(name);
+            deliveryReceive.setAddress(address);
+            deliveryReceive.setIdentity(identity);
+
+            print();
+        }
     }
 
     private void print()
@@ -390,7 +468,7 @@ public class DeliveryReceiveActivity extends AppCompatActivity implements Barcod
         } else {
             InBuuTaThu service = new InBuuTaThu();
             try {
-                service.print(deliverySend);
+                service.print(deliveryReceive);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

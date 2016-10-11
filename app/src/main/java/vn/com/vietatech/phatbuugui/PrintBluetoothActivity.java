@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
-import vn.com.vietatech.dto.DeliverySend;
+import vn.com.vietatech.dto.DeliveryReceive;
 import vn.com.vietatech.lib.InBuuTaThu;
 
 public class PrintBluetoothActivity extends AppCompatActivity
@@ -55,7 +55,7 @@ public class PrintBluetoothActivity extends AppCompatActivity
     // BT
     private BluetoothPort bp;
 
-    private  DeliverySend deliverySend;
+    private DeliveryReceive deliveryReceive;
 
     /**
      * Set up Bluetooth.
@@ -232,7 +232,7 @@ public class PrintBluetoothActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bluetooth_menu);
 
-        deliverySend = (DeliverySend) getIntent().getSerializableExtra("delivery_send");
+        deliveryReceive = (DeliveryReceive) getIntent().getSerializableExtra("delivery_send");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -318,7 +318,7 @@ public class PrintBluetoothActivity extends AppCompatActivity
                 {
                     InBuuTaThu service = new InBuuTaThu();
                     try {
-                        service.print(deliverySend);
+                        service.print(deliveryReceive);
                     } catch (UnsupportedEncodingException e) {
                         Log.e(TAG, e.getMessage(), e);
                     }

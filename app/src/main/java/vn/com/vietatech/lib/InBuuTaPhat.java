@@ -126,7 +126,7 @@ public class InBuuTaPhat {
     {
         ROW = 0;
         String Sendtext = ResetPrinterCommand();
-        Sendtext = Sendtext + FontSize("Times New Roman",8);// select font
+        Sendtext = Sendtext + FontSize("Times New Roman",10);// select font
         Sendtext = Sendtext + "nasc \"utf-8\"\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 8);// feed paper
         ROW = ROW+15;
@@ -135,7 +135,7 @@ public class InBuuTaPhat {
         Sendtext = Sendtext + GoPositionBold(385,  ROW, 9);
         ROW = ROW+25;
         Sendtext = Sendtext + "prtxt \"Tổng công ty bưu điện Việt Nam\"\r\n";
-        Sendtext = Sendtext + "FONT \"Times New Roman Bold\",9\r\n";// Only Bold
+        Sendtext = Sendtext + "FONT \"Times New Roman Bold\",11\r\n";// Only Bold
         Sendtext = Sendtext + GoPositionBold(320,  ROW, 9);
         ROW = ROW+25;
         Sendtext = Sendtext + GoPositionBold(320,  ROW, 9);
@@ -160,10 +160,8 @@ public class InBuuTaPhat {
         ROW = ROW+25;
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
         ROW = ROW+25;
-        Sendtext = Sendtext + "BARSET \"EAN8\"\r\n";
-        Sendtext = Sendtext + "BARFONT ON\r\n";
-        Sendtext = Sendtext + "PRBAR \"1234567.12345\"\r\n";
-        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
+        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 100);
+        Sendtext = Sendtext + "prtxt \" " + "\"\r\n";
 
         Sendtext = Sendtext + "printfeed\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
@@ -191,6 +189,11 @@ public class InBuuTaPhat {
         {
             Chuoi = "PRPOS" + X + "," + (Y + 30) + "\r\n";
             Y = Y + 30;
+        }
+        else if (Size == 100)
+        {
+            Chuoi = "PRPOS" + X + "," + (Y + 100) + "\r\n";
+            Y = Y + 100;
         }
         return Chuoi;
     }

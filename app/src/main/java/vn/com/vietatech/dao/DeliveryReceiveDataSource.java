@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import vn.com.vietatech.dto.DeliverySend;
+import vn.com.vietatech.dto.DeliveryReceive;
 import vn.com.vietatech.dto.User;
 import vn.com.vietatech.phatbuugui.MyApplication;
 
-public class DeliverySendDataSource {
+public class DeliveryReceiveDataSource {
     private SQLiteDatabase db;
     private MySQLiteHelper helper;
 
@@ -28,21 +28,21 @@ public class DeliverySendDataSource {
         MySQLiteHelper.KEY_SEND_UPLOAD
     };
 
-    private static DeliverySendDataSource sInstance;
+    private static DeliveryReceiveDataSource sInstance;
     private static Context context;
 
-    public static synchronized DeliverySendDataSource getInstance(Context _context) {
+    public static synchronized DeliveryReceiveDataSource getInstance(Context _context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
 
         if (sInstance == null) {
             context = _context;
-            sInstance = new DeliverySendDataSource(_context.getApplicationContext());
+            sInstance = new DeliveryReceiveDataSource(_context.getApplicationContext());
         }
         return sInstance;
     }
 
-    private DeliverySendDataSource(Context context) {
+    private DeliveryReceiveDataSource(Context context) {
         helper = MySQLiteHelper.getInstance(context);
     }
 
@@ -54,7 +54,7 @@ public class DeliverySendDataSource {
         helper.close();
     }
 
-    public DeliverySend createDelivery(DeliverySend _delivery) {
+    public DeliveryReceive createDelivery(DeliveryReceive _delivery) {
         ContentValues values = new ContentValues();
 
         values.put(MySQLiteHelper.KEY_SEND_ITEM_CODE, _delivery.getItemCode());
@@ -73,7 +73,7 @@ public class DeliverySendDataSource {
                 null);
 
         cursor.moveToFirst();
-        DeliverySend delivery = cursorToDelivery(cursor);
+        DeliveryReceive delivery = cursorToDelivery(cursor);
 
         cursor.close();
         return delivery;
@@ -81,7 +81,7 @@ public class DeliverySendDataSource {
 
     public boolean updatesMulti(List<String> itemCodes) {
         List<String> temp = itemCodes;
-        temp.add(0, DeliverySend.UPLOADED);
+        temp.add(0, DeliveryReceive.UPLOADED);
 
         String[] id = itemCodes.toArray(new String[itemCodes.size()]);
         String query = "UPDATE " + MySQLiteHelper.TABLE_DELIVERIES_SEND
@@ -93,7 +93,7 @@ public class DeliverySendDataSource {
         return true;
     }
 
-    public DeliverySend updateDelivery(DeliverySend _delivery) {
+    public DeliveryReceive updateDelivery(DeliveryReceive _delivery) {
         ContentValues values = new ContentValues();
         values.put(MySQLiteHelper.KEY_SEND_ITEM_CODE, _delivery.getItemCode());
         values.put(MySQLiteHelper.KEY_SEND_POS_CODE, _delivery.getToPOSCode());
@@ -106,7 +106,7 @@ public class DeliverySendDataSource {
         return _delivery;
     }
 
-    public void deleteDelivery(DeliverySend _delivery) {
+    public void deleteDelivery(DeliveryReceive _delivery) {
         String id = _delivery.getItemCode();
         System.out.println("Delivery deleted with id: " + id);
         String whereClause = MySQLiteHelper.KEY_SEND_ITEM_CODE + "= ?";
@@ -114,15 +114,15 @@ public class DeliverySendDataSource {
     }
 
 
-    public List<DeliverySend> getAllDeliveries() {
-        List<DeliverySend> list = new ArrayList<DeliverySend>();
+    public List<DeliveryReceive> getAllDeliveries() {
+        List<DeliveryReceive> list = new ArrayList<DeliveryReceive>();
 
         MyApplication globalVariable = (MyApplication) context.getApplicationContext();
         User user = globalVariable.getUser();
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES_SEND, allColumns, null, null, null, null, null);
 
         while (cursor.moveToNext()) {
-            DeliverySend Delivery = cursorToDelivery(cursor);
+            DeliveryReceive Delivery = cursorToDelivery(cursor);
             list.add(Delivery);
         }
         cursor.close();
@@ -130,17 +130,17 @@ public class DeliverySendDataSource {
         return list;
     }
 
-    public List<DeliverySend> getAllDeliveriesUnupload() {
-        List<DeliverySend> list = new ArrayList<DeliverySend>();
+    public List<DeliveryReceive> getAllDeliveriesUnupload() {
+        List<DeliveryReceive> list = new ArrayList<DeliveryReceive>();
 
         MyApplication globalVariable = (MyApplication) context.getApplicationContext();
         User user = globalVariable.getUser();
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES_SEND, allColumns,
                 MySQLiteHelper.KEY_SEND_UPLOAD + " = ? ",
-                new String[]{DeliverySend.UNUPLOADED}, null, null, null);
+                new String[]{DeliveryReceive.UNUPLOADED}, null, null, null);
 
         while (cursor.moveToNext()) {
-            DeliverySend Delivery = cursorToDelivery(cursor);
+            DeliveryReceive Delivery = cursorToDelivery(cursor);
             list.add(Delivery);
         }
         cursor.close();
@@ -148,12 +148,25 @@ public class DeliverySendDataSource {
         return list;
     }
 
-    public DeliverySend getDelivery(DeliverySend _delivery) {
+    public boolean existsDelivery(DeliveryReceive _delivery) {
+        // get data after insert
+        String where = MySQLiteHelper.KEY_SEND_ITEM_CODE + " = ?";
+        Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES_SEND, allColumns,
+                where, new String[]{_delivery.getItemCode()}, null, null,
+                null);
+
+        int count = cursor.getCount();
+        cursor.close();
+
+        return count != 0;
+    }
+
+    public DeliveryReceive getDelivery(DeliveryReceive _delivery) {
         // get data after insert
         Cursor cursor = db.query(MySQLiteHelper.TABLE_DELIVERIES_SEND, allColumns,
                 MySQLiteHelper.KEY_SEND_ITEM_CODE + "= ?", new String[]{_delivery.getItemCode()}, null, null,
                 null);
-        DeliverySend delivery = null;
+        DeliveryReceive delivery = null;
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
             delivery = cursorToDelivery(cursor);
@@ -162,7 +175,7 @@ public class DeliverySendDataSource {
         return delivery;
     }
 
-    private DeliverySend cursorToDelivery(Cursor cursor) {
+    private DeliveryReceive cursorToDelivery(Cursor cursor) {
         int indexItemCode = cursor.getColumnIndex(MySQLiteHelper.KEY_SEND_ITEM_CODE);
         int indexPosCode = cursor.getColumnIndex(MySQLiteHelper.KEY_SEND_POS_CODE);
         int indexName = cursor.getColumnIndex(MySQLiteHelper.KEY_SEND_NAME);
@@ -170,7 +183,7 @@ public class DeliverySendDataSource {
         int indexAddress = cursor.getColumnIndex(MySQLiteHelper.KEY_SEND_ADDRESS);
         int indexUpload = cursor.getColumnIndex(MySQLiteHelper.KEY_SEND_UPLOAD);
 
-        DeliverySend _delivery = new DeliverySend();
+        DeliveryReceive _delivery = new DeliveryReceive();
         _delivery.setItemCode(cursor.getString(indexItemCode));
         _delivery.setToPOSCode(cursor.getString(indexPosCode));
         _delivery.setName(cursor.getString(indexName));

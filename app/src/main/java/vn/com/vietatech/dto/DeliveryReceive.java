@@ -3,7 +3,7 @@ package vn.com.vietatech.dto;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
-public class DeliverySend implements Serializable {
+public class DeliveryReceive implements Serializable {
     private String itemCode;
     private String toPOSCode;
     private String name;
@@ -15,7 +15,7 @@ public class DeliverySend implements Serializable {
     public static final String UNUPLOADED = "0";
 
 
-    public DeliverySend() {
+    public DeliveryReceive() {
         setItemCode("");
         setToPOSCode("");
         setName("");

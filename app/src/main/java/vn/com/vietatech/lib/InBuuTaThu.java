@@ -14,7 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import vn.com.vietatech.dto.DeliverySend;
+import vn.com.vietatech.dto.DeliveryReceive;
 
 public class InBuuTaThu {
     private ESCPOSPrinter posPtr;
@@ -122,11 +122,11 @@ public class InBuuTaThu {
 
     }
 
-    public void receipt(DeliverySend deliverySend) throws UnsupportedEncodingException
+    public void receipt(DeliveryReceive deliveryReceive) throws UnsupportedEncodingException
     {
         ROW = 0;
         String Sendtext = ResetPrinterCommand();
-        Sendtext = Sendtext + FontSize("Times New Roman",8);// select font
+        Sendtext = Sendtext + FontSize("Times New Roman",10);// select font
         Sendtext = Sendtext + "nasc \"utf-8\"\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 8);// feed paper
         ROW = ROW+15;
@@ -135,7 +135,7 @@ public class InBuuTaThu {
         Sendtext = Sendtext + GoPositionBold(385,  ROW, 9);
         ROW = ROW+25;
         Sendtext = Sendtext + "prtxt \"Tổng công ty bưu điện Việt Nam\"\r\n";
-        Sendtext = Sendtext + "FONT \"Times New Roman Bold\",9\r\n";// Only Bold
+        Sendtext = Sendtext + FontSize("Times New Roman Bold",10);//
         Sendtext = Sendtext + GoPositionBold(320,  ROW, 9);
         ROW = ROW+25;
         Sendtext = Sendtext + GoPositionBold(320,  ROW, 9);
@@ -144,26 +144,19 @@ public class InBuuTaThu {
         Sendtext = Sendtext + FontSize("Times New Roman", 9);
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
         ROW = ROW+35;
-        Sendtext = Sendtext + "prtxt \"MÃ VẠCH: " + deliverySend.getItemCode() + "\"\r\n";
+        Sendtext = Sendtext + "prtxt \"MÃ VẠCH: " + deliveryReceive.getItemCode() + "\"\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
         ROW = ROW+35;
-        Sendtext = Sendtext + "prtxt \"TÊN KH: " + deliverySend.getName() + "\"\r\n";
+        Sendtext = Sendtext + "prtxt \"TÊN KH: " + deliveryReceive.getName() + "\"\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
         ROW = ROW+35;
-        Sendtext = Sendtext + "prtxt \"CMND: " + deliverySend.getIdentity() + "\"\r\n";
+        Sendtext = Sendtext + "prtxt \"CMND: " + deliveryReceive.getIdentity() + "\"\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
         ROW = ROW+35;
-        Sendtext = Sendtext + "prtxt \"ĐỊA CHỈ: " + deliverySend.getAddress() + "\"\r\n";
-        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
-        ROW = ROW+35;
-        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
+        Sendtext = Sendtext + "prtxt \"ĐỊA CHỈ: " + deliveryReceive.getAddress() + "\"\r\n";
         ROW = ROW+25;
-        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
-        ROW = ROW+25;
-        Sendtext = Sendtext + "BARSET \"EAN8\"\r\n";
-        Sendtext = Sendtext + "BARFONT ON\r\n";
-        Sendtext = Sendtext + "PRBAR \"1234567.12345\"\r\n";
-        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
+        Sendtext = Sendtext + GoPositionNormal(385,  ROW, 100);
+        Sendtext = Sendtext + "prtxt \" " + "\"\r\n";
 
         Sendtext = Sendtext + "printfeed\r\n";
         Sendtext = Sendtext + GoPositionNormal(385,  ROW, 9);
@@ -191,6 +184,11 @@ public class InBuuTaThu {
         {
             Chuoi = "PRPOS" + X + "," + (Y + 30) + "\r\n";
             Y = Y + 30;
+        }
+        else if (Size == 100)
+        {
+            Chuoi = "PRPOS" + X + "," + (Y + 100) + "\r\n";
+            Y = Y + 100;
         }
         return Chuoi;
     }
@@ -222,9 +220,9 @@ public class InBuuTaThu {
     }
 
 
-    public void print(DeliverySend deliverySend) throws UnsupportedEncodingException
+    public void print(DeliveryReceive deliveryReceive) throws UnsupportedEncodingException
     {
         ComamdFingering();
-        receipt(deliverySend);
+        receipt(deliveryReceive);
     }
 }

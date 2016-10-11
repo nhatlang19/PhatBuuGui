@@ -246,8 +246,8 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         txtCode = (EditText) findViewById(R.id.txtCode);
         cbBatch = (CheckBox) findViewById(R.id.cbBatch);
 
-        txtCode.setFocusable(false);
-        txtCode.setEnabled(false);
+//        txtCode.setFocusable(false);
+//        txtCode.setEnabled(false);
         txtCode.setBackgroundColor(Color.parseColor("#FFFFFF"));
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -430,7 +430,7 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
     {
         int position = viewPager.getCurrentItem();
         ViewPagerAdapter adapter = (ViewPagerAdapter) viewPager.getAdapter();
-//        txtCode.setText("asdasd ");
+
         if (txtCode.getText().toString().trim().length() == 0) {
             Utils.showAlert(context, this.getString(R.string.error_no_code));
             return;
@@ -439,6 +439,9 @@ public class DeliveryActivity extends AppCompatActivity implements BarcodeReader
         if (position == 0) {
             delivery = ((DeliveryFragment) adapter.getItem(position)).getData();
         }
+
+        String code = txtCode.getText().toString().trim();
+        delivery.setItemCode(code);
 
         if(delivery.getPrice().isEmpty()) {
             Utils.showAlert(context, "Vui lòng điền số tiền");
