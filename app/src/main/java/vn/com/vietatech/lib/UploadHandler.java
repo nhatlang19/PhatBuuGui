@@ -16,7 +16,7 @@ public class UploadHandler {
     private static UploadHandler instance = null;
     private static ExchangeService client = null;
 
-    private static String cnnString = "Data Source='.';Initial Catalog='VNPostDelivery';User ID='vnpost';Password='vnpost'";
+    private static String cnnString = "Data Source='113.161.79.56';Initial Catalog='VNPostDelivery';User ID='vnpost';Password='vnpost'";
 
     protected UploadHandler(Context context) throws Exception {
         client = ExchangeService.getInstance(context);
@@ -48,7 +48,7 @@ public class UploadHandler {
     }
 
     private boolean addDelivery(DeliveryReceive delivery) {
-        client.setMethod("Upload");
+        client.setMethod("UploadBuuTaGui");
 
         Map<String, String> params = new HashMap<>();
         params.put("connString", cnnString);
